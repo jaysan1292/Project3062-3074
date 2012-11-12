@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        package="com.jaysan1292.project.c3074"
+        android:versionCode="1"
+        android:versionName="1.0">
+    <uses-sdk
+            android:minSdkVersion="16"/>
+    <application
+            android:name=".MobileAppCommon"
+            android:label="@string/app_name_short"
+            android:icon="@drawable/ic_launcher_communityicon"
+            android:theme="@android:style/Theme.Holo.Light">
+        <activity
+                android:name=".activity.MainActivity"
+                android:label="@string/app_name">
+        </activity>
+        <activity
+                android:name=".activity.PostDetailActivity"
+                android:label="@string/act_post"/>
+        <activity
+                android:name=".activity.UserProfileActivity"
+                android:label="@string/act_user"/>
+        <activity
+                android:name=".activity.PostCommentActivity"
+                android:label="@string/act_comments"/>
+        <activity
+                android:name=".activity.LoginActivity"
+                android:label="@string/app_name_short">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.NewPostActivity"
+                  android:label="New Post"
+                  android:windowSoftInputMode="stateVisible"/>
+    </application>
+</manifest>

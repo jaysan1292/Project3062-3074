@@ -1,0 +1,64 @@
+@import "mixins.less";
+@import "bs-customizations.less";
+@import "feed.less";
+@import "profile.less";
+@import "splash.less";
+@import "about.less";
+
+.nav-shadow {
+    .box-shadow(0px 0px 10px 5px rgba(0, 0, 0, .15));
+}
+
+#main-nav {
+    .nav-shadow;
+}
+
+#footer {
+    .nav-shadow;
+    .center-text;
+    .navbar-inner .container .nav {
+        width: 100%;
+        li {
+            width: 100%;
+            a {
+                cursor:          default;
+                display:         block; //from navbar.less: ".navbar .nav > li > a"
+                float:           none;
+                padding:         ((@navbarHeight - @baseLineHeight) / 2) 15px ((@navbarHeight - @baseLineHeight) / 2);
+                text-decoration: none;
+                text-shadow:     0 1px 0 @navbarBackgroundHighlight;
+            }
+        }
+    }
+}
+
+.center-text {
+    text-align: center;
+}
+
+#remember_me_label {
+    position: relative;
+    top:      -5px;
+}
+
+#remember_me {
+    position: relative;
+    top:      -3px;
+}
+
+.brand {
+    #logo {
+        background-image:  url("../img/logo.png");
+        background-size:   cover;
+        background-repeat: no-repeat;
+        display:           inline-block;
+        width:             57px;
+        height:            45px;
+        margin-top:        1px;
+        line-height:       14px;
+        vertical-align:    text-top;
+        position:          absolute;
+        top:               -7px;
+        left:              1px;
+    }
+}

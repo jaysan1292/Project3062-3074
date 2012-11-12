@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:padding="16dip"
+        android:gravity="bottom">
+    <ImageView
+            android:src="@drawable/communityicon"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="200dip"
+            android:layout_marginTop="16dip"
+            android:contentDescription="@null"/>
+    <EditText
+            android:id="@+id/login_student_id"
+            android:inputType="number"
+            android:layout_width="fill_parent"
+            android:layout_height="48dip"
+            android:hint="@string/login_student_id_label"/>
+    <EditText
+            android:id="@+id/login_password"
+            android:inputType="textPassword"
+            android:layout_width="fill_parent"
+            android:layout_height="48dip"
+            android:hint="@string/login_password_label"/>
+    <Button
+            android:id="@+id/login_sign_in_button"
+            android:text="@string/login_sign_in_label"
+            android:layout_width="fill_parent"
+            android:layout_height="48dip"/>
+</LinearLayout>

@@ -1,0 +1,100 @@
+@import "../css/bootstrap-src/variables.less";
+
+.profile-container {
+}
+
+#profile-jumbotron {
+    @imgSize: 200px;
+    @imgMargin: @imgSize / 10;
+    @divPadding: (@imgMargin - 1);
+    @divMinHeight: (@imgSize + (@imgMargin / 2));
+    background:    initial;
+    border-radius: initial;
+    border:        initial;
+    img {
+        margin-right: @imgMargin;
+        width:        @imgSize;
+        height:       @imgSize;
+    }
+//    border-bottom: 1px solid darken(@wellBackground, 7%);
+    padding:       @divPadding;
+    min-height:    @divMinHeight;
+    .box-shadow(~"0 1px 4px rgba(0, 0, 0, .3), 0 0 40px rgba(0, 0, 0, .1) inset");
+}
+
+@media (max-width: 479px) {
+    #profile-jumbotron {
+        @imgSize: 80px;
+        @imgMargin: @imgSize / 10;
+        @divPadding: (@imgMargin - 1);
+        @divMaxHeight: (@imgSize + (@imgMargin / 2) + 6);
+        img {
+            margin-right: @imgMargin;
+            width:        @imgSize;
+            height:       @imgSize;
+        }
+        #user-info {
+            h1, h2 {
+                white-space:   nowrap;
+                text-overflow: ellipsis;
+                overflow:      hidden;
+            }
+            h1 {
+                font-size:   20px;
+                line-height: 1;
+                margin-top:  0px;
+            }
+            h2 {
+                font-size:   14px;
+                line-height: initial;
+            }
+        }
+        max-height: @divMaxHeight;
+        min-height: initial;
+    }
+}
+
+@media (min-width:480px) and (max-width:979px) {
+    #profile-jumbotron {
+        @imgSize: 200px;
+        @imgMargin: @imgSize / 10;
+        @divMaxHeight: (@imgSize + (@imgMargin / 2));
+        img {
+            margin-right: @imgMargin;
+            width:        @imgSize;
+            height:       @imgSize;
+        }
+        #user-info {
+            h1, h2 {
+                white-space:   nowrap;
+                text-overflow: ellipsis;
+                overflow:      hidden;
+            }
+            h1 {
+                font-size: 40px;
+            }
+            h2 {
+                font-size:   18px;
+                line-height: initial;
+            }
+        }
+        max-height: @divMaxHeight;
+        min-height: initial;
+    }
+}
+
+#profile-posts {
+    border-left:  1px solid darken(white, 15%);
+    margin-left:  -20px;
+    padding-left: 20px;
+    #no-posts {
+        border: none;
+    }
+}
+
+#classmate-images {
+    img {
+        margin:       2px;
+        margin-right: -3px;
+    }
+}

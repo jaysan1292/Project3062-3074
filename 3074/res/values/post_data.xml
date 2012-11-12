@@ -1,0 +1,6 @@
+<resources>
+    <item type="id"
+          name="post_id"/>
+    <item type="id"
+          name="post_author"/>
+</resources>

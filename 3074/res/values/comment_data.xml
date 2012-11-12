@@ -1,0 +1,6 @@
+<resources>
+    <item type="id"
+          name="comment_id"/>
+    <item type="id"
+          name="comment_author"/>
+</resources>

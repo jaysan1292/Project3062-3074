@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="act_comments">Comments</string>
+    <string name="act_login">Login</string>
+    <string name="act_main">myFeed</string>
+    <string name="act_post">Post</string>
+    <string name="act_user">User Profile</string>
+    <string name="app_name">gbc.myCommunity</string>
+    <string name="app_name_short">gbc.mc</string>
+    <string name="dev_placeholder_post_posttime">4 minutes ago</string>
+    <string name="dev_placeholder_post_content">Ehorlz nwlde ueeoarhhi fhjoyoftito nhzsei nsodatrt ehlrre hf
+        angmetrddlwx on.
+        Inubbtdvsye eodg arc ovishorgn theoepzsg oileeh. Aahirehos awandee
+        j hrhecoheuh tausesv besceoorutsq qbuhlmf vahehtbnb ltdsalabsb. Eode feetqugiivu
+        tioaedeqh astgeotif aaoedjoogthe lyfssdcr nt mqtorteeeie lidluvabfw.
+    </string>
+    <string name="dev_placeholder_user_fullname">John Smith</string>
+    <string name="dev_placeholder_user_program">T127: Computer Programmer Analyst</string>
+    <string name="dev_not_yet_implemented">This feature doesn\'t exist yet! It\'ll be here soon.</string>
+    <string name="list_no_items">there doesn\'t seem to be anything here</string>
+    <string name="loading_feed_posts">Loading feed, please wait…</string>
+    <string name="loading_user_posts">Loading %s\'s posts, please wait…</string>
+    <string name="login_password_label">Password</string>
+    <string name="login_sign_in_label">Sign In</string>
+    <string name="login_student_id_label">Student ID</string>
+</resources>

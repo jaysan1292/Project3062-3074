@@ -1,0 +1,38 @@
+<resources>
+    <!--Text colors-->
+    <color name="text_light">@android:color/primary_text_dark</color>
+    <color name="text_dark">@android:color/primary_text_light</color>
+    <!--Grays-->
+    <color name="black">#000000</color>
+    <color name="grayDarker">#222222</color>
+    <color name="grayDark">#333333</color>
+    <color name="gray">#555555</color>
+    <color name="grayLight">#999999</color>
+    <color name="grayLighter">#eeeeee</color>
+    <color name="white">#ffffff</color>
+    <!--Android colors-->
+    <color name="a_blue">#33b5e5</color>
+    <color name="a_blueDark">#0099cc</color>
+    <color name="a_purple">#aa66cc</color>
+    <color name="a_purpleDark">#9933cc</color>
+    <color name="a_green">#99cc00</color>
+    <color name="a_greenDark">#669900</color>
+    <color name="a_orange">#ffbb33</color>
+    <color name="a_orangeDark">#ff8800</color>
+    <color name="a_red">#ff4444</color>
+    <color name="a_redDark">#cc0000</color>
+    <!--Accent colors-->
+    <color name="blue">#049cdb</color>
+    <color name="blueDark">#0064cd</color>
+    <color name="green">#46a546</color>
+    <color name="red">#9d261d</color>
+    <color name="yellow">#ffc40d</color>
+    <color name="orange">#f89406</color>
+    <color name="pink">#c3325f</color>
+    <color name="purple">#7a43b6</color>
+    <!--App-specific colors-->
+    <color name="light_border_color">#e3e3e3</color>
+    <color name="list_hover">#16cedb</color>
+    <color name="menu_border_color">#4fa5d5</color>
+    <color name="selected_item_color">#0088cc</color>
+</resources>

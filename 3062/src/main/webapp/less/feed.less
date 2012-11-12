@@ -1,0 +1,185 @@
+@import "../css/bootstrap-src/variables.less";
+@import "../css/bootstrap-src/wells.less";
+@import "../css/bootstrap-src/utilities.less";
+
+@media (max-width: 979px) {
+    .the-container {
+        top:         -20px !important;
+        padding-top: 20px !important;
+    }
+
+    .post-container {
+        padding-left:  20px;
+        padding-right: 20px;
+    }
+}
+
+@media (max-width: 767px) {
+    .the-container {
+        margin-bottom: -60px !important;
+    }
+}
+
+@media (max-width:480px) {
+    html {
+        overflow-x: hidden;
+    }
+
+    .post-container {
+        border-bottom: none !important;
+        &:last-of-type {
+        }
+    }
+
+    .post-comment-link {
+        height:        60px;
+        margin-bottom: -20px;
+        margin-top:    10px;
+        margin-left:   -40px;
+        margin-right:  -40px;
+        padding-left:  40px;
+        padding-right: 40px;
+        border-bottom: 1px solid darken(@wellBackground, 7%);
+        span, a {
+            display:       block;
+            width:         50%;
+            text-align:    center;
+            padding-top:   20px;
+            border-top:    1px solid darken(@wellBackground, 10%);
+            margin-bottom: -20px;
+            height:        40px;
+        }
+        span {
+            .pull-left;
+            margin-left:   -50px;
+            padding-left:  19px;
+            padding-right: 30px;
+            border-right:  1px solid darken(@wellBackground, 7%);
+            white-space:   nowrap;
+            overflow:      hidden;
+            text-overflow: ellipsis;
+        }
+        a {
+            .pull-right;
+            margin-right:  -45px;
+            padding-right: 30px;
+            white-space:   nowrap;
+            padding-left:  15px;
+        }
+        .post-comment-link-separator {
+            display: none;
+        }
+    }
+}
+
+.the-container {
+    .box-shadow(~"30px 0px 30px -30px rgba(0, 0, 0, 0.15) inset, -30px 0px 30px -30px rgba(0, 0, 0, 0.15) inset, 0px 15px 20px -3px rgba(0, 0, 0, 0.15)");
+    background-color: darken(white, 2%);
+    border-left:      1px solid darken(@wellBackground, 10%);
+    border-right:     1px solid darken(@wellBackground, 10%);
+    border-bottom:    1px solid darken(@wellBackground, 10%);
+    position:         relative;
+    top:              -60px;
+    padding-top:      60px;
+    margin-bottom:    -40px;
+    padding-bottom:   40px;
+}
+
+#l-sidebar {
+
+}
+
+#content {
+
+}
+
+#r-sidebar {
+
+}
+
+.post-container {
+    &:first-of-type {
+        margin-top: 20px;
+    }
+    &:last-of-type {
+        border-bottom: none;
+    }
+    margin-bottom:  20px;
+    border-bottom:  1px solid darken(@wellBackground, 7%);
+    padding-bottom: 20px;
+
+    .post-author-img-thumb {
+        width:  50px;
+        height: 50px;
+        margin: -5px 3px 3px -5px;
+    }
+    .post-author-name {
+        margin: -7px 10px 0 59px;
+    }
+    .post-created-time {
+        .pull-left;
+    }
+    .post-comment-link {
+        text-align: right;
+    }
+    .post-content {
+        padding-left: 60px;
+    }
+
+}
+
+.comment-container {
+    margin-bottom:  20px;
+    border-bottom:  1px solid darken(@wellBackground, 7%);
+    padding-top:    10px;
+    padding-bottom: 20px;
+    padding-left:   5px;
+    overflow:       auto;
+    .comment-author-img-thumb {
+        width:  50px;
+        height: 50px;
+        margin: -5px 3px 3px -5px;
+    }
+    .comment-author-name {
+        .post-container > .post-author-name;
+        margin-left: 49px;
+    }
+    .comment-time {
+        text-align: right;
+    }
+
+    .comment-content {
+        padding-left: 60px;
+    }
+}
+
+#no-posts {
+    display:        block;
+    width:          100%;
+    text-align:     center;
+    border-bottom:  1px solid darken(@wellBackground, 7%);
+    padding-bottom: 20px;
+    margin-bottom:  20px;
+    color:          red;
+}
+
+#comment-area {
+    &:last-of-type {
+        border-bottom: 1px solid darken(@wellBackground, 7%);
+    }
+}
+
+#comment-form {
+    #comment-box {
+    }
+    #comment-button {
+        position: relative;
+        left:     -13px;
+    }
+
+    margin-bottom: 120px;
+}
+
+#pager {
+
+}

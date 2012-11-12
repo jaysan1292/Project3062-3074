@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/menu_main_refresh"
+            android:title="Refresh"
+            android:icon="@drawable/icon_refresh"
+            android:showAsAction="ifRoom"
+            android:onClick="onOptionsItemSelected"/>
+    <item
+            android:id="@+id/menu_main_post_new"
+            android:title="New Post"
+            android:icon="@drawable/icon_new_post"
+            android:showAsAction="always"
+            android:onClick="onOptionsItemSelected"/>
+</menu>

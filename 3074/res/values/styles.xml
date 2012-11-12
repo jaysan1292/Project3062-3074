@@ -1,0 +1,12 @@
+<resources>
+    <style name="marquee_scrolling">
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:marqueeRepeatLimit">marquee_forever</item>
+        <item name="android:scrollHorizontally">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:textColor">@color/text_light</item>
+        <item name="android:textColorHint">@color/text_light</item>
+    </style>
+</resources>

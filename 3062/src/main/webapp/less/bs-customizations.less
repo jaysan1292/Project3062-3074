@@ -1,0 +1,45 @@
+@import "mixins.less";
+@import "../css/bootstrap-src/variables.less";
+
+* {
+    font-family: "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
+body {
+    position:    relative;
+    padding-top: 60px;
+}
+
+@media (max-width: 980px) {
+    body {
+        padding-top: 0;
+    }
+}
+
+a {
+    .transition(all .2s linear);
+}
+
+code,
+pre {
+    font-family: "Droid Sans Mono", Consolas, "Courier New", monospace;
+}
+
+body > .navbar .brand {
+    font-weight: bold;
+    color:       #00A1DE;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, .1), 0 0 30px rgba(255, 255, 255, .125);
+}
+
+#btn-login,
+#btn-logout {
+    display:  inline !important;
+    float:    none !important;
+    position: relative;
+    height:   31px;
+    padding:  0 10px !important;
+}
+
+.btn {
+    .transition(none);
+}
