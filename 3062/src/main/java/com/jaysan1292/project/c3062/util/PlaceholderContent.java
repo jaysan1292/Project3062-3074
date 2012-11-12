@@ -133,8 +133,10 @@ public class PlaceholderContent {
 
             //</editor-fold>
 
+            saveAllToDatabase();
         } catch (Exception e) {
-            WebAppCommon.log.error(e.getMessage(), e);
+            WebAppCommon.log.error("There was an error initializing content ABORT ABORT", e);
+            System.exit(1);
         } finally {
             try {
                 watch.stop();
@@ -143,6 +145,10 @@ public class PlaceholderContent {
             assert (Posts != null) && (Users != null) && (UserPasswords != null);
             WebAppCommon.log.info(String.format("Placeholder content generation (%d posts, %d users) took %s.", Posts.size(), Users.size(), watchTotal.toString()));
         }
+    }
+
+    private static void saveAllToDatabase() {
+
     }
 
     public static User getUser(final long id) {

@@ -71,3 +71,5 @@ gen/
 ###### Other files
 *.log
 glyphicons/
+posts.json
+users.json

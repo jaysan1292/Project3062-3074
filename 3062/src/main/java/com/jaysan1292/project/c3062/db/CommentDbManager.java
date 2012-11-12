@@ -15,7 +15,7 @@ import java.sql.SQLException;
  */
 public class CommentDbManager extends BaseDbManager<Comment> {
     CommentDbManager() {
-        super("comment");
+        super("comment_t");
     }
 
     public String getIdColumnName() {
