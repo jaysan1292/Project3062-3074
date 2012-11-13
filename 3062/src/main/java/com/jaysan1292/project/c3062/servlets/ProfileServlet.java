@@ -28,7 +28,7 @@ public class ProfileServlet extends HttpServlet {
             try {
                 requestedUserId = Long.parseLong(request.getParameter("id"));
             } catch (NumberFormatException e) {
-                requestedUserId = ((UserBean) request.getSession().getAttribute(ATTR_USER)).getUser().getId();
+                requestedUserId = ((UserBean) request.getSession().getAttribute(ATTR_USER)).getId();
             }
 
             WebAppCommon.log.debug("Requested user profile ID: " + requestedUserId);

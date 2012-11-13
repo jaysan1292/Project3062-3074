@@ -3,6 +3,7 @@ package com.jaysan1292.project.c3062.util;
 import com.jaysan1292.jdcommon.Extensions;
 import com.jaysan1292.jdcommon.Range;
 import com.jaysan1292.project.c3062.WebAppCommon;
+import com.jaysan1292.project.c3062.db.DatabaseInitializer;
 import com.jaysan1292.project.common.data.Comment;
 import com.jaysan1292.project.common.data.Post;
 import com.jaysan1292.project.common.data.Program;
@@ -16,6 +17,7 @@ import org.apache.commons.lang3.time.StopWatch;
 
 import java.util.*;
 
+@Deprecated
 @SuppressWarnings("ObjectAllocationInLoop")
 public class PlaceholderContent {
     private final static long maxTime = (long) (86400000 * 1.5);
@@ -29,6 +31,8 @@ public class PlaceholderContent {
     public static Set<UserPasswordPair> UserPasswords;
 
     private PlaceholderContent() {}
+
+    //TODO: Save placeholder content directly to database rather than putting it in Sets beforehand
 
     static {
         StopWatch watch = new StopWatch();
@@ -133,6 +137,7 @@ public class PlaceholderContent {
 
             //</editor-fold>
 
+            DatabaseInitializer.saveContentToDatabase();
         } catch (Exception e) {
             WebAppCommon.log.error(e.getMessage(), e);
         } finally {

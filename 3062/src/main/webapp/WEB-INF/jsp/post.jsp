@@ -29,7 +29,7 @@
                         $('#comment-button').addClass('disabled');
                         sendComment(
                                 "${pageContext.servletContext.contextPath}/post/comment",
-                                ${user.user.id},
+                                ${user.id},
                                 ${post.id}
                         );
                     }

@@ -26,6 +26,10 @@ public class User extends BaseEntity<User> implements Comparable<User> {
         this.program = p;
     }
 
+    public User(String fn, String ln, String em, String sid, Program p) {
+        this(-1, fn, ln, em, sid, p);
+    }
+
     public User(User other) {
         this(other.userId, other.firstName, other.lastName, other.email, other.studentNumber, other.program);
     }
@@ -73,6 +77,9 @@ public class User extends BaseEntity<User> implements Comparable<User> {
     }
 
     public void setStudentNumber(String studentNumber) {
+        if (studentNumber.length() != 9) {
+            throw new IllegalArgumentException("Student number must be exactly 9 characters.");
+        }
         this.studentNumber = studentNumber;
     }
 

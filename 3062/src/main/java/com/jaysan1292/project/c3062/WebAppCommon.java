@@ -1,7 +1,9 @@
 package com.jaysan1292.project.c3062;
 
+import com.jaysan1292.project.c3062.db.DatabaseInitializer;
 import com.jaysan1292.project.common.data.User;
 import com.jaysan1292.project.common.data.beans.UserBean;
+import org.apache.commons.lang3.time.StopWatch;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -99,5 +101,42 @@ public abstract class WebAppCommon {
                 put(value[0], value[1]);
             }
         }};
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    private static boolean _initialized;
+
+    public static void initializeApplication() {
+        assert !_initialized;
+
+        StopWatch watch = new StopWatch(); watch.start();
+
+        // Each call of Class.forName(String) here loads the specified class,
+        // which in effect will initialize all the static variables in the
+        // class, as well as invoke its static constructor.
+        WebAppCommon.log.info("Initializing application.");
+
+        WebAppCommon.log.info("Current working directory is: " + System.getProperty("user.dir"));
+        try {
+            // Create the database
+            DatabaseInitializer.initialize();
+
+            // Load the placeholder content
+            Class.forName("com.jaysan1292.project.c3062.util.NewPlaceholderContent");
+//            Class.forName("com.jaysan1292.project.c3062.util.PlaceholderContent");
+        } catch (ClassNotFoundException ignored) {}
+
+        watch.stop();
+        WebAppCommon.log.info("Initialization complete! Took " + watch.toString());
+
+        _initialized = true;
+    }
+
+    public static void shutdownApplication() {
+        assert _initialized;
+
+        DatabaseInitializer.shutdown();
+
+        _initialized = false;
     }
 }

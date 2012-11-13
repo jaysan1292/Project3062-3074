@@ -5,13 +5,14 @@ import com.jaysan1292.project.common.data.BaseEntity;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
-import org.apache.commons.lang3.time.StopWatch;
-import org.intellij.lang.annotations.Language;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 
+import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
+import java.util.ArrayList;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,256 +24,118 @@ import java.util.Collection;
 public abstract class BaseDbManager<T extends BaseEntity> {
     public static final String DB_NAME = "gbc_community";
     static final QueryRunner RUN = new QueryRunner();
+    private Class<T> cls;
 
-    private String tableName;
+    public BaseDbManager(Class<T> cls) {
+        this.cls = cls;
+    }
 
-    static {
+    protected ResultSetHandler<T> getResultSetHandler() {
+        return new ResultSetHandler<T>() {
+            public T handle(ResultSet rs) throws SQLException {
+                if (!rs.next()) return null;
+
+                return buildObject(rs);
+            }
+        };
+    }
+
+    protected ResultSetHandler<T[]> getArrayResultSetHandler() {
+        return new ResultSetHandler<T[]>() {
+            @SuppressWarnings("unchecked")
+            public T[] handle(ResultSet rs) throws SQLException {
+                if (!rs.next()) return null;
+
+                ArrayList<T> items = new ArrayList<T>();
+                do {
+                    items.add(buildObject(rs));
+                } while (rs.next());
+
+                return items.toArray((T[]) Array.newInstance(cls, items.size()));
+            }
+        };
+    }
+
+    protected abstract String tableName();
+
+    protected abstract String idColumnName();
+
+    protected abstract T buildObject(ResultSet rs) throws SQLException;
+
+    public T get(long id) throws SQLException {
         Connection conn = null;
+        String query = "SELECT * FROM " + tableName() + " WHERE " + idColumnName() + "=?";
         try {
-            try {
-                Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-            } catch (ClassNotFoundException ignored) {}
-
-            //TODO: Foreign key constraints
-            StopWatch watch = new StopWatch(); watch.start();
-            WebAppCommon.log.info("Initializing database...");
-            WebAppCommon.log.info("Creating tables");
             conn = openDatabaseConnection();
+            T item = RUN.query(conn, query, getResultSetHandler(), id);
 
-            //region Table SQL
-            @Language("Derby")
-            String program =
-                    "CREATE TABLE program_t(\n" +
-                    "  program_id BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),\n" +
-                    "  program_code CHAR(4) NOT NULL,\n" +
-                    "  program_name VARCHAR(96) NOT NULL,\n" +
-                    "  CONSTRAINT program_pk PRIMARY KEY (program_id)\n" +
-                    ')';
-            @Language("Derby")
-            String user =
-                    "CREATE TABLE user_t(\n" +
-                    "  user_id BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),\n" +
-                    "  first_name VARCHAR(32) NOT NULL,\n" +
-                    "  last_name VARCHAR(32) NOT NULL,\n" +
-                    "  email VARCHAR(24) NOT NULL,\n" +
-                    "  student_number CHAR(9) NOT NULL, -- This is the \"username\" for logging in\n" +
-                    "  program_id BIGINT NOT NULL, -- Foreign key to program table\n" +
-                    "  password CHAR(64) NOT NULL, -- Stored as a 64-character encrypted hash\n" +
-                    "  CONSTRAINT user_pk PRIMARY KEY (user_id),  CONSTRAINT user_fk FOREIGN KEY (program_id)\n" +
-                    "  REFERENCES program_t (program_id)\n" +
-                    ')';
-            @Language("Derby")
-            String post =
-                    "CREATE TABLE post_t(\n" +
-                    "  post_id BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),\n" +
-                    "  post_date DATE NOT NULL,\n" +
-                    "  post_author_id BIGINT NOT NULL, -- Foreign key to user table\n" +
-                    "  post_content LONG VARCHAR NOT NULL,\n" +
-                    "  CONSTRAINT post_pl PRIMARY KEY (post_id),\n" +
-                    "  CONSTRAINT post_fk FOREIGN KEY (post_author_id)\n" +
-                    "  REFERENCES user_t (user_id)\n" +
-                    ')';
-            @Language("Derby")
-            String comment =
-                    "CREATE TABLE comment_t(\n" +
-                    "  comment_id BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),\n" +
-                    "  comment_author_id BIGINT NOT NULL, -- Foreign key to user table\n" +
-                    "  comment_body LONG VARCHAR NOT NULL,\n" +
-                    "  comment_date DATE NOT NULL,\n" +
-                    "  post_id BIGINT NOT NULL, -- Foreign key to post table\n" +
-                    "  CONSTRAINT comment_pk PRIMARY KEY (comment_id),\n" +
-                    "  CONSTRAINT comment_fk FOREIGN KEY (post_id)\n" +
-                    "  REFERENCES post_t (post_id)\n" +
-                    ')';
-            //endregion
-
-            //region Create tables
-            WebAppCommon.log.trace("Creating program table.");
-            try {
-                RUN.update(conn, program);
-            } catch (SQLException e) {
-                if (DerbyHelper.tableAlreadyExists(e)) {
-                    WebAppCommon.log.trace("Program table already exists! Moving on then.");
-                } else {
-                    throw e;
-                }
+            if (item == null) {
+                throw new SQLException(String.format("The requested item was not found in the database. Query: [%s] Parameters: %s", query, id));
             }
 
-            WebAppCommon.log.trace("Creating user table.");
-            try {
-                RUN.update(conn, user);
-            } catch (SQLException e) {
-                if (DerbyHelper.tableAlreadyExists(e)) {
-                    WebAppCommon.log.trace("User table already exists! Moving on then.");
-                } else {
-                    throw e;
-                }
-            }
-
-            WebAppCommon.log.trace("Creating post table.");
-            try {
-                RUN.update(conn, post);
-            } catch (SQLException e) {
-                if (DerbyHelper.tableAlreadyExists(e)) {
-                    WebAppCommon.log.trace("Post table already exists! Moving on then.");
-                } else {
-                    throw e;
-                }
-            }
-
-            WebAppCommon.log.trace("Creating comment table.");
-            try {
-                RUN.update(conn, comment);
-            } catch (SQLException e) {
-                if (DerbyHelper.tableAlreadyExists(e)) {
-                    WebAppCommon.log.trace("Comment table already exists! Moving on then.");
-                } else {
-                    throw e;
-                }
-            }
-            //endregion
-
-            watch.stop();
-            WebAppCommon.log.info(String.format("Initializing database complete! Finished in %s.", watch.toString()));
+            return item;
         } catch (SQLException e) {
-            WebAppCommon.log.error("There was an error creating and populating database tables. ABORT ABORT", e);
-            System.exit(0);
+            throw new SQLException(e.getMessage(), e);
         } finally {
             DbUtils.closeQuietly(conn);
         }
-
-        //region Shutdown hook
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            //Register shutdown hook to clear the tables and shut down Derby
-            public void run() {
-                WebAppCommon.log.info("Shutting down database.");
-            }
-        });
-        //endregion
     }
 
-    BaseDbManager(String tableName) {
-        this.tableName = tableName;
-    }
-
-    public abstract String getIdColumnName();
-
-    protected abstract ResultSetHandler<T> getResultSetHandler();
-
-    protected abstract ResultSetHandler<T[]> getArrayResultSetHandler();
-
-    //region Single items
-
-    public int put(T value) throws SQLException {
-        Connection connection = openDatabaseConnection();
+    @SuppressWarnings("unchecked")
+    public T[] getAll() {
+        Connection conn = null;
         try {
-            return doPut(connection, value);
+            conn = openDatabaseConnection();
+            String query = "SELECT * FROM " + tableName();
+
+            T[] items = RUN.query(conn, query, getArrayResultSetHandler());
+
+            if (items == null) throw new SQLException();
+
+            return items;
+        } catch (SQLException e) {
+            WebAppCommon.log.error(e.getMessage(), e);
+            return (T[]) new ArrayList<T>().toArray();
         } finally {
-            DbUtils.closeQuietly(connection);
+            DbUtils.closeQuietly(conn);
         }
     }
 
-    public T get(long id) throws SQLException {
-        Connection connection = openDatabaseConnection();
-
-        T item = null;
+    public void update(T item) throws SQLException {
+        Connection conn = null;
         try {
-            String query = doGet(connection, id);
-            item = RUN.query(connection, query, getResultSetHandler(), id);
-
-            if (item == null) {
-                String errorMessage = "The requested item was not found in the database. Query: %s; Parameters: %s";
-                throw new SQLException(String.format(errorMessage, query, id));
-            }
+            conn = openDatabaseConnection();
+            doUpdate(conn, item);
         } finally {
-            DbUtils.closeQuietly(connection);
-        }
-
-        return item;
-    }
-
-    public int update(T newValue) throws SQLException {
-        Connection connection = openDatabaseConnection();
-        try {
-            return doUpdate(connection, newValue);
-        } finally {
-            DbUtils.closeQuietly(connection);
+            DbUtils.closeQuietly(conn);
         }
     }
 
-    public int delete(long id) throws SQLException {
-        Connection connection = openDatabaseConnection();
+    public void insert(T item) throws SQLException {
+        Connection conn = null;
         try {
-            return doDelete(connection, id);
+            conn = openDatabaseConnection();
+            doInsert(conn, item);
         } finally {
-            DbUtils.closeQuietly(connection);
+            DbUtils.closeQuietly(conn);
         }
     }
 
-    //endregion
-
-    public int putBatch(Collection<T> values) throws SQLException {
-        Connection connection = openDatabaseConnection();
+    public int getCount() throws SQLException {
+        Connection conn = null;
         try {
-            int count = 0;
-            for (T value : values) {
-                count += doPut(connection, value);
-            }
-            return count;
+            conn = openDatabaseConnection();
+            return RUN.query(conn, "SELECT COUNT(*) FROM " + tableName(), new ScalarHandler<Integer>());
         } finally {
-            DbUtils.closeQuietly(connection);
+            DbUtils.closeQuietly(conn);
         }
     }
 
-    public Collection<T> getBatch(String[] columns, Object... values) throws SQLException {
-//        Connection connection = openDatabaseConnection();
-//        try {
-//
-//        } finally {
-//            DbUtils.closeQuietly(connection);
-//        }
-        throw new UnsupportedOperationException();
-    }
+    protected abstract int doUpdate(Connection conn, T item) throws SQLException;
 
-    public int updateBatch(Collection<T> newValues) throws SQLException {
-        Connection connection = openDatabaseConnection();
-        try {
-            int count = 0;
-            for (T newValue : newValues) {
-                count += doUpdate(connection, newValue);
-            }
-            return count;
-        } finally {
-            DbUtils.closeQuietly(connection);
-        }
-    }
+    protected abstract void doInsert(Connection conn, T item) throws SQLException;
 
-    public int deleteBatch(Collection<T> valuesToDelete) throws SQLException {
-        Connection connection = openDatabaseConnection();
-        try {
-            int count = 0;
-            for (T value : valuesToDelete) {
-                count += doDelete(connection, value.getId());
-            }
-            return count;
-        } finally {
-            DbUtils.closeQuietly(connection);
-        }
-    }
-
-    protected abstract String doGet(Connection connection, long id) throws SQLException;
-
-    protected abstract T[] doGet(Connection connection, String[] columns, Object... params) throws SQLException;
-
-    protected abstract int doPut(Connection connection, T value) throws SQLException;
-
-    protected abstract int doUpdate(Connection connection, T newValue) throws SQLException;
-
-    protected abstract int doDelete(Connection connection, long id) throws SQLException;
-
-    protected abstract void verifyColumns(String[] columns, Object... params) throws SQLException;
-
-    public static Connection openDatabaseConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:derby:" + DB_NAME + ";create=true");
+    protected static Connection openDatabaseConnection() throws SQLException {
+        return DriverManager.getConnection("jdbc:derby:" + DB_NAME);
     }
 }

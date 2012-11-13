@@ -1,56 +1,101 @@
 package com.jaysan1292.project.c3062.db;
 
 import com.jaysan1292.project.common.data.Comment;
-import org.apache.commons.dbutils.ResultSetHandler;
+import com.jaysan1292.project.common.data.Post;
+import org.apache.commons.dbutils.DbUtils;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
  * Created with IntelliJ IDEA.
- * Date: 04/11/12
- * Time: 8:07 PM
+ * Date: 13/11/12
+ * Time: 12:59 AM
  *
  * @author Jason Recillo
  */
 public class CommentDbManager extends BaseDbManager<Comment> {
-    CommentDbManager() {
-        super("comment");
+    private static CommentDbManager sharedInstance;
+    private static final String TABLE_NAME = "comment_t";
+    private static final String ID_COLUMN = "comment_id";
+    private static final String AUTHOR_ID_COLUMN = "comment_author_id";
+    private static final String CONTENT_COLUMN = "comment_body";
+    private static final String DATE_COLUMN = "comment_date";
+    private static final String PARENT_POST_ID_COLUMN = "post_id";
+
+    public static CommentDbManager getSharedInstance() {
+        if (sharedInstance == null) sharedInstance = new CommentDbManager();
+        return sharedInstance;
     }
 
-    public String getIdColumnName() {
-        return "comment_id";
+    private CommentDbManager() {
+        super(Comment.class);
     }
 
-    protected ResultSetHandler<Comment> getResultSetHandler() {
-        return null;  //TODO: Auto-generated method stub
+    protected String tableName() {
+        return TABLE_NAME;
     }
 
-    protected ResultSetHandler<Comment[]> getArrayResultSetHandler() {
-        return null;  //TODO: Auto-generated method stub
+    protected String idColumnName() {
+        return ID_COLUMN;
     }
 
-    protected String doGet(Connection connection, long id) throws SQLException {
-        return null;  //TODO: Auto-generated method stub
+    protected Comment buildObject(ResultSet rs) throws SQLException {
+        Comment comment = new Comment();
+        comment.setId(rs.getLong(ID_COLUMN));
+        comment.setCommentAuthor(UserManager.getSharedInstance().get(rs.getLong(AUTHOR_ID_COLUMN)));
+        comment.setCommentBody(rs.getString(CONTENT_COLUMN));
+        comment.setCommentDate(rs.getDate(DATE_COLUMN));
+        comment.setParentPostId(rs.getLong(PARENT_POST_ID_COLUMN));
+        return comment;
     }
 
-    protected Comment[] doGet(Connection connection, String[] columns, Object... params) throws SQLException {
-        return new Comment[0];  //TODO: Auto-generated method stub
+    protected int doUpdate(Connection conn, Comment item) throws SQLException {
+        String query = "UPDATE " + TABLE_NAME + " SET " +
+                       AUTHOR_ID_COLUMN + "=?, " +
+                       CONTENT_COLUMN + "=?, " +
+                       DATE_COLUMN + "=?, " +
+                       PARENT_POST_ID_COLUMN + "=? " +
+                       "WHERE " + ID_COLUMN + "=?";
+
+        return RUN.update(conn, query,
+                          item.getCommentAuthor().getId(),
+                          item.getCommentBody(),
+                          item.getCommentDate(),
+                          item.getParentPostId(),
+                          item.getId());
     }
 
-    protected int doPut(Connection connection, Comment value) throws SQLException {
-        return 0;  //TODO: Auto-generated method stub
+    protected void doInsert(Connection conn, Comment item) throws SQLException {
+        String query = "INSERT INTO " + TABLE_NAME + " (" +
+                       AUTHOR_ID_COLUMN + ", " +
+                       CONTENT_COLUMN + ", " +
+                       DATE_COLUMN + ", " +
+                       PARENT_POST_ID_COLUMN + ") VALUES (?, ?, ?, ?)";
+        RUN.update(conn, query,
+                   item.getCommentAuthor().getId(),
+                   item.getCommentBody(),
+                   item.getCommentDate(),
+                   item.getParentPostId());
     }
 
-    protected int doUpdate(Connection connection, Comment newValue) throws SQLException {
-        return 0;  //TODO: Auto-generated method stub
-    }
+    ///////////////////////////////////////////////////////////////////////////
 
-    protected int doDelete(Connection connection, long id) throws SQLException {
-        return 0;  //TODO: Auto-generated method stub
-    }
+    public Comment[] getComments(Post post) throws SQLException {
+        Connection conn = null;
+        try {
+            conn = openDatabaseConnection();
+            String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + PARENT_POST_ID_COLUMN + "=?";
+            Comment[] comments = RUN.query(conn, query, getArrayResultSetHandler(), post.getId());
 
-    protected void verifyColumns(String[] columns, Object... params) throws SQLException {
-        //TODO: Auto-generated method stub
+            if ((comments == null) || (comments.length == 0)) {
+                throw new SQLException("There are no comments for that post.");
+            }
+
+            return comments;
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
     }
 }

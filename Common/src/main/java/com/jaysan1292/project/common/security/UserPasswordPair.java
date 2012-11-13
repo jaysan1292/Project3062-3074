@@ -11,6 +11,11 @@ public class UserPasswordPair implements Comparable<UserPasswordPair> {
 
     public UserPasswordPair() {}
 
+    public UserPasswordPair(User user) {
+        this.user = user;
+        this.password = "(null)";
+    }
+
     public UserPasswordPair(User user, String plainPassword) {
         this.user = user;
         this.password = EncryptionUtils.encryptPassword(plainPassword);
@@ -32,6 +37,14 @@ public class UserPasswordPair implements Comparable<UserPasswordPair> {
         this.password = EncryptionUtils.encryptPassword(plainPassword);
     }
 
+    public void setPasswordDirect(String encryptedPassword) {
+        if (encryptedPassword.length() != 64) {
+            throw new IllegalArgumentException("The given password doesn't appear to be encrypted! Input: " + encryptedPassword);
+        }
+
+        this.password = encryptedPassword;
+    }
+
     public boolean comparePassword(String plainPassword) {
         return EncryptionUtils.getPasswordEncryptor().checkPassword(plainPassword, this.password);
     }
@@ -43,5 +56,9 @@ public class UserPasswordPair implements Comparable<UserPasswordPair> {
     @Override
     public String toString() {
         return "User/Password Pair: " + user.getStudentNumber() + ", " + StringUtils.abbreviate(password, 16);
+    }
+
+    public static String encryptPassword(String plainPassword) {
+        return EncryptionUtils.encryptPassword(plainPassword);
     }
 }

@@ -1,6 +1,7 @@
 package com.jaysan1292.project.c3062.servlets;
 
 import com.jaysan1292.project.c3062.WebAppCommon;
+import com.jaysan1292.project.c3062.db.ProgramDbManager;
 import com.jaysan1292.project.c3062.db.UserDbManager;
 import com.jaysan1292.project.common.data.Program;
 import com.jaysan1292.project.common.data.beans.UserBean;
@@ -15,8 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @WebServlet(WebAppCommon.SRV_LOGIN)
 public class LoginServlet extends HttpServlet {
@@ -66,7 +68,8 @@ public class LoginServlet extends HttpServlet {
             response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + '/'));
         } else {
             session.setAttribute("sendBackUrl", request.getParameter("sendBackUrl"));
-            ArrayList<Program> programs = new ArrayList<Program>(Program.AllPrograms.values());
+            List<Program> programs = Arrays.asList(ProgramDbManager.getSharedInstance().getAll());
+//            ArrayList<Program> programs = new ArrayList<Program>(Program.AllPrograms.values());
 
             Collections.sort(programs);
 
@@ -83,12 +86,12 @@ public class LoginServlet extends HttpServlet {
         session.setAttribute(WebAppCommon.ATTR_LOGGED_IN, true);
         session.setAttribute(WebAppCommon.ATTR_USER, user);
 
-        WebAppCommon.log.info(user.getUser().getFullName() + " has logged in.");
+        WebAppCommon.log.info(user.getFullName() + " has logged in.");
     }
 
     private static void setSessionUserLoggedOut(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
-        WebAppCommon.log.info(((UserBean) session.getAttribute(WebAppCommon.ATTR_USER)).getUser().getFullName() + " has logged out.");
+        WebAppCommon.log.info(((UserBean) session.getAttribute(WebAppCommon.ATTR_USER)).getFullName() + " has logged out.");
         session.setAttribute(WebAppCommon.ATTR_LOGGED_IN, false);
         session.setAttribute(WebAppCommon.ATTR_USER, new UserBean());
         session.removeAttribute(WebAppCommon.ATTR_USER_FEED);

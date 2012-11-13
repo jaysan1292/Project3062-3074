@@ -60,7 +60,7 @@
                                         <li>
                                             <a href="javascript:void(0)" style="cursor: default;">
                                                     <%--<c:out value="<%=user.getFullName()%>"/>--%>
-                                                    ${user.user.fullName}
+                                                    ${user.fullName}
                                             </a>
                                         </li>
                                     </c:if>

@@ -25,6 +25,10 @@ public class Comment extends BaseEntity<Comment> implements Comparable<Comment> 
         this.parentPostId = parentPostId;
     }
 
+    public Comment(User author, String body, Date date, long parentPostId) {
+        this(-1, author, body, date, parentPostId);
+    }
+
     public Comment(Comment other) {
         this(other.commentId, other.commentAuthor, other.commentBody, other.commentDate, other.parentPostId);
     }

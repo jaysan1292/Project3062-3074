@@ -31,6 +31,10 @@ public class Post extends BaseEntity<Post> implements Comparable<Post> {
         this.postContent = pcontent;
     }
 
+    public Post(Date pdate, User pauthor, String pcontent) {
+        this(-1, pdate, pauthor, pcontent);
+    }
+
     public Post(Post other) {
         this(other.postId, other.postDate, other.postAuthor, other.postContent);
     }

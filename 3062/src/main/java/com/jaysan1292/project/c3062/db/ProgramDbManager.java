@@ -1,13 +1,11 @@
 package com.jaysan1292.project.c3062.db;
 
 import com.jaysan1292.project.common.data.Program;
-import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.DbUtils;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,99 +15,64 @@ import java.util.Arrays;
  * @author Jason Recillo
  */
 public class ProgramDbManager extends BaseDbManager<Program> {
+    private static ProgramDbManager sharedInstance;
     public static final String TABLE_NAME = "program_t";
     public static final String ID_COLUMN = "program_id";
     public static final String CODE_COLUMN = "program_code";
     public static final String NAME_COLUMN = "program_name";
 
-    public ProgramDbManager() {
-        super(TABLE_NAME);
+    public static synchronized ProgramDbManager getSharedInstance() {
+        if (sharedInstance == null) sharedInstance = new ProgramDbManager();
+        return sharedInstance;
     }
 
-    public String getIdColumnName() {
+    private ProgramDbManager() {
+        super(Program.class);
+    }
+
+    protected String tableName() {
+        return TABLE_NAME;
+    }
+
+    protected String idColumnName() {
         return ID_COLUMN;
     }
 
-    public ResultSetHandler<Program> getResultSetHandler() {
-        return new ResultSetHandler<Program>() {
-            public Program handle(ResultSet rs) throws SQLException {
-                if (!rs.next()) return null;
-
-                Program program = new Program();
-                program.setId(rs.getLong("program_id"));
-                program.setProgramCode(rs.getString("program_code"));
-                program.setProgramName(rs.getString("program_name"));
-                return program;
-            }
-        };
+    protected Program buildObject(ResultSet rs) throws SQLException {
+        Program program = new Program();
+        program.setId(rs.getLong(ID_COLUMN));
+        program.setProgramCode(rs.getString(CODE_COLUMN));
+        program.setProgramName(rs.getString(NAME_COLUMN));
+        return program;
     }
 
-    public ResultSetHandler<Program[]> getArrayResultSetHandler() {
-        return new ResultSetHandler<Program[]>() {
-            public Program[] handle(ResultSet rs) throws SQLException {
-                if (!rs.next()) return null;
-
-                ArrayList<Program> programs = new ArrayList<Program>();
-                do {
-                    Program program = new Program();
-                    program.setId(rs.getLong("program_id"));
-                    program.setProgramCode(rs.getString("program_code"));
-                    program.setProgramName(rs.getString("program_name"));
-                    programs.add(program);
-                } while (rs.next());
-
-                return programs.toArray(new Program[programs.size()]);
-            }
-        };
-    }
-
-    protected String doGet(Connection connection, long id) throws SQLException {
-        return "SELECT * FROM program_t WHERE program_id=?";
-    }
-
-    protected Program[] doGet(Connection connection, String[] columns, Object... params) throws SQLException {
-        verifyColumns(columns, params);
-        String query = String.format("SELECT * from %s WHERE %s", TABLE_NAME, buildQueryParams(columns));
-        return RUN.query(connection, query, getArrayResultSetHandler(), params);
-    }
-
-    private static String buildQueryParams(String[] columns) {
-        StringBuilder sb = new StringBuilder();
-
-        for (String column : columns) {
-            sb.append(column).append("=?");
-        }
-
-        return new String(sb);
-    }
-
-    protected int doPut(Connection connection, Program value) throws SQLException {
-        String query = "INSERT INTO program_t(program_code, program_name) " +
-                       "VALUES (?, ?)";
-        return RUN.update(connection, query, value.getProgramCode(), value.getProgramName());
-    }
-
-    protected int doUpdate(Connection connection, Program newValue) throws SQLException {
+    protected int doUpdate(Connection conn, Program item) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    protected int doDelete(Connection connection, long id) throws SQLException {
-        throw new UnsupportedOperationException();
+    protected void doInsert(Connection conn, Program item) throws SQLException {
+        String query = "INSERT INTO " + TABLE_NAME + " (" + CODE_COLUMN + ", " + NAME_COLUMN + ") VALUES (?, ?)";
+        RUN.update(conn, query, item.getProgramCode(), item.getProgramName());
     }
 
-    protected void verifyColumns(String[] columns, Object... params) throws SQLException {
-        assert columns.length == params.length;
-        ArrayList<String> invalidColumns = new ArrayList<String>();
-        for (String column : columns) {
-            if (!(column.equals(ID_COLUMN) ||
-                  column.equals(CODE_COLUMN) ||
-                  column.equals(NAME_COLUMN))) {
+    ///////////////////////////////////////////////////////////////////////////
 
-                invalidColumns.add(column);
+    public Program getProgram(String programCode) throws SQLException {
+        Connection conn = null;
+        String query = String.format("SELECT * FROM %s WHERE %s=?", tableName(), CODE_COLUMN);
+        try {
+            conn = openDatabaseConnection();
+            Program program = RUN.query(conn, query, getResultSetHandler(), programCode);
+
+            if (program == null) {
+                throw new SQLException(String.format("The requested item was not found in the database. Query: [%s] Parameters: %s", query, program));
             }
-        }
-        if (!invalidColumns.isEmpty()) {
-            throw new SQLException("Some invalid columns were specified: " + Arrays.deepToString(invalidColumns.toArray()));
+
+            return program;
+        } catch (SQLException e) {
+            throw new SQLException(e.getMessage(), e);
+        } finally {
+            DbUtils.closeQuietly(conn);
         }
     }
 }

@@ -9,6 +9,7 @@ import com.jaysan1292.project.common.security.UserPasswordPair;
 import java.util.ArrayList;
 
 /** @author Jason Recillo */
+@Deprecated
 public class UserDbManager {
     private static UserDbManager sharedInstance;
 
@@ -19,22 +20,27 @@ public class UserDbManager {
 
     private UserDbManager() {}
 
+    @Deprecated
     public synchronized User getUser(long id) {
         return PlaceholderContent.getUser(id);
     }
 
+    @Deprecated
     public synchronized UserPasswordPair getPasswordForUser(long id) {
         return getPasswordForUser(getUser(id));
     }
 
+    @Deprecated
     public synchronized UserPasswordPair getPasswordForUser(User user) {
         return PlaceholderContent.getPasswordPair(user);
     }
 
+    @Deprecated
     public synchronized User getUserByStudentId(String studentId) {
         return PlaceholderContent.getUserByStudentId(studentId);
     }
 
+    @Deprecated
     public synchronized UserBean getUserBean(long id) {
         UserBean user = new UserBean();
         user.setUser(getUser(id));
@@ -43,6 +49,7 @@ public class UserDbManager {
         return user;
     }
 
+    @Deprecated
     public synchronized ArrayList<User> getUsersInProgram(Program program) {
         ArrayList<User> out = new ArrayList<User>();
         for (User user : PlaceholderContent.Users) {
