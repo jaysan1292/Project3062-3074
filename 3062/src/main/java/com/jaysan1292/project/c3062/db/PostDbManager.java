@@ -58,7 +58,8 @@ public class PostDbManager extends BaseDbManager<Post> {
         return RUN.update(conn, query,
                           item.getPostDate().getTime(),
                           item.getPostAuthor().getId(),
-                          item.getPostContent());
+                          item.getPostContent(),
+                          item.getId());
     }
 
     protected void doInsert(Connection conn, Post item) throws SQLException {
@@ -74,6 +75,7 @@ public class PostDbManager extends BaseDbManager<Post> {
 
     ///////////////////////////////////////////////////////////////////////////
 
+    //TODO: This should probably return a regular array
     public synchronized SortedArrayList<Post> getPosts(User user) throws SQLException {
         Connection conn = null;
         try {
@@ -94,6 +96,7 @@ public class PostDbManager extends BaseDbManager<Post> {
         }
     }
 
+    //TODO: This should probably return a regular array
     public synchronized SortedArrayList<PostBean> getPostBeans(User user) {
         Connection conn = null;
         try {
@@ -118,6 +121,7 @@ public class PostDbManager extends BaseDbManager<Post> {
         }
     }
 
+    //TODO: This should probably return a regular array
     public synchronized SortedArrayList<PostBean> getAllPostBeans() {
         Connection conn = null;
         try {

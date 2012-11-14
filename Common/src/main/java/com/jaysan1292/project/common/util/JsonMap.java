@@ -135,9 +135,4 @@ public class JsonMap extends LinkedHashMap<String, Object> implements Iterable<M
     public Iterator<Map.Entry<String, Object>> iterator() {
         return super.entrySet().iterator();
     }
-
-    @Override
-    public String toString() {
-        return super.toString();
-    }
 }

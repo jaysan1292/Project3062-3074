@@ -24,6 +24,7 @@ public class CommentDbManager extends BaseDbManager<Comment> {
     private static final String CONTENT_COLUMN = "comment_body";
     private static final String DATE_COLUMN = "comment_date";
     private static final String PARENT_POST_ID_COLUMN = "post_id";
+    private static final Comment[] EMPTY_COMMENTS = new Comment[0];
 
     public static CommentDbManager getSharedInstance() {
         if (sharedInstance == null) sharedInstance = new CommentDbManager();
@@ -83,18 +84,20 @@ public class CommentDbManager extends BaseDbManager<Comment> {
 
     ///////////////////////////////////////////////////////////////////////////
 
-    public Comment[] getComments(Post post) throws SQLException {
+    public Comment[] getComments(Post post) {
         Connection conn = null;
         try {
             conn = openDatabaseConnection();
             String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + PARENT_POST_ID_COLUMN + "=?";
             Comment[] comments = RUN.query(conn, query, getArrayResultSetHandler(), post.getId());
 
-            if ((comments == null)) {
-                return new Comment[0];
+            if (comments == null) {
+                return EMPTY_COMMENTS;
             }
 
             return comments;
+        } catch (SQLException e) {
+            return EMPTY_COMMENTS;
         } finally {
             DbUtils.closeQuietly(conn);
         }

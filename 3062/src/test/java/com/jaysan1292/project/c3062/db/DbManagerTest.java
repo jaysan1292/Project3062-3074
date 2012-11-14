@@ -1,6 +1,5 @@
 package com.jaysan1292.project.c3062.db;
 
-import com.jaysan1292.jdcommon.Extensions;
 import com.jaysan1292.project.c3062.WebAppCommon;
 import com.jaysan1292.project.c3062.util.PlaceholderGenerator;
 import com.jaysan1292.project.common.data.Comment;
@@ -22,8 +21,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -212,16 +210,8 @@ public class DbManagerTest {
     public void testGetCommentsForPost() throws Exception {
         Post post = postManager.get(0);
         Comment[] comments;
-        try {
-            comments = commentManager.getComments(post);
-        } catch (SQLException e) {
-            // Because some posts might have no comments, and these are generated randomly,
-            // we may have some bad luck where there might be no comments for this specific
-            // post. So, get a new post and try one more time.
-            post = Extensions.getRandom(postManager.getAll());
-            comments = commentManager.getComments(post);
-        }
-        assertTrue(comments.length != 0);
+        comments = commentManager.getComments(post);
+        assertNotNull(comments);
     }
 
     @Test
@@ -234,7 +224,7 @@ public class DbManagerTest {
         comment.setCommentAuthor(user);
         comment.setCommentDate(new Date());
         comment.setCommentBody("Trolololololololol");
-        comment.setParentPostId(pid);
+        comment.setParentPostId(post.getId());
 
         commentManager.insert(comment);
 
@@ -293,6 +283,43 @@ public class DbManagerTest {
             post.setId(post2.getId());
 
             assertEquals(post, post2);
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+    }
+
+    @Test
+    public void testEditPost() throws Exception {
+        WebAppCommon.log.info("Test: Edit an existing post");
+
+        Post post = new Post();
+        post.setPostAuthor(userManager.get(0));
+        post.setPostDate(new Date());
+        post.setPostContent("This is a test post.");
+
+        postManager.insert(post);
+
+        Connection conn = null;
+        try {
+            conn = BaseDbManager.openDatabaseConnection();
+            String query = "SELECT * FROM post_t WHERE post_date=?";
+
+            // Get the post that we just inserted
+            Post post2 = BaseDbManager.RUN.query(conn, query, PostDbManager.getSharedInstance().getResultSetHandler(), post.getPostDate().getTime());
+
+            // Ensure that the content is the same
+            assertEquals(post.getPostContent(), post2.getPostContent());
+            post2.setPostContent("This is a test post. EDITED!");
+
+            postManager.update(post2);
+
+            // Get the edited post
+            Post post3 = BaseDbManager.RUN.query(conn, query, PostDbManager.getSharedInstance().getResultSetHandler(), post.getPostDate().getTime());
+
+            // Ensure that the edited post has the same ID as the one we
+            // just retrieved, and that the content was edited successfully
+            assertEquals(post2.getId(), post3.getId());
+            assertEquals(post2.getPostContent(), post3.getPostContent());
         } finally {
             DbUtils.closeQuietly(conn);
         }

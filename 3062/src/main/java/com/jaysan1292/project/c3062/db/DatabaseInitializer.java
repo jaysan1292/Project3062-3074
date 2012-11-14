@@ -181,6 +181,7 @@ public class DatabaseInitializer {
                 try {
                     WebAppCommon.log.info("Cleaning database directory.");
                     FileDeleteStrategy.FORCE.delete(new File(BaseDbManager.DB_NAME));
+                    WebAppCommon.log.info("Database directory cleaned successfully!");
                 } catch (IOException e1) {
                     WebAppCommon.log.error("There was an error deleting the database directory. Please delete it manually.");
                     WebAppCommon.log.error(e1.getMessage(), e1);
