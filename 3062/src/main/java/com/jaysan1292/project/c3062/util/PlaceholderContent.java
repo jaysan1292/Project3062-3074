@@ -103,7 +103,11 @@ public class PlaceholderContent {
 
             WebAppCommon.log.trace("Generating posts.");
             for (int i = 0; i < numPosts; i++) {
-                Post post = new Post(new Date(((long) (System.currentTimeMillis() - (Math.random() * maxTime)))), Extensions.getRandom(users), PlaceholderGenerator.generateRandomContent(2, (Math.random() > 0.05) ? PlaceholderGenerator.ContentType.Sentence : PlaceholderGenerator.ContentType.Paragraph));
+                Post post = new Post(new Date(((long) (System.currentTimeMillis() - (Math.random() * maxTime)))),
+                                     Extensions.getRandom(users),
+                                     PlaceholderGenerator.generateRandomContent(2, (Math.random() > 0.05) ?
+                                                                                   PlaceholderGenerator.ContentType.Sentence :
+                                                                                   PlaceholderGenerator.ContentType.Paragraph));
                 po.insert(post);
             }
             posts = po.getAll();
