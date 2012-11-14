@@ -1,9 +1,6 @@
 package com.jaysan1292.project.common.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /** @author Jason Recillo */
 public class SortedArrayList<T extends Comparable<T>> extends ArrayList<T> {
@@ -11,6 +8,10 @@ public class SortedArrayList<T extends Comparable<T>> extends ArrayList<T> {
 
     public SortedArrayList(Collection<? extends T> collection) {
         super(collection);
+    }
+
+    public <E extends T> SortedArrayList(E[] array) {
+        super(Arrays.asList(array));
     }
 
     public void insertSorted(T value) {

@@ -1,10 +1,10 @@
 package com.jaysan1292.project.c3062.servlets;
 
 import com.jaysan1292.project.c3062.WebAppCommon;
-import com.jaysan1292.project.c3062.util.PlaceholderContent;
-import com.jaysan1292.project.common.data.Post;
+import com.jaysan1292.project.c3062.db.PostDbManager;
 import com.jaysan1292.project.common.data.User;
 import com.jaysan1292.project.common.data.beans.FeedBean;
+import com.jaysan1292.project.common.data.beans.PostBean;
 import com.jaysan1292.project.common.util.SortedArrayList;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
@@ -57,14 +57,15 @@ public class FeedServlet extends HttpServlet {
         }
     }
 
-    private static SortedArrayList<Post> getUserFeedPosts(final User user) {
-        SortedArrayList<Post> feed = new SortedArrayList<Post>();
+    private static SortedArrayList<PostBean> getUserFeedPosts(final User user) {
+        //TODO: Do this better ;p
+        SortedArrayList<PostBean> feed = new SortedArrayList<PostBean>();
         CollectionUtils.select(
-                PlaceholderContent.Posts,
+                PostDbManager.getSharedInstance().getAllPostBeans(),
                 new Predicate() {
                     public boolean evaluate(Object object) {
-                        Post post = (Post) object;
-                        return user.getProgram().equals(post.getPostAuthor().getProgram());
+                        PostBean post = (PostBean) object;
+                        return user.getProgram().equals(post.getPost().getPostAuthor().getProgram());
 //                        return true;
                     }
                 },

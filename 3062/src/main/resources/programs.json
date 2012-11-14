@@ -1,0 +1,562 @@
+[
+    {
+        "programCode": "A101",
+        "programName": "College Vocational"
+    },
+    {
+        "programCode": "A102",
+        "programName": "Pre-Health Science"
+    },
+    {
+        "programCode": "A103",
+        "programName": "Pre-Community Services"
+    },
+    {
+        "programCode": "A105",
+        "programName": "Assistant Cook Extended Training"
+    },
+    {
+        "programCode": "A106",
+        "programName": "Construction Craft Worker Foundations"
+    },
+    {
+        "programCode": "A146",
+        "programName": "Pre-Business"
+    },
+    {
+        "programCode": "A737",
+        "programName": "Academic Upgrading"
+    },
+    {
+        "programCode": "A738",
+        "programName": "Academic Upgrading for Deaf and Hard-of-Hearing Adults"
+    },
+    {
+        "programCode": "B103",
+        "programName": "Business - Accounting"
+    },
+    {
+        "programCode": "B107",
+        "programName": "Business Administration - Accounting"
+    },
+    {
+        "programCode": "B108",
+        "programName": "Business Administration - Marketing"
+    },
+    {
+        "programCode": "B130",
+        "programName": "Business Administration"
+    },
+    {
+        "programCode": "B144",
+        "programName": "Business Administration - Human Resources (no co-op)"
+    },
+    {
+        "programCode": "B145",
+        "programName": "Business Administration (no co-op)"
+    },
+    {
+        "programCode": "B150",
+        "programName": "Business Administration"
+    },
+    {
+        "programCode": "B154",
+        "programName": "Business Administration - Human Resources (with co-op)"
+    },
+    {
+        "programCode": "B155",
+        "programName": "Business Administration (with co-op)"
+    },
+    {
+        "programCode": "B157",
+        "programName": "Business Administration - Accounting(with co-op)"
+    },
+    {
+        "programCode": "B158",
+        "programName": "Business Administration - Marketing (with co-op)"
+    },
+    {
+        "programCode": "B301",
+        "programName": "Bachelor of Applied Business - Financial Services"
+    },
+    {
+        "programCode": "B400",
+        "programName": "Sport and Event Marketing (Postgraduate)"
+    },
+    {
+        "programCode": "B406",
+        "programName": "Marketing Management - Financial Services (Postgraduate)"
+    },
+    {
+        "programCode": "B407",
+        "programName": "Financial Planning (Postgraduate)"
+    },
+    {
+        "programCode": "B408",
+        "programName": "Human Resources Management (Postgraduate)"
+    },
+    {
+        "programCode": "B409",
+        "programName": "Strategic Relationship Marketing (Postgraduate)"
+    },
+    {
+        "programCode": "B410",
+        "programName": "Small Business Entrepreneurship (Postgraduate)"
+    },
+    {
+        "programCode": "B411",
+        "programName": "International Business Management (Postgraduate)"
+    },
+    {
+        "programCode": "C100",
+        "programName": "Early Childhood Education"
+    },
+    {
+        "programCode": "C101",
+        "programName": "Community Worker"
+    },
+    {
+        "programCode": "C102",
+        "programName": "Activation Co-ordinator"
+    },
+    {
+        "programCode": "C104",
+        "programName": "Child and Youth Worker"
+    },
+    {
+        "programCode": "C105",
+        "programName": "Early Childhood Assistant"
+    },
+    {
+        "programCode": "C108",
+        "programName": "Intervenor for Deaf-Blind Persons"
+    },
+    {
+        "programCode": "C109",
+        "programName": "Career and Work Counsellor"
+    },
+    {
+        "programCode": "C110",
+        "programName": "American Sign Language - English Interpreter"
+    },
+    {
+        "programCode": "C112",
+        "programName": "Personal Support Worker"
+    },
+    {
+        "programCode": "C114",
+        "programName": "American Sign Language and Deaf Studies"
+    },
+    {
+        "programCode": "C115",
+        "programName": "Office Administration - Medical"
+    },
+    {
+        "programCode": "C116",
+        "programName": "Behavioural Science Technology"
+    },
+    {
+        "programCode": "C118",
+        "programName": "Early Childhood Education (Consecutive Diploma)"
+    },
+    {
+        "programCode": "C119",
+        "programName": "Social Service Worker"
+    },
+    {
+        "programCode": "C129",
+        "programName": "Career and Work Counsellor (for Internationally Educated Professionals)"
+    },
+    {
+        "programCode": "C134",
+        "programName": "Child and Youth Worker (Fast Track)"
+    },
+    {
+        "programCode": "C135",
+        "programName": "Social Service Worker (Fast Track)"
+    },
+    {
+        "programCode": "C138",
+        "programName": "Career and Work Counsellor (Fast Track)"
+    },
+    {
+        "programCode": "C139",
+        "programName": "Health Information Management"
+    },
+    {
+        "programCode": "C300",
+        "programName": "Early Childhood Leadership (Bachelor of Applied Arts Degree Program)"
+    },
+    {
+        "programCode": "C301",
+        "programName": "Early Childhood Leadership (Bachelor of Applied Arts Degree Program) Fast Track"
+    },
+    {
+        "programCode": "C405",
+        "programName": "Autism and Behavioural Science (Postgraduate)"
+    },
+    {
+        "programCode": "C701",
+        "programName": "Redirection Through Education - For You"
+    },
+    {
+        "programCode": "C702",
+        "programName": "Redirection Through Education - Work Entry"
+    },
+    {
+        "programCode": "F102",
+        "programName": "Fashion Management"
+    },
+    {
+        "programCode": "F105",
+        "programName": "Gemmology"
+    },
+    {
+        "programCode": "F110",
+        "programName": "Jewellery Methods"
+    },
+    {
+        "programCode": "F111",
+        "programName": "Jewellery Essentials"
+    },
+    {
+        "programCode": "F112",
+        "programName": "Fashion Business Industry"
+    },
+    {
+        "programCode": "F113",
+        "programName": "Fashion Techniques and Design"
+    },
+    {
+        "programCode": "F114",
+        "programName": "Jewellery Arts"
+    },
+    {
+        "programCode": "F402",
+        "programName": "International Fashion Development and Management (Postgraduate)"
+    },
+    {
+        "programCode": "G102",
+        "programName": "Graphic Design"
+    },
+    {
+        "programCode": "G108",
+        "programName": "Art and Design Foundation"
+    },
+    {
+        "programCode": "G109",
+        "programName": "Game Development"
+    },
+    {
+        "programCode": "G401",
+        "programName": "Design Management (Postgraduate)"
+    },
+    {
+        "programCode": "G402",
+        "programName": "Digital Design - Advanced Digital Design (Postgraduate)"
+    },
+    {
+        "programCode": "G405",
+        "programName": "Digital Design - Game Design (Postgraduate)"
+    },
+    {
+        "programCode": "G414",
+        "programName": "Interdisciplinary Design Strategy (Postgraduate)"
+    },
+    {
+        "programCode": "H100",
+        "programName": "Culinary Management"
+    },
+    {
+        "programCode": "H101",
+        "programName": "Hospitality Services"
+    },
+    {
+        "programCode": "H102",
+        "programName": "Food and Beverage Management"
+    },
+    {
+        "programCode": "H103",
+        "programName": "Hotel Management"
+    },
+    {
+        "programCode": "H108",
+        "programName": "Baking Pre-Employment"
+    },
+    {
+        "programCode": "H110",
+        "programName": "Hospitality"
+    },
+    {
+        "programCode": "H112",
+        "programName": "Culinary Skills - Chef Training"
+    },
+    {
+        "programCode": "H113",
+        "programName": "Baking and Pastry Arts Management"
+    },
+    {
+        "programCode": "H116",
+        "programName": "Culinary Management (Integrated Learning)"
+    },
+    {
+        "programCode": "H119",
+        "programName": "Culinary Management - Nutrition"
+    },
+    {
+        "programCode": "H121",
+        "programName": "Special Events Planning"
+    },
+    {
+        "programCode": "H301",
+        "programName": "Bachelor of Applied Business - Hospitality Operations Management"
+    },
+    {
+        "programCode": "H402",
+        "programName": "Food and Nutrition Management"
+    },
+    {
+        "programCode": "H411",
+        "programName": "Culinary Arts - Italian (Postgraduate)"
+    },
+    {
+        "programCode": "P100",
+        "programName": "Theatre Arts"
+    },
+    {
+        "programCode": "P101",
+        "programName": "Dance Performance Preparation"
+    },
+    {
+        "programCode": "P102",
+        "programName": "Dance Performance Studies"
+    },
+    {
+        "programCode": "P103",
+        "programName": "Commercial Dance Studies"
+    },
+    {
+        "programCode": "R101",
+        "programName": "General Arts and Science - Two-Year"
+    },
+    {
+        "programCode": "R102",
+        "programName": "General Arts and Science - Introduction to Performing Arts Careers"
+    },
+    {
+        "programCode": "R104",
+        "programName": "General Arts and Science One-Year"
+    },
+    {
+        "programCode": "R106",
+        "programName": "Northern Women"
+    },
+    {
+        "programCode": "R107",
+        "programName": "Assaulted Women"
+    },
+    {
+        "programCode": "R400",
+        "programName": "Teaching English as a Second Language to Adults (TESL)"
+    },
+    {
+        "programCode": "R403",
+        "programName": "College Teacher Training (for Internationally Educated Professionals) (Postgraduate)"
+    },
+    {
+        "programCode": "R732",
+        "programName": "Intensive English as a Second Language (ESL)"
+    },
+    {
+        "programCode": "R739",
+        "programName": "Intensive English as a Second Language for International Students (ESL)"
+    },
+    {
+        "programCode": "S100",
+        "programName": "Dental Technology"
+    },
+    {
+        "programCode": "S101",
+        "programName": "Denturism"
+    },
+    {
+        "programCode": "S102",
+        "programName": "Orthotic"
+    },
+    {
+        "programCode": "S113",
+        "programName": "Dental Assisting Levels I and II"
+    },
+    {
+        "programCode": "S115",
+        "programName": "Dental Office Administration"
+    },
+    {
+        "programCode": "S117",
+        "programName": "Hearing Instrument Specialist"
+    },
+    {
+        "programCode": "S118",
+        "programName": "Bachelor of Science in Nursing (B"
+    },
+    {
+        "programCode": "S119",
+        "programName": "Personal Support Worker Pathway to Practical Nursing"
+    },
+    {
+        "programCode": "S121",
+        "programName": "Practical Nursing"
+    },
+    {
+        "programCode": "S122",
+        "programName": "R"
+    },
+    {
+        "programCode": "S124",
+        "programName": "Dental Hygiene"
+    },
+    {
+        "programCode": "S125",
+        "programName": "Fitness and Health Promotion"
+    },
+    {
+        "programCode": "S400",
+        "programName": "Restorative Dental Hygiene (Postgraduate)"
+    },
+    {
+        "programCode": "S402",
+        "programName": "Registered Nurse - Critical Care Nursing (Postgraduate)"
+    },
+    {
+        "programCode": "S404",
+        "programName": "Registered Nurse - Perinatal Intensive Care Nursing (Postgraduate)"
+    },
+    {
+        "programCode": "S407",
+        "programName": "Clinical Methods in Orthotics"
+    },
+    {
+        "programCode": "S414",
+        "programName": "Registered Nurse - Operating Room Perioperative Nursing (Postgraduate)"
+    },
+    {
+        "programCode": "S415",
+        "programName": "Registered Nurse - Family Practice Nursing"
+    },
+    {
+        "programCode": "S416",
+        "programName": "Interprofessional Acute Care Paediatric Cardiology Certificate"
+    },
+    {
+        "programCode": "S422",
+        "programName": "Registered Nurse - Critical Care Nursing (Online) (Postgraduate)"
+    },
+    {
+        "programCode": "T105",
+        "programName": "Construction Engineering Technology"
+    },
+    {
+        "programCode": "T109",
+        "programName": "Architectural Technology"
+    },
+    {
+        "programCode": "T110",
+        "programName": "Building Renovation Technician"
+    },
+    {
+        "programCode": "T121",
+        "programName": "Mechanical Engineering Technology - Design"
+    },
+    {
+        "programCode": "T126",
+        "programName": "Construction Trade Techniques"
+    },
+    {
+        "programCode": "T127",
+        "programName": "Computer Programmer Analyst"
+    },
+    {
+        "programCode": "T132",
+        "programName": "Architectural Technician"
+    },
+    {
+        "programCode": "T141",
+        "programName": "Computer Systems Technician"
+    },
+    {
+        "programCode": "T143",
+        "programName": "Mechanical Technician - Tool"
+    },
+    {
+        "programCode": "T146",
+        "programName": "Electromechanical Engineering Technician"
+    },
+    {
+        "programCode": "T147",
+        "programName": "Computer Systems Technology"
+    },
+    {
+        "programCode": "T148",
+        "programName": "Building Renovation Technology"
+    },
+    {
+        "programCode": "T151",
+        "programName": "Railway Conductor"
+    },
+    {
+        "programCode": "T160",
+        "programName": "Heating"
+    },
+    {
+        "programCode": "T161",
+        "programName": "Construction Engineering Technician"
+    },
+    {
+        "programCode": "T162",
+        "programName": "Heating"
+    },
+    {
+        "programCode": "T163",
+        "programName": "Game Programming"
+    },
+    {
+        "programCode": "T164",
+        "programName": "Civil Engineering Technology"
+    },
+    {
+        "programCode": "T167",
+        "programName": "Electrical Techniques"
+    },
+    {
+        "programCode": "T302",
+        "programName": "Bachelor of Applied Technology - Construction Science and Management"
+    },
+    {
+        "programCode": "T402",
+        "programName": "Health Informatics (Postgraduate)"
+    },
+    {
+        "programCode": "T403",
+        "programName": "Construction Management for Internationally Educated Professionals (Postgraduate)"
+    },
+    {
+        "programCode": "T405",
+        "programName": "Information Systems Business Analyst (Postgraduate)"
+    },
+    {
+        "programCode": "T411",
+        "programName": "Wireless Networking (Postgraduate)"
+    },
+    {
+        "programCode": "T901",
+        "programName": "Electronics Technician (Distance Education)"
+    },
+    {
+        "programCode": "T902",
+        "programName": "Electromechanical Technician (Distance Education)"
+    },
+    {
+        "programCode": "T948",
+        "programName": "Robotics Technician (Distance Education)"
+    }
+]

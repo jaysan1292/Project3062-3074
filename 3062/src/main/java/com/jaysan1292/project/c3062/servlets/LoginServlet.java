@@ -2,7 +2,7 @@ package com.jaysan1292.project.c3062.servlets;
 
 import com.jaysan1292.project.c3062.WebAppCommon;
 import com.jaysan1292.project.c3062.db.ProgramDbManager;
-import com.jaysan1292.project.c3062.db.UserDbManager;
+import com.jaysan1292.project.c3062.db.UserManager;
 import com.jaysan1292.project.common.data.Program;
 import com.jaysan1292.project.common.data.beans.UserBean;
 import org.apache.commons.lang3.BooleanUtils;
@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -32,8 +33,12 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("login_password");
 
         UserBean user = new UserBean();
-        user.setUser(UserDbManager.getSharedInstance().getUserByStudentId(username));
-        user.setPassword(UserDbManager.getSharedInstance().getPasswordForUser(user.getUser()));
+        try {
+            user.setUser(UserManager.getSharedInstance().getUser(username));
+            user.setPassword(UserManager.getSharedInstance().getPassword(user.getUser()));
+        } catch (SQLException e) {
+            throw new ServletException(e);
+        }
 
 //        User user = UserDbManager.getSharedInstance().getUserByStudentId(username);
 

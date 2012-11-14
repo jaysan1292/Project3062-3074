@@ -7,6 +7,7 @@ import org.apache.commons.dbutils.DbUtils;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -46,7 +47,7 @@ public class CommentDbManager extends BaseDbManager<Comment> {
         comment.setId(rs.getLong(ID_COLUMN));
         comment.setCommentAuthor(UserManager.getSharedInstance().get(rs.getLong(AUTHOR_ID_COLUMN)));
         comment.setCommentBody(rs.getString(CONTENT_COLUMN));
-        comment.setCommentDate(rs.getDate(DATE_COLUMN));
+        comment.setCommentDate(new Date(rs.getLong(DATE_COLUMN)));
         comment.setParentPostId(rs.getLong(PARENT_POST_ID_COLUMN));
         return comment;
     }
@@ -62,7 +63,7 @@ public class CommentDbManager extends BaseDbManager<Comment> {
         return RUN.update(conn, query,
                           item.getCommentAuthor().getId(),
                           item.getCommentBody(),
-                          item.getCommentDate(),
+                          item.getCommentDate().getTime(),
                           item.getParentPostId(),
                           item.getId());
     }
@@ -76,7 +77,7 @@ public class CommentDbManager extends BaseDbManager<Comment> {
         RUN.update(conn, query,
                    item.getCommentAuthor().getId(),
                    item.getCommentBody(),
-                   item.getCommentDate(),
+                   item.getCommentDate().getTime(),
                    item.getParentPostId());
     }
 
@@ -89,8 +90,8 @@ public class CommentDbManager extends BaseDbManager<Comment> {
             String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + PARENT_POST_ID_COLUMN + "=?";
             Comment[] comments = RUN.query(conn, query, getArrayResultSetHandler(), post.getId());
 
-            if ((comments == null) || (comments.length == 0)) {
-                throw new SQLException("There are no comments for that post.");
+            if ((comments == null)) {
+                return new Comment[0];
             }
 
             return comments;

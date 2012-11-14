@@ -1,6 +1,9 @@
 package com.jaysan1292.project.common.test;
 
-import com.jaysan1292.project.c3062.util.PlaceholderContent;
+import com.jaysan1292.project.c3062.WebAppCommon;
+import com.jaysan1292.project.c3062.db.CommentDbManager;
+import com.jaysan1292.project.c3062.db.PostDbManager;
+import com.jaysan1292.project.c3062.db.UserManager;
 import com.jaysan1292.project.common.data.Comment;
 import com.jaysan1292.project.common.data.Post;
 import com.jaysan1292.project.common.data.User;
@@ -10,9 +13,7 @@ import org.apache.commons.collections.Predicate;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @SuppressWarnings("ALL")
 public class Application {
@@ -20,9 +21,11 @@ public class Application {
 
     //Note: the purpose of this method is only to create the placeholder data used by the mobile app for gbc.myCommunity
     public static void main(String[] args) throws Exception {
-        Set<Post> posts = PlaceholderContent.Posts;
-        Set<User> users = PlaceholderContent.Users;
-        Set<Comment> comments = PlaceholderContent.Comments;
+        WebAppCommon.initializeApplication();
+
+        Set<Post> posts = new TreeSet<Post>(Arrays.asList(PostDbManager.getSharedInstance().getAll()));
+        Set<User> users = new TreeSet<User>(Arrays.asList(UserManager.getSharedInstance().getAll()));
+        Set<Comment> comments = new TreeSet<Comment>(Arrays.asList(CommentDbManager.getSharedInstance().getAll()));
 
         String postFilepath = "Project3074/res/raw/posts.json";
         String userFilepath = "Project3074/res/raw/users.json";
@@ -55,5 +58,7 @@ public class Application {
         Post.writeJSONArray(posts, new BufferedWriter(new FileWriter(postFilepath)));
         User.writeJSONArray(users, new BufferedWriter(new FileWriter(userFilepath)));
         Comment.writeJSONArray(comments, new BufferedWriter(new FileWriter(commentFilepath)));
+
+        WebAppCommon.shutdownApplication();
     }
 }

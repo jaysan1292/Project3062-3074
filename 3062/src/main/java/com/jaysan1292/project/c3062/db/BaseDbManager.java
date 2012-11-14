@@ -14,6 +14,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+//TODO: Remove sharedInstance from all subclasses, and just make each method synchronized
+
 /**
  * Created with IntelliJ IDEA.
  * Date: 31/10/12
@@ -121,11 +123,13 @@ public abstract class BaseDbManager<T extends BaseEntity> {
         }
     }
 
-    public int getCount() throws SQLException {
+    public int getCount() {
         Connection conn = null;
         try {
             conn = openDatabaseConnection();
             return RUN.query(conn, "SELECT COUNT(*) FROM " + tableName(), new ScalarHandler<Integer>());
+        } catch (SQLException e) {
+            return 0;
         } finally {
             DbUtils.closeQuietly(conn);
         }

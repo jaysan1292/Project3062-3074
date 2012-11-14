@@ -1,6 +1,5 @@
 package com.jaysan1292.project.common.data.beans;
 
-import com.jaysan1292.project.common.data.Post;
 import com.jaysan1292.project.common.data.User;
 import com.jaysan1292.project.common.util.SortedArrayList;
 
@@ -10,7 +9,7 @@ import java.util.List;
 public class FeedBean {
     public static final int POSTS_PER_PAGE = 20;
 
-    private SortedArrayList<Post> posts;
+    private SortedArrayList<PostBean> posts;
     private User user;
     private int offset;
 
@@ -22,22 +21,22 @@ public class FeedBean {
         this.user = user;
     }
 
-    public List<Post> getPosts() {
+    public List<PostBean> getPosts() {
         return posts;
     }
 
-    public void setPosts(List<Post> posts) {
-        this.posts = new SortedArrayList<Post>(posts);
+    public void setPosts(List<PostBean> posts) {
+        this.posts = new SortedArrayList<PostBean>(posts);
     }
 
-    public List<Post> getPostsWithOffset() {
+    public List<PostBean> getPostsWithOffset() {
         try {
-            return new SortedArrayList<Post>(posts.subList(offset, offset + POSTS_PER_PAGE));
+            return new SortedArrayList<PostBean>(posts.subList(offset, offset + POSTS_PER_PAGE));
         } catch (IndexOutOfBoundsException e) {
             try {
-                return new SortedArrayList<Post>(posts.subList(offset, getPostCount()));
+                return new SortedArrayList<PostBean>(posts.subList(offset, getPostCount()));
             } catch (IllegalArgumentException e1) {
-                return new SortedArrayList<Post>();
+                return new SortedArrayList<PostBean>();
             }
         }
     }

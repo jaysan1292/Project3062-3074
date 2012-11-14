@@ -2,19 +2,25 @@ package com.jaysan1292.project.c3062.db;
 
 import com.jaysan1292.jdcommon.Extensions;
 import com.jaysan1292.project.c3062.WebAppCommon;
+import com.jaysan1292.project.c3062.util.PlaceholderGenerator;
 import com.jaysan1292.project.common.data.Comment;
 import com.jaysan1292.project.common.data.Post;
 import com.jaysan1292.project.common.data.Program;
 import com.jaysan1292.project.common.data.User;
+import com.jaysan1292.project.common.data.beans.PostBean;
 import com.jaysan1292.project.common.data.beans.UserBean;
+import com.jaysan1292.project.common.util.SortedArrayList;
+import org.apache.commons.dbutils.DbUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -40,6 +46,7 @@ public class DbManagerTest {
         WebAppCommon.log.info("----------------------------------------");
         try {
             WebAppCommon.initializeApplication();
+
             programManager = ProgramDbManager.getSharedInstance();
             postManager = PostDbManager.getSharedInstance();
             userManager = UserManager.getSharedInstance();
@@ -157,6 +164,20 @@ public class DbManagerTest {
         assertEquals(user.getStudentNumber(), user2.getStudentNumber());
     }
 
+    @Test
+    public void testUpdateUser() throws Exception {
+        WebAppCommon.log.info("Test: Update existing user");
+
+        User user = userManager.getUser("100726948");
+        assertEquals("jaysan1292@example.com", user.getEmail());
+
+        user.setEmail("jaysan1292@gmail.com");
+        userManager.update(user);
+
+        User user2 = userManager.getUser("100726948");
+        assertEquals("jaysan1292@gmail.com", user2.getEmail());
+    }
+
     @Test(expected = SQLException.class)
     public void testCreateUserThatAlreadyExists() throws Exception {
         WebAppCommon.log.info("Test: Create user with duplicate student number");
@@ -173,18 +194,14 @@ public class DbManagerTest {
         userManager.insert(user);
     }
 
-    @Test
-    public void testUpdateUser() throws Exception {
-        WebAppCommon.log.info("Test: Update existing user");
+    @Test(expected = SQLException.class)
+    public void testGetNonExistingUser() throws Exception {
+        WebAppCommon.log.info("Test: Get non-existing user");
 
-        User user = userManager.getUser("100726948");
-        assertEquals("jaysan1292@example.com", user.getEmail());
-
-        user.setEmail("jaysan1292@gmail.com");
-        userManager.update(user);
-
-        User user2 = userManager.getUser("100726948");
-        assertEquals("jaysan1292@gmail.com", user2.getEmail());
+        // This should fail because it shouldn't exist in the database; (there
+        // is an extremely small chance it could because the student numbers
+        // are randomly generated
+        userManager.getUser("000000000");
     }
 
     //endregion
@@ -205,6 +222,80 @@ public class DbManagerTest {
             comments = commentManager.getComments(post);
         }
         assertTrue(comments.length != 0);
+    }
+
+    @Test
+    public void testCreateComment() throws Exception {
+        long pid = 0;
+        Post post = postManager.get(pid);
+        User user = userManager.get(0);
+
+        Comment comment = new Comment();
+        comment.setCommentAuthor(user);
+        comment.setCommentDate(new Date());
+        comment.setCommentBody("Trolololololololol");
+        comment.setParentPostId(pid);
+
+        commentManager.insert(comment);
+
+        Connection conn = null;
+        try {
+            conn = BaseDbManager.openDatabaseConnection();
+            String query = "SELECT * FROM comment_t WHERE comment_date=?";
+            Comment comment2 = BaseDbManager.RUN.query(conn, query, CommentDbManager.getSharedInstance().getResultSetHandler(), comment.getCommentDate().getTime());
+
+            comment.setId(comment2.getId());
+
+            assertEquals(comment, comment2);
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+    }
+
+    //endregion
+
+    //region PostDbManager
+
+    @Test
+    public void testGetPostsForUser() throws Exception {
+        WebAppCommon.log.info("Test: Get posts for a specific user");
+
+        User user = userManager.getUser("100726948");
+        Post post = new Post();
+        post.setPostAuthor(user);
+        post.setPostDate(new Date());
+        post.setPostContent("Testing testing testing...");
+
+        postManager.insert(post);
+
+        SortedArrayList<PostBean> posts = postManager.getPostBeans(user);
+
+        assertTrue(posts.size() >= 1);
+    }
+
+    @Test
+    public void testCreatePost() throws Exception {
+        WebAppCommon.log.info("Test: Create a new post");
+
+        Post post = new Post();
+        post.setPostAuthor(userManager.getUser("100726948"));
+        post.setPostDate(new Date());
+        post.setPostContent(PlaceholderGenerator.generateRandomContent(5, PlaceholderGenerator.ContentType.Sentence));
+
+        postManager.insert(post);
+
+        Connection conn = null;
+        try {
+            conn = BaseDbManager.openDatabaseConnection();
+            String query = "SELECT * FROM post_t WHERE post_date=?";
+            Post post2 = BaseDbManager.RUN.query(conn, query, PostDbManager.getSharedInstance().getResultSetHandler(), post.getPostDate().getTime());
+
+            post.setId(post2.getId());
+
+            assertEquals(post, post2);
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
     }
 
     //endregion

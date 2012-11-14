@@ -89,10 +89,6 @@
                             <directory>gbc_community</directory>
                             <followSymlinks>false</followSymlinks>
                         </fileset>
-                        <fileset>
-                            <directory>out</directory>
-                            <followSymlinks>false</followSymlinks>
-                        </fileset>
                     </filesets>
                 </configuration>
             </plugin>

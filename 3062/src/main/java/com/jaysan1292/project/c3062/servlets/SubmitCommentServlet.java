@@ -1,7 +1,8 @@
 package com.jaysan1292.project.c3062.servlets;
 
 import com.jaysan1292.project.c3062.WebAppCommon;
-import com.jaysan1292.project.c3062.db.UserDbManager;
+import com.jaysan1292.project.c3062.db.CommentDbManager;
+import com.jaysan1292.project.c3062.db.UserManager;
 import com.jaysan1292.project.common.data.Comment;
 import com.jaysan1292.project.common.data.User;
 import org.apache.commons.io.IOUtils;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
@@ -25,7 +27,12 @@ public class SubmitCommentServlet extends HttpServlet {
             Map<String, String[]> params = request.getParameterMap();
 
             long userId = Long.parseLong(params.get("comment-poster")[0]);
-            User commentAuthor = UserDbManager.getSharedInstance().getUser(userId);
+            User commentAuthor;
+            try {
+                commentAuthor = UserManager.getSharedInstance().get(userId);
+            } catch (SQLException e) {
+                throw new ServletException(e);
+            }
             String commentBody = params.get("comment")[0];
             Date commentDate = new Date(Long.parseLong(params.get("comment-date")[0]));
             long parentPostId = Long.parseLong(params.get("post-id")[0]);
@@ -36,7 +43,11 @@ public class SubmitCommentServlet extends HttpServlet {
             comment.setCommentDate(commentDate);
             comment.setParentPostId(parentPostId);
 
-//            PostDbManager.getSharedInstance().getPost(parentPostId).getPostComments().add(comment);
+            try {
+                CommentDbManager.getSharedInstance().insert(comment);
+            } catch (SQLException e) {
+                throw new ServletException(e);
+            }
 
             //Dynamically create a new JSP file to generate the required HTML for the comment
             File root = new File(getServletContext().getRealPath("/"));

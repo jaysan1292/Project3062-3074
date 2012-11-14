@@ -55,7 +55,7 @@ public class NewPlaceholderContent {
             ///////////////////////////////////////////////////////////////////
 
             WebAppCommon.log.trace("Populating program table...");
-            ArrayList<Program> pro = Program.readJSONArray(Program.class, ClassLoader.getSystemResourceAsStream("programs.json"));
+            ArrayList<Program> pro = Program.readJSONArray(Program.class, NewPlaceholderContent.class.getClassLoader().getResourceAsStream("programs.json"));
             for (Program program : pro) {
                 p.insert(program);
             }
@@ -68,7 +68,11 @@ public class NewPlaceholderContent {
             ///////////////////////////////////////////////////////////////////
 
             WebAppCommon.log.trace("Generating users.");
-            UserBean ub = new UserBean(new User("Jason", "Recillo", "jaysan1292@example.com", "100726948", p.getProgram("T127")));
+            UserBean ub = new UserBean(new User("Jason",
+                                                "Recillo",
+                                                "jaysan1292@example.com",
+                                                "100726948",
+                                                p.getProgram("T127")));
             ub.setPassword(ub.getStudentNumber());
             u.insert(ub);
 

@@ -2,9 +2,9 @@ package com.jaysan1292.project.c3062.servlets;
 
 import com.jaysan1292.project.c3062.WebAppCommon;
 import com.jaysan1292.project.c3062.db.PostDbManager;
-import com.jaysan1292.project.c3062.db.UserDbManager;
-import com.jaysan1292.project.common.data.Post;
+import com.jaysan1292.project.c3062.db.UserManager;
 import com.jaysan1292.project.common.data.User;
+import com.jaysan1292.project.common.data.beans.PostBean;
 import com.jaysan1292.project.common.data.beans.ProfileBean;
 import com.jaysan1292.project.common.data.beans.UserBean;
 import com.jaysan1292.project.common.util.SortedArrayList;
@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import static com.jaysan1292.project.c3062.WebAppCommon.ATTR_USER;
 
@@ -33,18 +34,23 @@ public class ProfileServlet extends HttpServlet {
 
             WebAppCommon.log.debug("Requested user profile ID: " + requestedUserId);
 
-            User user;
-            SortedArrayList<Post> posts;
-            user = UserDbManager.getSharedInstance().getUser(requestedUserId);
-            posts = PostDbManager.getSharedInstance().getPosts(user);
+            try {
+                User user;
+                SortedArrayList<PostBean> posts;
+                user = UserManager.getSharedInstance().get(requestedUserId);
+                posts = PostDbManager.getSharedInstance().getPostBeans(user);
 
-            if (user != null) {
-                ProfileBean profile = new ProfileBean();
-                profile.setUser(user);
-                profile.setPosts(posts);
-                request.setAttribute("profile", profile);
-                request.getRequestDispatcher(WebAppCommon.JSP_PROFILE).include(request, response);
-            } else {
+                if (user != null) {
+                    ProfileBean profile = new ProfileBean();
+                    profile.setUser(user);
+                    profile.setPosts(posts);
+                    request.setAttribute("profile", profile);
+                    request.getRequestDispatcher(WebAppCommon.JSP_PROFILE).include(request, response);
+                } else {
+                    request.getRequestDispatcher("/404").forward(request, response);
+                }
+            } catch (SQLException e) {
+                WebAppCommon.log.error(e.getMessage(), e);
                 request.getRequestDispatcher("/404").forward(request, response);
             }
         }

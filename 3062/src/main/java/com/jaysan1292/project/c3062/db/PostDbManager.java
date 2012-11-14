@@ -1,15 +1,17 @@
 package com.jaysan1292.project.c3062.db;
 
-import com.jaysan1292.project.c3062.util.PlaceholderContent;
+import com.jaysan1292.project.c3062.WebAppCommon;
 import com.jaysan1292.project.common.data.Post;
 import com.jaysan1292.project.common.data.User;
+import com.jaysan1292.project.common.data.beans.PostBean;
 import com.jaysan1292.project.common.util.SortedArrayList;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
+import org.apache.commons.dbutils.DbUtils;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Date;
 
 /** @author Jason Recillo */
 public class PostDbManager extends BaseDbManager<Post> {
@@ -40,7 +42,7 @@ public class PostDbManager extends BaseDbManager<Post> {
     protected Post buildObject(ResultSet rs) throws SQLException {
         Post post = new Post();
         post.setId(rs.getLong(ID_COLUMN));
-        post.setPostDate(rs.getDate(DATE_COLUMN));
+        post.setPostDate(new Date(rs.getLong(DATE_COLUMN)));
         post.setPostAuthor(UserManager.getSharedInstance().get(rs.getLong(AUTHOR_ID_COLUMN)));
         post.setPostContent(rs.getString(CONTENT_COLUMN));
         return post;
@@ -54,7 +56,7 @@ public class PostDbManager extends BaseDbManager<Post> {
                        "WHERE " + ID_COLUMN + "=?";
 
         return RUN.update(conn, query,
-                          item.getPostDate(),
+                          item.getPostDate().getTime(),
                           item.getPostAuthor().getId(),
                           item.getPostContent());
     }
@@ -65,28 +67,75 @@ public class PostDbManager extends BaseDbManager<Post> {
                        AUTHOR_ID_COLUMN + ", " +
                        CONTENT_COLUMN + ") VALUES (?, ?, ?)";
         RUN.update(conn, query,
-                   item.getPostDate(),
+                   item.getPostDate().getTime(),
                    item.getPostAuthor().getId(),
                    item.getPostContent());
     }
 
     ///////////////////////////////////////////////////////////////////////////
 
-    @Deprecated
-    public synchronized Post getPost(long id) {
-        return PlaceholderContent.getPost(id);
+    public synchronized SortedArrayList<Post> getPosts(User user) throws SQLException {
+        Connection conn = null;
+        try {
+            conn = openDatabaseConnection();
+            String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + AUTHOR_ID_COLUMN + "=?";
+            Post[] posts = RUN.query(conn, query, getArrayResultSetHandler(), user.getId());
+
+            if ((posts == null)) {
+                return new SortedArrayList<Post>();
+            }
+
+            return new SortedArrayList<Post>(posts);
+        } catch (SQLException e) {
+            WebAppCommon.log.error(e.getMessage(), e);
+            return new SortedArrayList<Post>();
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
     }
 
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public synchronized SortedArrayList<Post> getPosts(final User user) {
-        return new SortedArrayList<Post>() {{
-            addAll(CollectionUtils.select(PlaceholderContent.Posts, new Predicate() {
-                @Override
-                public boolean evaluate(Object object) {
-                    return ((Post) object).getPostAuthor().equals(user);
-                }
-            }));
-        }};
+    public synchronized SortedArrayList<PostBean> getPostBeans(User user) {
+        Connection conn = null;
+        try {
+            conn = openDatabaseConnection();
+            String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + AUTHOR_ID_COLUMN + "=?";
+            Post[] posts = RUN.query(conn, query, getArrayResultSetHandler(), user.getId());
+
+            SortedArrayList<PostBean> userPosts = new SortedArrayList<PostBean>();
+            for (Post post : posts) {
+                PostBean bean = new PostBean();
+                bean.setPost(post);
+                bean.setComments(Arrays.asList(CommentDbManager.getSharedInstance().getComments(post)));
+                userPosts.insertSorted(bean);
+            }
+
+            return userPosts;
+        } catch (SQLException e) {
+            WebAppCommon.log.error(e.getMessage(), e);
+            return new SortedArrayList<PostBean>();
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+    }
+
+    public synchronized SortedArrayList<PostBean> getAllPostBeans() {
+        Connection conn = null;
+        try {
+            Post[] posts = getAll();
+            SortedArrayList<PostBean> allPosts = new SortedArrayList<PostBean>();
+            for (Post post : posts) {
+                PostBean bean = new PostBean();
+                bean.setPost(post);
+                bean.setComments(Arrays.asList(CommentDbManager.getSharedInstance().getComments(post)));
+                allPosts.insertSorted(bean);
+            }
+
+            return allPosts;
+        } catch (Exception e) {
+            WebAppCommon.log.error(e.getMessage(), e);
+            return new SortedArrayList<PostBean>();
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
     }
 }

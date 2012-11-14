@@ -16,9 +16,14 @@ public class UserBean {
         this.password = new UserPasswordPair(user);
     }
 
-    public UserBean(User user) {
+    public UserBean(User user, UserPasswordPair password) {
         this.user = user;
-        this.password = new UserPasswordPair(user);
+        this.password = password;
+    }
+
+    public UserBean(User user) {
+        this(user, new UserPasswordPair());
+        this.password.setUser(user);
     }
 
     public User getUser() {

@@ -123,7 +123,6 @@ public abstract class WebAppCommon {
 
             // Load the placeholder content
             Class.forName("com.jaysan1292.project.c3062.util.NewPlaceholderContent");
-//            Class.forName("com.jaysan1292.project.c3062.util.PlaceholderContent");
         } catch (ClassNotFoundException ignored) {}
 
         watch.stop();
