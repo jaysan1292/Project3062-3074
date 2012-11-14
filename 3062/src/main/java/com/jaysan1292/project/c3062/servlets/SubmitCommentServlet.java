@@ -2,7 +2,7 @@ package com.jaysan1292.project.c3062.servlets;
 
 import com.jaysan1292.project.c3062.WebAppCommon;
 import com.jaysan1292.project.c3062.db.CommentDbManager;
-import com.jaysan1292.project.c3062.db.UserManager;
+import com.jaysan1292.project.c3062.db.UserDbManager;
 import com.jaysan1292.project.common.data.Comment;
 import com.jaysan1292.project.common.data.User;
 import org.apache.commons.io.IOUtils;
@@ -29,7 +29,7 @@ public class SubmitCommentServlet extends HttpServlet {
             long userId = Long.parseLong(params.get("comment-poster")[0]);
             User commentAuthor;
             try {
-                commentAuthor = UserManager.getSharedInstance().get(userId);
+                commentAuthor = UserDbManager.getSharedInstance().get(userId);
             } catch (SQLException e) {
                 throw new ServletException(e);
             }

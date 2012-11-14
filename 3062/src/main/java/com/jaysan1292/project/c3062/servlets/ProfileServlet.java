@@ -2,7 +2,7 @@ package com.jaysan1292.project.c3062.servlets;
 
 import com.jaysan1292.project.c3062.WebAppCommon;
 import com.jaysan1292.project.c3062.db.PostDbManager;
-import com.jaysan1292.project.c3062.db.UserManager;
+import com.jaysan1292.project.c3062.db.UserDbManager;
 import com.jaysan1292.project.common.data.User;
 import com.jaysan1292.project.common.data.beans.PostBean;
 import com.jaysan1292.project.common.data.beans.ProfileBean;
@@ -37,7 +37,7 @@ public class ProfileServlet extends HttpServlet {
             try {
                 User user;
                 SortedArrayList<PostBean> posts;
-                user = UserManager.getSharedInstance().get(requestedUserId);
+                user = UserDbManager.getSharedInstance().get(requestedUserId);
                 posts = PostDbManager.getSharedInstance().getPostBeans(user);
 
                 if (user != null) {

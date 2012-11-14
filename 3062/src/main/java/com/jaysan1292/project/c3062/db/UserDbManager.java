@@ -18,8 +18,8 @@ import java.sql.SQLException;
  *
  * @author Jason Recillo
  */
-public class UserManager extends BaseDbManager<User> {
-    private static UserManager sharedInstance;
+public class UserDbManager extends BaseDbManager<User> {
+    private static UserDbManager sharedInstance;
     private static final String TABLE_NAME = "user_t";
     private static final String ID_COLUMN = "user_id";
     private static final String FIRST_NAME_COLUMN = "first_name";
@@ -29,12 +29,12 @@ public class UserManager extends BaseDbManager<User> {
     private static final String PROGRAM_ID_COLUMN = "program_id";
     private static final String PASSWORD_COLUMN = "password";
 
-    public static UserManager getSharedInstance() {
-        if (sharedInstance == null) sharedInstance = new UserManager();
+    public static UserDbManager getSharedInstance() {
+        if (sharedInstance == null) sharedInstance = new UserDbManager();
         return sharedInstance;
     }
 
-    private UserManager() {
+    private UserDbManager() {
         super(User.class);
     }
 

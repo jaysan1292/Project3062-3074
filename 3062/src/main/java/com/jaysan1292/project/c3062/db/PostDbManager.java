@@ -43,7 +43,7 @@ public class PostDbManager extends BaseDbManager<Post> {
         Post post = new Post();
         post.setId(rs.getLong(ID_COLUMN));
         post.setPostDate(new Date(rs.getLong(DATE_COLUMN)));
-        post.setPostAuthor(UserManager.getSharedInstance().get(rs.getLong(AUTHOR_ID_COLUMN)));
+        post.setPostAuthor(UserDbManager.getSharedInstance().get(rs.getLong(AUTHOR_ID_COLUMN)));
         post.setPostContent(rs.getString(CONTENT_COLUMN));
         return post;
     }

@@ -36,7 +36,7 @@ public class DbManagerTest {
 
     private static ProgramDbManager programManager;
     private static PostDbManager postManager;
-    private static UserManager userManager;
+    private static UserDbManager userManager;
     private static CommentDbManager commentManager;
 
     @BeforeClass
@@ -49,7 +49,7 @@ public class DbManagerTest {
 
             programManager = ProgramDbManager.getSharedInstance();
             postManager = PostDbManager.getSharedInstance();
-            userManager = UserManager.getSharedInstance();
+            userManager = UserDbManager.getSharedInstance();
             commentManager = CommentDbManager.getSharedInstance();
         } catch (Exception e) {
             WebAppCommon.log.error("There was an error somewhere D:", e);

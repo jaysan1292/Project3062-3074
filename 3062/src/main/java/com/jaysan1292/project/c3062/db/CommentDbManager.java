@@ -45,7 +45,7 @@ public class CommentDbManager extends BaseDbManager<Comment> {
     protected Comment buildObject(ResultSet rs) throws SQLException {
         Comment comment = new Comment();
         comment.setId(rs.getLong(ID_COLUMN));
-        comment.setCommentAuthor(UserManager.getSharedInstance().get(rs.getLong(AUTHOR_ID_COLUMN)));
+        comment.setCommentAuthor(UserDbManager.getSharedInstance().get(rs.getLong(AUTHOR_ID_COLUMN)));
         comment.setCommentBody(rs.getString(CONTENT_COLUMN));
         comment.setCommentDate(new Date(rs.getLong(DATE_COLUMN)));
         comment.setParentPostId(rs.getLong(PARENT_POST_ID_COLUMN));

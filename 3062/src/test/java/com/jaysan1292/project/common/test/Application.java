@@ -3,7 +3,7 @@ package com.jaysan1292.project.common.test;
 import com.jaysan1292.project.c3062.WebAppCommon;
 import com.jaysan1292.project.c3062.db.CommentDbManager;
 import com.jaysan1292.project.c3062.db.PostDbManager;
-import com.jaysan1292.project.c3062.db.UserManager;
+import com.jaysan1292.project.c3062.db.UserDbManager;
 import com.jaysan1292.project.common.data.Comment;
 import com.jaysan1292.project.common.data.Post;
 import com.jaysan1292.project.common.data.User;
@@ -24,7 +24,7 @@ public class Application {
         WebAppCommon.initializeApplication();
 
         Set<Post> posts = new TreeSet<Post>(Arrays.asList(PostDbManager.getSharedInstance().getAll()));
-        Set<User> users = new TreeSet<User>(Arrays.asList(UserManager.getSharedInstance().getAll()));
+        Set<User> users = new TreeSet<User>(Arrays.asList(UserDbManager.getSharedInstance().getAll()));
         Set<Comment> comments = new TreeSet<Comment>(Arrays.asList(CommentDbManager.getSharedInstance().getAll()));
 
         String postFilepath = "Project3074/res/raw/posts.json";

@@ -6,7 +6,7 @@ import com.jaysan1292.project.c3062.WebAppCommon;
 import com.jaysan1292.project.c3062.db.CommentDbManager;
 import com.jaysan1292.project.c3062.db.PostDbManager;
 import com.jaysan1292.project.c3062.db.ProgramDbManager;
-import com.jaysan1292.project.c3062.db.UserManager;
+import com.jaysan1292.project.c3062.db.UserDbManager;
 import com.jaysan1292.project.common.data.Comment;
 import com.jaysan1292.project.common.data.Post;
 import com.jaysan1292.project.common.data.Program;
@@ -28,13 +28,13 @@ import java.util.Date;
  * @author Jason Recillo
  */
 @SuppressWarnings("ObjectAllocationInLoop")
-public class NewPlaceholderContent {
+public class PlaceholderContent {
     private final static long maxTime = (long) (86400000 * 1.5);
     private final static int numUsers = (Integer) new Range<Integer>(700, 1200).getRandomValue();
     private final static int numPosts = (Integer) new Range<Integer>(7000, 9000).getRandomValue();
     private final static int maxComments = 5;
 
-    private NewPlaceholderContent() {}
+    private PlaceholderContent() {}
 
     static {
         StopWatch watch = new StopWatch(); watch.start();
@@ -42,7 +42,7 @@ public class NewPlaceholderContent {
 
         WebAppCommon.log.info("Generating placeholder content (may take a while)...");
         try {
-            UserManager u = UserManager.getSharedInstance();
+            UserDbManager u = UserDbManager.getSharedInstance();
             ProgramDbManager p = ProgramDbManager.getSharedInstance();
             PostDbManager po = PostDbManager.getSharedInstance();
             CommentDbManager c = CommentDbManager.getSharedInstance();
@@ -55,7 +55,7 @@ public class NewPlaceholderContent {
             ///////////////////////////////////////////////////////////////////
 
             WebAppCommon.log.trace("Populating program table...");
-            ArrayList<Program> pro = Program.readJSONArray(Program.class, NewPlaceholderContent.class.getClassLoader().getResourceAsStream("programs.json"));
+            ArrayList<Program> pro = Program.readJSONArray(Program.class, PlaceholderContent.class.getClassLoader().getResourceAsStream("programs.json"));
             for (Program program : pro) {
                 p.insert(program);
             }

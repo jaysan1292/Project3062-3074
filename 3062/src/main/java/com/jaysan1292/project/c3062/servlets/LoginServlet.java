@@ -2,7 +2,7 @@ package com.jaysan1292.project.c3062.servlets;
 
 import com.jaysan1292.project.c3062.WebAppCommon;
 import com.jaysan1292.project.c3062.db.ProgramDbManager;
-import com.jaysan1292.project.c3062.db.UserManager;
+import com.jaysan1292.project.c3062.db.UserDbManager;
 import com.jaysan1292.project.common.data.Program;
 import com.jaysan1292.project.common.data.beans.UserBean;
 import org.apache.commons.lang3.BooleanUtils;
@@ -34,8 +34,8 @@ public class LoginServlet extends HttpServlet {
 
         UserBean user = new UserBean();
         try {
-            user.setUser(UserManager.getSharedInstance().getUser(username));
-            user.setPassword(UserManager.getSharedInstance().getPassword(user.getUser()));
+            user.setUser(UserDbManager.getSharedInstance().getUser(username));
+            user.setPassword(UserDbManager.getSharedInstance().getPassword(user.getUser()));
         } catch (SQLException e) {
             throw new ServletException(e);
         }
