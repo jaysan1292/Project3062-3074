@@ -128,7 +128,8 @@ public class User extends BaseEntity<User> implements Comparable<User> {
                lastName.equals(other.lastName) &&
                email.equals(other.email) &&
                studentNumber.equals(other.studentNumber) &&
-               program.equals(other.program);
+               program.equals(other.program) &&
+               password.equals(other.password);
     }
 
     @Override
@@ -140,6 +141,7 @@ public class User extends BaseEntity<User> implements Comparable<User> {
                 .append(email)
                 .append(studentNumber)
                 .append(program)
+                .append(password)
                 .toHashCode();
     }
 
