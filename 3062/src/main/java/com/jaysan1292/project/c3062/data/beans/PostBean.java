@@ -1,4 +1,4 @@
-package com.jaysan1292.project.common.data.beans;
+package com.jaysan1292.project.c3062.data.beans;
 
 import com.jaysan1292.project.c3062.db.PostDbManager;
 import com.jaysan1292.project.common.data.Comment;
