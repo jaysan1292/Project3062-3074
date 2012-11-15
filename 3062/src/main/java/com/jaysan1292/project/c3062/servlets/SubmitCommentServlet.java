@@ -6,6 +6,7 @@ import com.jaysan1292.project.c3062.db.UserDbManager;
 import com.jaysan1292.project.common.data.Comment;
 import com.jaysan1292.project.common.data.User;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -43,6 +44,8 @@ public class SubmitCommentServlet extends HttpServlet {
 
             commentBody = MULTIPLE_LINE_BREAKS.matcher(commentBody).replaceAll("<br/><br/>");
             commentBody = SINGLE_LINE_BREAK.matcher(commentBody).replaceAll("<br/>");
+            commentBody = StringUtils.removeEnd(commentBody, "<br/><br/>");
+            commentBody = StringUtils.removeEnd(commentBody, "<br/>");
 
             Comment comment = new Comment();
             comment.setCommentAuthor(commentAuthor);
@@ -59,7 +62,8 @@ public class SubmitCommentServlet extends HttpServlet {
             //Dynamically create a new JSP file to generate the required HTML for the comment
             File root = new File(getServletContext().getRealPath("/"));
             String filename = UUID.randomUUID() + "_comment.jsp";
-            String jsp = "<%@ taglib prefix=\"t\" tagdir=\"/WEB-INF/tags\" %>" +
+            String jsp = "<%@ page pageEncoding=\"UTF-8\" %>" +
+                         "<%@ taglib prefix=\"t\" tagdir=\"/WEB-INF/tags\" %>" +
                          "<jsp:useBean id=\"comment\" scope=\"request\" type=\"com.jaysan1292.project.common.data.Comment\"/>" +
                          "<t:post_comment comment=\"${comment}\"/>";
             File commentJsp = new File(root, filename);
