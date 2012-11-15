@@ -1,9 +1,9 @@
 package com.jaysan1292.project.c3062.servlets;
 
 import com.jaysan1292.project.c3062.WebAppCommon;
+import com.jaysan1292.project.c3062.data.beans.PostBean;
 import com.jaysan1292.project.c3062.db.CommentDbManager;
 import com.jaysan1292.project.c3062.db.PostDbManager;
-import com.jaysan1292.project.common.data.beans.PostBean;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import javax.servlet.ServletException;

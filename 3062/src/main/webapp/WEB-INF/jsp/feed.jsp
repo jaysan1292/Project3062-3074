@@ -9,7 +9,7 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<jsp:useBean id="userFeed" class="com.jaysan1292.project.common.data.beans.FeedBean" scope="request"/>
+<jsp:useBean id="userFeed" class="com.jaysan1292.project.c3062.data.beans.FeedBean" scope="request"/>
 
 <t:base>
     <jsp:attribute name="page_title">Home</jsp:attribute>

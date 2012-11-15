@@ -1,8 +1,8 @@
 package com.jaysan1292.project.c3062.db;
 
+import com.jaysan1292.project.c3062.data.beans.UserBean;
 import com.jaysan1292.project.common.data.Program;
 import com.jaysan1292.project.common.data.User;
-import com.jaysan1292.project.common.data.beans.UserBean;
 import com.jaysan1292.project.common.security.UserPasswordPair;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.ResultSetHandler;

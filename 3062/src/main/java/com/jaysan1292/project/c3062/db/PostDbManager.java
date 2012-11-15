@@ -1,9 +1,9 @@
 package com.jaysan1292.project.c3062.db;
 
 import com.jaysan1292.project.c3062.WebAppCommon;
+import com.jaysan1292.project.c3062.data.beans.PostBean;
 import com.jaysan1292.project.common.data.Post;
 import com.jaysan1292.project.common.data.User;
-import com.jaysan1292.project.common.data.beans.PostBean;
 import com.jaysan1292.project.common.util.SortedArrayList;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.handlers.ScalarHandler;

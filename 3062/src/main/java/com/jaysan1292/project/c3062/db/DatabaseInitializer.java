@@ -34,7 +34,6 @@ public class DatabaseInitializer {
                 Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
             } catch (ClassNotFoundException ignored) {}
 
-            //TODO: Foreign key constraints
             StopWatch watch = new StopWatch(); watch.start();
             WebAppCommon.log.info("Initializing database...");
             WebAppCommon.log.info("Creating tables");

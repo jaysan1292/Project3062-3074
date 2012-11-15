@@ -1,10 +1,10 @@
 package com.jaysan1292.project.c3062.servlets;
 
 import com.jaysan1292.project.c3062.WebAppCommon;
+import com.jaysan1292.project.c3062.data.beans.UserBean;
 import com.jaysan1292.project.c3062.db.ProgramDbManager;
 import com.jaysan1292.project.c3062.db.UserDbManager;
 import com.jaysan1292.project.common.data.Program;
-import com.jaysan1292.project.common.data.beans.UserBean;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;

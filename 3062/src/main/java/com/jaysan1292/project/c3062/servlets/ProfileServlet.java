@@ -1,12 +1,12 @@
 package com.jaysan1292.project.c3062.servlets;
 
 import com.jaysan1292.project.c3062.WebAppCommon;
+import com.jaysan1292.project.c3062.data.beans.PostBean;
+import com.jaysan1292.project.c3062.data.beans.ProfileBean;
+import com.jaysan1292.project.c3062.data.beans.UserBean;
 import com.jaysan1292.project.c3062.db.PostDbManager;
 import com.jaysan1292.project.c3062.db.UserDbManager;
 import com.jaysan1292.project.common.data.User;
-import com.jaysan1292.project.common.data.beans.PostBean;
-import com.jaysan1292.project.common.data.beans.ProfileBean;
-import com.jaysan1292.project.common.data.beans.UserBean;
 import com.jaysan1292.project.common.util.SortedArrayList;
 
 import javax.servlet.ServletException;

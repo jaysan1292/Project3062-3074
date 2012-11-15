@@ -17,10 +17,14 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 /** @author Jason Recillo */
 @WebServlet(WebAppCommon.SRV_POSTCOMMENT)
 public class SubmitCommentServlet extends HttpServlet {
+    private static final Pattern MULTIPLE_LINE_BREAKS = Pattern.compile("(\\n){2,}");
+    private static final Pattern SINGLE_LINE_BREAK = Pattern.compile("(\\n)");
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (WebAppCommon.checkLoginAndAuthenticate(request, response)) {
             WebAppCommon.log.info("SubmitCommentServlet POST");
@@ -37,9 +41,12 @@ public class SubmitCommentServlet extends HttpServlet {
             Date commentDate = new Date(Long.parseLong(params.get("comment-date")[0]));
             long parentPostId = Long.parseLong(params.get("post-id")[0]);
 
+            commentBody = MULTIPLE_LINE_BREAKS.matcher(commentBody).replaceAll("<br/><br/>");
+            commentBody = SINGLE_LINE_BREAK.matcher(commentBody).replaceAll("<br/>");
+
             Comment comment = new Comment();
             comment.setCommentAuthor(commentAuthor);
-            comment.setCommentBody(commentBody.replaceAll("\n", "</br>"));
+            comment.setCommentBody(commentBody);
             comment.setCommentDate(commentDate);
             comment.setParentPostId(parentPostId);
 

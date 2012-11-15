@@ -1,8 +1,8 @@
 package com.jaysan1292.project.c3062;
 
+import com.jaysan1292.project.c3062.data.beans.UserBean;
 import com.jaysan1292.project.c3062.db.DatabaseInitializer;
 import com.jaysan1292.project.common.data.User;
-import com.jaysan1292.project.common.data.beans.UserBean;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.log4j.Logger;
 

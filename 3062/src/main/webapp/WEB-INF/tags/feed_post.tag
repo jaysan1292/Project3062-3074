@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ tag description="Post template" pageEncoding="UTF-8" %>
-<%@ attribute name="post" type="com.jaysan1292.project.common.data.beans.PostBean" required="true" %>
+<%@ attribute name="post" type="com.jaysan1292.project.c3062.data.beans.PostBean" required="true" %>
 
 <div class="post-container clearfix">
     <img class="img-polaroid pull-left post-author-img-thumb" src="http://placehold.it/50x50"/>

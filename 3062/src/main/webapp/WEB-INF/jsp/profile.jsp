@@ -9,7 +9,7 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<jsp:useBean id="profile" scope="request" type="com.jaysan1292.project.common.data.beans.ProfileBean"/>
+<jsp:useBean id="profile" scope="request" type="com.jaysan1292.project.c3062.data.beans.ProfileBean"/>
 
 <t:base>
     <jsp:attribute name="page_title">${profile.user.fullName} - myProfile</jsp:attribute>

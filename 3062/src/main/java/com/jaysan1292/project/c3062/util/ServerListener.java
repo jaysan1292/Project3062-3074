@@ -1,7 +1,7 @@
 package com.jaysan1292.project.c3062.util;
 
 import com.jaysan1292.project.c3062.WebAppCommon;
-import com.jaysan1292.project.common.data.beans.UserBean;
+import com.jaysan1292.project.c3062.data.beans.UserBean;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

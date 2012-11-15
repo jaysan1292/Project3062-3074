@@ -5,7 +5,7 @@
 <%@ attribute name="show_items" type="java.lang.Boolean" %>
 <%@ attribute name="show_login" type="java.lang.Boolean" %>
 
-<jsp:useBean id="user" scope="session" type="com.jaysan1292.project.common.data.beans.UserBean"/>
+<jsp:useBean id="user" scope="session" type="com.jaysan1292.project.c3062.data.beans.UserBean"/>
 <jsp:useBean id="loggedIn" scope="session" type="java.lang.Boolean"/>
 
 <div class="navbar navbar-fixed-top" id="main-nav">
