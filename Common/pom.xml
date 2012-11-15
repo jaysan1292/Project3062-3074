@@ -8,7 +8,5 @@
         <artifactId>Project</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <groupId>com.jaysan1292.project</groupId>
     <artifactId>Common</artifactId>
-    <version>1.0-SNAPSHOT</version>
 </project>
