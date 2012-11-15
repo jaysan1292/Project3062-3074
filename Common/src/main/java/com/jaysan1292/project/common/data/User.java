@@ -1,10 +1,11 @@
 package com.jaysan1292.project.common.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jaysan1292.project.common.util.EncryptionUtils;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class User extends BaseEntity<User> implements Comparable<User> {
-    public static final User NOT_LOGGED_IN = new User(-5, null, null, null, null, null);
+    public static final User NOT_LOGGED_IN = new User(-5, null, null, null, null, null, null);
 
     private long userId;
     private String firstName;
@@ -12,26 +13,29 @@ public class User extends BaseEntity<User> implements Comparable<User> {
     private String email;
     private String studentNumber;
     private Program program;
+    private String password;
 
     public User() {
-        this(-1, "(null)", "(null)", "(null)", "(null)", new Program());
+        this(-1, "(null)", "(null)", "(null)", "(null)", new Program(), "(null)");
     }
 
-    public User(long uid, String fn, String ln, String em, String sid, Program p) {
+    public User(long uid, String fn, String ln, String em, String sid, Program p, String pw) {
         this.userId = uid;
         this.firstName = fn;
         this.lastName = ln;
         this.email = em;
         this.studentNumber = sid;
         this.program = p;
+        setPassword(pw);
     }
 
-    public User(String fn, String ln, String em, String sid, Program p) {
-        this(-1, fn, ln, em, sid, p);
+    public User(String fn, String ln, String em, String sid, Program p, String pw) {
+        this(-1, fn, ln, em, sid, p, pw);
     }
 
     public User(User other) {
-        this(other.userId, other.firstName, other.lastName, other.email, other.studentNumber, other.program);
+        this(other.userId, other.firstName, other.lastName, other.email, other.studentNumber, other.program, "");
+        setPasswordDirect(other.password);
     }
 
     //region Getters and Setters
@@ -60,6 +64,11 @@ public class User extends BaseEntity<User> implements Comparable<User> {
         return program;
     }
 
+    @JsonIgnore
+    public String getPassword() {
+        return this.password;
+    }
+
     public void setId(long id) {
         this.userId = id;
     }
@@ -85,6 +94,21 @@ public class User extends BaseEntity<User> implements Comparable<User> {
 
     public void setProgram(Program p) {
         this.program = p;
+    }
+
+    @JsonIgnore
+    public void setPassword(String plainPassword) {
+        if (plainPassword == null) plainPassword = "";
+        this.password = EncryptionUtils.encryptPassword(plainPassword);
+    }
+
+    @JsonIgnore
+    public void setPasswordDirect(String encryptedPassword) {
+        if (encryptedPassword.length() != 64) {
+            throw new IllegalArgumentException("The given password doesn't appear to be encrypted! Input: " + encryptedPassword);
+        }
+
+        this.password = encryptedPassword;
     }
 
     //endregion Getters and Setters
@@ -122,5 +146,9 @@ public class User extends BaseEntity<User> implements Comparable<User> {
     @Override
     public int compareTo(User o) {
         return o.studentNumber.compareTo(this.studentNumber);
+    }
+
+    public boolean comparePassword(String plainPassword) {
+        return EncryptionUtils.getPasswordEncryptor().checkPassword(plainPassword, this.password);
     }
 }
