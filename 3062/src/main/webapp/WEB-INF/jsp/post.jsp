@@ -12,7 +12,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <jsp:useBean id="post" scope="request" type="com.jaysan1292.project.c3062.data.beans.PostBean"/>
-<jsp:useBean id="user" scope="session" type="com.jaysan1292.project.c3062.data.beans.UserBean"/>
+<jsp:useBean id="user" scope="session" type="com.jaysan1292.project.common.data.User"/>
 
 <t:base>
     <jsp:attribute name="page_title">

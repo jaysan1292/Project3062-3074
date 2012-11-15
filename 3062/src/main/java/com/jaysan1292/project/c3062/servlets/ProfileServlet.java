@@ -3,7 +3,6 @@ package com.jaysan1292.project.c3062.servlets;
 import com.jaysan1292.project.c3062.WebAppCommon;
 import com.jaysan1292.project.c3062.data.beans.PostBean;
 import com.jaysan1292.project.c3062.data.beans.ProfileBean;
-import com.jaysan1292.project.c3062.data.beans.UserBean;
 import com.jaysan1292.project.c3062.db.PostDbManager;
 import com.jaysan1292.project.c3062.db.UserDbManager;
 import com.jaysan1292.project.common.data.User;
@@ -29,7 +28,7 @@ public class ProfileServlet extends HttpServlet {
             try {
                 requestedUserId = Long.parseLong(request.getParameter("id"));
             } catch (NumberFormatException e) {
-                requestedUserId = ((UserBean) request.getSession().getAttribute(ATTR_USER)).getId();
+                requestedUserId = ((User) request.getSession().getAttribute(ATTR_USER)).getId();
             }
 
             WebAppCommon.log.debug("Requested user profile ID: " + requestedUserId);

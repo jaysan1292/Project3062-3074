@@ -1,6 +1,5 @@
 package com.jaysan1292.project.c3062;
 
-import com.jaysan1292.project.c3062.data.beans.UserBean;
 import com.jaysan1292.project.c3062.db.DatabaseInitializer;
 import com.jaysan1292.project.common.data.User;
 import org.apache.commons.lang3.time.StopWatch;
@@ -31,7 +30,7 @@ public abstract class WebAppCommon {
 
     public static final String ATTR_LOGGED_IN = "loggedIn";
 
-    /** (UserBean) The user object containing the information of the currently logged in user. */
+    /** (User) The user object containing the information of the currently logged in user. */
     public static final String ATTR_USER = "user";
 
     /** (FeedBean) The bean class containing the user's home feed. */
@@ -85,7 +84,7 @@ public abstract class WebAppCommon {
     }
 
     public static User getLoggedInUser(HttpSession session) {
-        return ((UserBean) session.getAttribute(ATTR_USER)).getUser();
+        return (User) session.getAttribute(ATTR_USER);
     }
 
     public static Map<String, String> queryStringToMap(HttpServletRequest request) {

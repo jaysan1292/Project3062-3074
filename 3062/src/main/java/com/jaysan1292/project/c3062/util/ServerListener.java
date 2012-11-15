@@ -1,7 +1,7 @@
 package com.jaysan1292.project.c3062.util;
 
 import com.jaysan1292.project.c3062.WebAppCommon;
-import com.jaysan1292.project.c3062.data.beans.UserBean;
+import com.jaysan1292.project.common.data.User;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -40,7 +40,7 @@ public class ServerListener implements ServletContextListener, HttpSessionListen
     // -------------------------------------------------------
     public void sessionCreated(HttpSessionEvent se) {
         WebAppCommon.log.info("Session created: " + se.getSession().getId());
-        se.getSession().setAttribute(WebAppCommon.ATTR_USER, new UserBean());
+        se.getSession().setAttribute(WebAppCommon.ATTR_USER, new User());
         se.getSession().setAttribute(WebAppCommon.ATTR_LOGGED_IN, false);
     }
 

@@ -1,11 +1,8 @@
 package com.jaysan1292.project.c3062.db;
 
-import com.jaysan1292.project.c3062.data.beans.UserBean;
 import com.jaysan1292.project.common.data.Program;
 import com.jaysan1292.project.common.data.User;
-import com.jaysan1292.project.common.security.UserPasswordPair;
 import org.apache.commons.dbutils.DbUtils;
-import org.apache.commons.dbutils.ResultSetHandler;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -54,6 +51,7 @@ public class UserDbManager extends BaseDbManager<User> {
         user.setEmail(rs.getString(EMAIL_COLUMN));
         user.setStudentNumber(rs.getString(STUDENT_NUMBER_COLUMN));
         user.setProgram(ProgramDbManager.getSharedInstance().get(rs.getLong(PROGRAM_ID_COLUMN)));
+        user.setPasswordDirect(rs.getString(PASSWORD_COLUMN));
         return user;
     }
 
@@ -63,7 +61,8 @@ public class UserDbManager extends BaseDbManager<User> {
                        LAST_NAME_COLUMN + "=?, " +
                        EMAIL_COLUMN + "=?, " +
                        STUDENT_NUMBER_COLUMN + "=?, " +
-                       PROGRAM_ID_COLUMN + "=?" +
+                       PROGRAM_ID_COLUMN + "=?, " +
+                       PASSWORD_COLUMN + "=? " +
                        "WHERE " + ID_COLUMN + "=?";
 
         return RUN.update(conn, query,
@@ -72,24 +71,11 @@ public class UserDbManager extends BaseDbManager<User> {
                           item.getEmail(),
                           item.getStudentNumber(),
                           item.getProgram().getId(),
+                          item.getPassword(),
                           item.getId());
     }
 
-    public void insert(UserBean item) throws SQLException {
-        Connection conn = null;
-        try {
-            conn = openDatabaseConnection();
-            doInsert(conn, item);
-        } finally {
-            DbUtils.closeQuietly(conn);
-        }
-    }
-
-    protected void doInsert(Connection conn, User item) throws SQLException {
-        doInsert(conn, new UserBean(item));
-    }
-
-    protected void doInsert(Connection conn, UserBean user) throws SQLException {
+    protected void doInsert(Connection conn, User user) throws SQLException {
         String query = "INSERT INTO " + TABLE_NAME + " (" +
                        FIRST_NAME_COLUMN + ", " +
                        LAST_NAME_COLUMN + ", " +
@@ -103,7 +89,7 @@ public class UserDbManager extends BaseDbManager<User> {
                    user.getEmail(),
                    user.getStudentNumber(),
                    user.getProgram().getId(),
-                   user.getPasswordString());
+                   user.getPassword());
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -144,34 +130,34 @@ public class UserDbManager extends BaseDbManager<User> {
         }
     }
 
-    public UserBean getUserBean(long id) throws SQLException {
-        Connection conn = null;
-        try {
-            conn = openDatabaseConnection();
-            String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + ID_COLUMN + "=?";
-            UserBean user = RUN.query(conn, query, new ResultSetHandler<UserBean>() {
-                public UserBean handle(ResultSet rs) throws SQLException {
-                    if (!rs.next()) return null;
+//    public UserBean getUserBean(long id) throws SQLException {
+//        Connection conn = null;
+//        try {
+//            conn = openDatabaseConnection();
+//            String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + ID_COLUMN + "=?";
+//            UserBean user = RUN.query(conn, query, new ResultSetHandler<UserBean>() {
+//                public UserBean handle(ResultSet rs) throws SQLException {
+//                    if (!rs.next()) return null;
+//
+//                    UserBean u = new UserBean();
+//                    u.setUser(buildObject(rs));
+//                    u.getPassword().setPasswordDirect(rs.getString(PASSWORD_COLUMN));
+//
+//                    return u;
+//                }
+//            }, id);
+//
+//            if (user == null) {
+//                throw new SQLException(String.format("The requested item was not found in the database. Query: [%s] Parameters: %s", query, id));
+//            }
+//
+//            return user;
+//        } finally {
+//            DbUtils.closeQuietly(conn);
+//        }
+//    }
 
-                    UserBean u = new UserBean();
-                    u.setUser(buildObject(rs));
-                    u.getPassword().setPasswordDirect(rs.getString(PASSWORD_COLUMN));
-
-                    return u;
-                }
-            }, id);
-
-            if (user == null) {
-                throw new SQLException(String.format("The requested item was not found in the database. Query: [%s] Parameters: %s", query, id));
-            }
-
-            return user;
-        } finally {
-            DbUtils.closeQuietly(conn);
-        }
-    }
-
-    public UserPasswordPair getPassword(User user) throws SQLException {
-        return getUserBean(user.getId()).getPassword();
-    }
+//    public UserPasswordPair getPassword(User user) throws SQLException {
+//        return getUserBean(user.getId()).getPassword();
+//    }
 }

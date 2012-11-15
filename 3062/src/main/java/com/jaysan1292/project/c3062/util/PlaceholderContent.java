@@ -3,7 +3,6 @@ package com.jaysan1292.project.c3062.util;
 import com.jaysan1292.jdcommon.Extensions;
 import com.jaysan1292.jdcommon.Range;
 import com.jaysan1292.project.c3062.WebAppCommon;
-import com.jaysan1292.project.c3062.data.beans.UserBean;
 import com.jaysan1292.project.c3062.db.CommentDbManager;
 import com.jaysan1292.project.c3062.db.PostDbManager;
 import com.jaysan1292.project.c3062.db.ProgramDbManager;
@@ -68,24 +67,40 @@ public class PlaceholderContent {
             ///////////////////////////////////////////////////////////////////
 
             WebAppCommon.log.trace("Generating users.");
-            UserBean ub = new UserBean(new User("Jason",
-                                                "Recillo",
-                                                "jaysan1292@example.com",
-                                                "100726948",
-                                                p.getProgram("T127")));
-            ub.setPassword(ub.getStudentNumber());
-            u.insert(ub);
+            User me = new User("Jason",
+                               "Recillo",
+                               "jaysan1292@example.com",
+                               "100726948",
+                               p.getProgram("T127"),
+                               "");
+            me.setPassword(me.getStudentNumber());
+            u.insert(me);
+//            UserBean ub = new UserBean(new User("Jason",
+//                                                "Recillo",
+//                                                "jaysan1292@example.com",
+//                                                "100726948",
+//                                                p.getProgram("T127"),
+//                                                ""));
+//            ub.setPassword(ub.getStudentNumber());
+//            u.insert(ub);
 
             for (int i = 1; i < numUsers; i++) {
                 while (true) {
                     try {
                         String studentId = RandomStringUtils.randomNumeric(9);
-                        UserBean user = new UserBean(new User("User",
-                                                              "Number " + i,
-                                                              "n" + i + "@example.com",
-                                                              studentId,
-                                                              Extensions.getRandom(programs)));
-                        user.setPassword(user.getStudentNumber());
+//                        UserBean user = new UserBean(new User("User",
+//                                                              "Number " + i,
+//                                                              "n" + i + "@example.com",
+//                                                              studentId,
+//                                                              Extensions.getRandom(programs)));
+//                        user.setPassword(user.getStudentNumber());
+//                        u.insert(user);
+                        User user = new User("User",
+                                             "Number " + i,
+                                             "n" + i + "@example.com",
+                                             studentId,
+                                             Extensions.getRandom(programs),
+                                             studentId); // for now set password to be the same as student id
                         u.insert(user);
                         break;
                     } catch (SQLException e) {

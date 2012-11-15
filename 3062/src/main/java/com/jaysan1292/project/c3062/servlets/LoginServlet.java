@@ -1,10 +1,10 @@
 package com.jaysan1292.project.c3062.servlets;
 
 import com.jaysan1292.project.c3062.WebAppCommon;
-import com.jaysan1292.project.c3062.data.beans.UserBean;
 import com.jaysan1292.project.c3062.db.ProgramDbManager;
 import com.jaysan1292.project.c3062.db.UserDbManager;
 import com.jaysan1292.project.common.data.Program;
+import com.jaysan1292.project.common.data.User;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -37,17 +37,16 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        UserBean user = new UserBean();
+        User user = null;
         try {
-            user.setUser(UserDbManager.getSharedInstance().getUser(username));
-            user.setPassword(UserDbManager.getSharedInstance().getPassword(user.getUser()));
+            user = new User(UserDbManager.getSharedInstance().getUser(username));
         } catch (SQLException e) {
             throw new ServletException(e);
         }
 
 //        User user = UserDbManager.getSharedInstance().getUserByStudentId(username);
 
-        if ((user.getUser() == null) || !user.getPassword().comparePassword(password)) {
+        if (!user.comparePassword(password)) {
             // The given user was not found, or the password was
             // incorrect, so send the user back to the login page
             request.setAttribute("errorMessage", "Username or password was incorrect.");
@@ -92,7 +91,7 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
-    private static void setSessionUserLoggedIn(HttpSession session, UserBean user) {
+    private static void setSessionUserLoggedIn(HttpSession session, User user) {
         session.setAttribute(WebAppCommon.ATTR_LOGGED_IN, true);
         session.setAttribute(WebAppCommon.ATTR_USER, user);
 
@@ -101,9 +100,9 @@ public class LoginServlet extends HttpServlet {
 
     private static void setSessionUserLoggedOut(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
-        WebAppCommon.log.info(((UserBean) session.getAttribute(WebAppCommon.ATTR_USER)).getFullName() + " has logged out.");
+        WebAppCommon.log.info(((User) session.getAttribute(WebAppCommon.ATTR_USER)).getFullName() + " has logged out.");
         session.setAttribute(WebAppCommon.ATTR_LOGGED_IN, false);
-        session.setAttribute(WebAppCommon.ATTR_USER, new UserBean());
+        session.setAttribute(WebAppCommon.ATTR_USER, new User());
         session.removeAttribute(WebAppCommon.ATTR_USER_FEED);
     }
 }

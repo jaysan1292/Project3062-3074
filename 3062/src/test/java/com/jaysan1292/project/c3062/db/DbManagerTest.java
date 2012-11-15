@@ -3,7 +3,6 @@ package com.jaysan1292.project.c3062.db;
 import com.jaysan1292.jdcommon.Extensions;
 import com.jaysan1292.project.c3062.WebAppCommon;
 import com.jaysan1292.project.c3062.data.beans.PostBean;
-import com.jaysan1292.project.c3062.data.beans.UserBean;
 import com.jaysan1292.project.c3062.util.PlaceholderGenerator;
 import com.jaysan1292.project.common.data.Comment;
 import com.jaysan1292.project.common.data.Post;
@@ -22,8 +21,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -117,6 +115,7 @@ public class DbManagerTest {
 
         User user = userManager.get(0);
         assertEquals("Jason Recillo", user.getFullName());
+        assertNotNull(user.getPassword());
     }
 
     @Test
@@ -125,14 +124,7 @@ public class DbManagerTest {
 
         User user = userManager.getUser("100726948");
         assertEquals("Jason Recillo", user.getFullName());
-    }
-
-    @Test
-    public void testGetUserBeanInstance() throws Exception {
-        WebAppCommon.log.info("Test: Get UserBean instance");
-
-        UserBean user = userManager.getUserBean(0);
-        assertEquals("Jason Recillo", user.getFullName());
+        assertNotNull(user.getPassword());
     }
 
     @Test
@@ -150,7 +142,7 @@ public class DbManagerTest {
     public void testCreateUser() throws Exception {
         WebAppCommon.log.info("Test: Create new user");
 
-        UserBean user = new UserBean();
+        User user = new User();
         user.setFirstName("John");
         user.setLastName("Smith");
         user.setEmail("jsmith@example.ca");
@@ -162,6 +154,7 @@ public class DbManagerTest {
 
         User user2 = userManager.getUser("100777777");
         assertEquals(user.getStudentNumber(), user2.getStudentNumber());
+        assertEquals(user.getPassword(), user2.getPassword());
     }
 
     @Test
@@ -176,13 +169,14 @@ public class DbManagerTest {
 
         User user2 = userManager.getUser("100726948");
         assertEquals("jaysan1292@gmail.com", user2.getEmail());
+        assertEquals(user.getPassword(), user2.getPassword());
     }
 
     @Test(expected = SQLException.class)
     public void testCreateUserThatAlreadyExists() throws Exception {
         WebAppCommon.log.info("Test: Create user with duplicate student number");
 
-        UserBean user = new UserBean();
+        User user = new User();
         user.setFirstName("John");
         user.setLastName("Smith");
         user.setEmail("jsmith@example.ca");
