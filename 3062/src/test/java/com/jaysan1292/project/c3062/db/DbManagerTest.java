@@ -312,7 +312,7 @@ public class DbManagerTest {
 
         postManager.insert(post);
 
-        SortedArrayList<PostBean> posts = postManager.getPostBeans(user);
+        SortedArrayList<PostBean> posts = new SortedArrayList<PostBean>(postManager.getPostBeans(user));
 
         assertTrue(posts.size() >= 1);
     }

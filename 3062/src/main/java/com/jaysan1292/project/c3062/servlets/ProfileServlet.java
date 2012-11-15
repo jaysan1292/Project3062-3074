@@ -38,7 +38,7 @@ public class ProfileServlet extends HttpServlet {
                 User user;
                 SortedArrayList<PostBean> posts;
                 user = UserDbManager.getSharedInstance().get(requestedUserId);
-                posts = PostDbManager.getSharedInstance().getPostBeans(user);
+                posts = new SortedArrayList<PostBean>(PostDbManager.getSharedInstance().getPostBeans(user));
 
                 if (user != null) {
                     ProfileBean profile = new ProfileBean();

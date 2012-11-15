@@ -23,6 +23,7 @@ public class PostDbManager extends BaseDbManager<Post> {
     public static final String AUTHOR_ID_COLUMN = "post_author_id";
     public static final String CONTENT_COLUMN = "post_content";
     private static final Post[] EMPTY_POSTS = new Post[0];
+    private static final PostBean[] EMPTY_POST_BEANS = new PostBean[0];
 
     public static synchronized PostDbManager getSharedInstance() {
         if (sharedInstance == null) sharedInstance = new PostDbManager();
@@ -77,8 +78,7 @@ public class PostDbManager extends BaseDbManager<Post> {
 
     ///////////////////////////////////////////////////////////////////////////
 
-    //TODO: This should probably return a regular array
-    public synchronized SortedArrayList<Post> getPosts(User user) throws SQLException {
+    public synchronized Post[] getPosts(User user) throws SQLException {
         Connection conn = null;
         try {
             conn = openDatabaseConnection();
@@ -86,20 +86,19 @@ public class PostDbManager extends BaseDbManager<Post> {
             Post[] posts = RUN.query(conn, query, getArrayResultSetHandler(), user.getId());
 
             if ((posts == null)) {
-                return new SortedArrayList<Post>();
+                return EMPTY_POSTS;
             }
 
-            return new SortedArrayList<Post>(posts);
+            return posts;
         } catch (SQLException e) {
             WebAppCommon.log.error(e.getMessage(), e);
-            return new SortedArrayList<Post>();
+            return EMPTY_POSTS;
         } finally {
             DbUtils.closeQuietly(conn);
         }
     }
 
-    //TODO: This should probably return a regular array
-    public synchronized SortedArrayList<PostBean> getPostBeans(User user) {
+    public synchronized PostBean[] getPostBeans(User user) {
         Connection conn = null;
         try {
             conn = openDatabaseConnection();
@@ -114,17 +113,16 @@ public class PostDbManager extends BaseDbManager<Post> {
                 userPosts.insertSorted(bean);
             }
 
-            return userPosts;
+            return userPosts.toArray(new PostBean[userPosts.size()]);
         } catch (SQLException e) {
             WebAppCommon.log.error(e.getMessage(), e);
-            return new SortedArrayList<PostBean>();
+            return EMPTY_POST_BEANS;
         } finally {
             DbUtils.closeQuietly(conn);
         }
     }
 
-    //TODO: This should probably return a regular array
-    public synchronized SortedArrayList<PostBean> getAllPostBeans() {
+    public synchronized PostBean[] getAllPostBeans() {
         Connection conn = null;
         try {
             Post[] posts = getAll();
@@ -136,10 +134,10 @@ public class PostDbManager extends BaseDbManager<Post> {
                 allPosts.insertSorted(bean);
             }
 
-            return allPosts;
+            return allPosts.toArray(new PostBean[allPosts.size()]);
         } catch (Exception e) {
             WebAppCommon.log.error(e.getMessage(), e);
-            return new SortedArrayList<PostBean>();
+            return EMPTY_POST_BEANS;
         } finally {
             DbUtils.closeQuietly(conn);
         }
