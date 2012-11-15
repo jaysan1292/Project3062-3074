@@ -32,6 +32,11 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("login_username");
         String password = request.getParameter("login_password");
 
+        if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+            doGet(request, response);
+            return;
+        }
+
         UserBean user = new UserBean();
         try {
             user.setUser(UserDbManager.getSharedInstance().getUser(username));
