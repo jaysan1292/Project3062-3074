@@ -97,7 +97,7 @@ public abstract class BaseDbManager<T extends BaseEntity> {
             return items;
         } catch (SQLException e) {
             WebAppCommon.log.error(e.getMessage(), e);
-            return (T[]) new ArrayList<T>().toArray();
+            return (T[]) Array.newInstance(cls, 0);
         } finally {
             DbUtils.closeQuietly(conn);
         }

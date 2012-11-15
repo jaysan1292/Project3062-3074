@@ -44,6 +44,8 @@
                     <assetsDirectory>${project.basedir}/assets</assetsDirectory>
                     <resourceDirectory>${project.basedir}/res</resourceDirectory>
                     <nativeLibrariesDirectory>${project.basedir}/src/main/natives</nativeLibrariesDirectory>
+                    <genDirectory>${project.basedir}/gen</genDirectory>
+                    <genDirectoryAidl>${project.basedir}/gen</genDirectoryAidl>
                     <sdk>
                         <platform>16</platform>
                     </sdk>

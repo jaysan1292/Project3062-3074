@@ -16,7 +16,9 @@
 
 <t:base>
     <jsp:attribute name="page_title">
-        <c:out value="<%=StringUtils.abbreviate(post.getPost().getPostContent(), 50)%>"/>
+        <c:out value="<%=StringUtils.replaceEach(StringUtils.abbreviate(post.getPost().getPostContent(), 50),
+                                                 new String[]{\"<p>\",\"</p>\",\"<br/>\"},
+                                                 new String[]{\"\",\"\",\"\"})%>"/>
     </jsp:attribute>
     <jsp:attribute name="optional_header">
         <script type="text/javascript" src="<c:url value="/js/comments.js"/>"></script>

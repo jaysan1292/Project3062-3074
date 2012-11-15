@@ -2,12 +2,11 @@ package com.jaysan1292.project.c3062.servlets;
 
 import com.jaysan1292.project.c3062.WebAppCommon;
 import com.jaysan1292.project.c3062.db.PostDbManager;
+import com.jaysan1292.project.common.data.Post;
 import com.jaysan1292.project.common.data.User;
 import com.jaysan1292.project.common.data.beans.FeedBean;
 import com.jaysan1292.project.common.data.beans.PostBean;
 import com.jaysan1292.project.common.util.SortedArrayList;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -57,19 +56,28 @@ public class FeedServlet extends HttpServlet {
         }
     }
 
-    private static SortedArrayList<PostBean> getUserFeedPosts(final User user) {
-        //TODO: Do this better ;p
-        SortedArrayList<PostBean> feed = new SortedArrayList<PostBean>();
-        CollectionUtils.select(
-                PostDbManager.getSharedInstance().getAllPostBeans(),
-                new Predicate() {
-                    public boolean evaluate(Object object) {
-                        PostBean post = (PostBean) object;
-                        return user.getProgram().equals(post.getPost().getPostAuthor().getProgram());
-//                        return true;
-                    }
-                },
-                feed);
-        return feed;
+    private static SortedArrayList<PostBean> getUserFeedPosts(User user) {
+//        //TODO: Do this better ;p
+//        SortedArrayList<PostBean> feed = new SortedArrayList<PostBean>();
+//        CollectionUtils.select(
+//                PostDbManager.getSharedInstance().getAllPostBeans(),
+//                new Predicate() {
+//                    public boolean evaluate(Object object) {
+//                        PostBean post = (PostBean) object;
+//                        return user.getProgram().equals(post.getPost().getPostAuthor().getProgram());
+////                        return true;
+//                    }
+//                },
+//                feed);
+//        return feed;
+        final Post[] feedPosts = PostDbManager.getSharedInstance().getUserFeedPosts(user);
+
+        return new SortedArrayList<PostBean>() {{
+            for (Post post : feedPosts) {
+                PostBean bean = new PostBean();
+                bean.setPost(post);
+                insertSorted(bean);
+            }
+        }};
     }
 }

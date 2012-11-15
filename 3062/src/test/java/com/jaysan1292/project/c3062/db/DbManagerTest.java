@@ -1,5 +1,6 @@
 package com.jaysan1292.project.c3062.db;
 
+import com.jaysan1292.jdcommon.Extensions;
 import com.jaysan1292.project.c3062.WebAppCommon;
 import com.jaysan1292.project.c3062.util.PlaceholderGenerator;
 import com.jaysan1292.project.common.data.Comment;
@@ -9,6 +10,9 @@ import com.jaysan1292.project.common.data.User;
 import com.jaysan1292.project.common.data.beans.PostBean;
 import com.jaysan1292.project.common.data.beans.UserBean;
 import com.jaysan1292.project.common.util.SortedArrayList;
+import org.apache.commons.collections.Closure;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
 import org.apache.commons.dbutils.DbUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -16,12 +20,10 @@ import org.junit.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
+import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created with IntelliJ IDEA.
@@ -208,10 +210,17 @@ public class DbManagerTest {
 
     @Test
     public void testGetCommentsForPost() throws Exception {
-        Post post = postManager.get(0);
+        final Post post = postManager.get(0);
         Comment[] comments;
         comments = commentManager.getComments(post);
-        assertNotNull(comments);
+
+        final boolean[] valid = new boolean[]{true};
+        CollectionUtils.forAllDo(Arrays.asList(comments), new Closure() {
+            public void execute(Object input) {
+                valid[0] &= post.getId() == ((Comment) input).getParentPostId();
+            }
+        });
+        assertTrue(valid[0]);
     }
 
     @Test
@@ -232,11 +241,56 @@ public class DbManagerTest {
         try {
             conn = BaseDbManager.openDatabaseConnection();
             String query = "SELECT * FROM comment_t WHERE comment_date=?";
-            Comment comment2 = BaseDbManager.RUN.query(conn, query, CommentDbManager.getSharedInstance().getResultSetHandler(), comment.getCommentDate().getTime());
+            Comment comment2 = BaseDbManager.RUN.query(conn,
+                                                       query,
+                                                       CommentDbManager.getSharedInstance().getResultSetHandler(),
+                                                       comment.getCommentDate().getTime());
 
             comment.setId(comment2.getId());
 
             assertEquals(comment, comment2);
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+    }
+
+    @Test
+    public void testEditComment() throws Exception {
+        long pid = 0;
+        Post post = postManager.get(pid);
+        User user = userManager.get(0);
+
+        Comment comment = new Comment();
+        comment.setCommentAuthor(user);
+        comment.setCommentDate(new Date());
+        comment.setCommentBody("Trololololol");
+        comment.setParentPostId(post.getId());
+
+        commentManager.insert(comment);
+
+        Connection conn = null;
+        try {
+            conn = BaseDbManager.openDatabaseConnection();
+            String query = "SELECT * FROM comment_t WHERE comment_date=?";
+            Comment comment2 = BaseDbManager.RUN.query(conn,
+                                                       query,
+                                                       CommentDbManager.getSharedInstance().getResultSetHandler(),
+                                                       comment.getCommentDate().getTime());
+
+            comment.setId(comment2.getId());
+
+            assertEquals(comment, comment2);
+
+            comment2.setCommentBody("Edited comment");
+            commentManager.update(comment2);
+
+            query = "SELECT * FROM comment_t WHERE comment_date=?";
+            Comment comment3 = BaseDbManager.RUN.query(conn,
+                                                       query,
+                                                       CommentDbManager.getSharedInstance().getResultSetHandler(),
+                                                       comment.getCommentDate().getTime());
+
+            assertEquals(comment2, comment3);
         } finally {
             DbUtils.closeQuietly(conn);
         }
@@ -278,7 +332,10 @@ public class DbManagerTest {
         try {
             conn = BaseDbManager.openDatabaseConnection();
             String query = "SELECT * FROM post_t WHERE post_date=?";
-            Post post2 = BaseDbManager.RUN.query(conn, query, PostDbManager.getSharedInstance().getResultSetHandler(), post.getPostDate().getTime());
+            Post post2 = BaseDbManager.RUN.query(conn,
+                                                 query,
+                                                 PostDbManager.getSharedInstance().getResultSetHandler(),
+                                                 post.getPostDate().getTime());
 
             post.setId(post2.getId());
 
@@ -305,7 +362,10 @@ public class DbManagerTest {
             String query = "SELECT * FROM post_t WHERE post_date=?";
 
             // Get the post that we just inserted
-            Post post2 = BaseDbManager.RUN.query(conn, query, PostDbManager.getSharedInstance().getResultSetHandler(), post.getPostDate().getTime());
+            Post post2 = BaseDbManager.RUN.query(conn,
+                                                 query,
+                                                 PostDbManager.getSharedInstance().getResultSetHandler(),
+                                                 post.getPostDate().getTime());
 
             // Ensure that the content is the same
             assertEquals(post.getPostContent(), post2.getPostContent());
@@ -314,7 +374,10 @@ public class DbManagerTest {
             postManager.update(post2);
 
             // Get the edited post
-            Post post3 = BaseDbManager.RUN.query(conn, query, PostDbManager.getSharedInstance().getResultSetHandler(), post.getPostDate().getTime());
+            Post post3 = BaseDbManager.RUN.query(conn,
+                                                 query,
+                                                 PostDbManager.getSharedInstance().getResultSetHandler(),
+                                                 post.getPostDate().getTime());
 
             // Ensure that the edited post has the same ID as the one we
             // just retrieved, and that the content was edited successfully
@@ -323,6 +386,32 @@ public class DbManagerTest {
         } finally {
             DbUtils.closeQuietly(conn);
         }
+    }
+
+    @Test
+    public void testGetUserFeedPosts() throws Exception {
+        WebAppCommon.log.info("Test: Get user feed posts");
+
+        final User user = userManager.get(0);
+        Collection<Post> feedPosts = Arrays.asList(postManager.getUserFeedPosts(user));
+        assertTrue(CollectionUtils.select(feedPosts, new Predicate() {
+            public boolean evaluate(Object object) {
+                Post post = (Post) object;
+                return !user.getProgram().equals(post.getPostAuthor().getProgram());
+            }
+        }).isEmpty() && !feedPosts.isEmpty());
+    }
+
+    @Test
+    public void testGetPostCommentCount() throws Exception {
+        WebAppCommon.log.info("Test: Get post comment count");
+
+        Post post = Extensions.getRandom(postManager.getAll());
+        Comment[] postComments = commentManager.getComments(post);
+
+        int commentCount = postManager.getCommentCount(post);
+
+        assertEquals(postComments.length, commentCount);
     }
 
     //endregion

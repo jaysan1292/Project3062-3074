@@ -49,7 +49,7 @@ public class FeedBean {
         if (offset > 0) {
             this.offset = offset;
         } else {
-            offset = 0;
+            this.offset = 0;
         }
     }
 

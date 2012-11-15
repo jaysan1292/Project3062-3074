@@ -39,7 +39,7 @@ public class SubmitCommentServlet extends HttpServlet {
 
             Comment comment = new Comment();
             comment.setCommentAuthor(commentAuthor);
-            comment.setCommentBody(commentBody);
+            comment.setCommentBody(commentBody.replaceAll("\n", "</br>"));
             comment.setCommentDate(commentDate);
             comment.setParentPostId(parentPostId);
 

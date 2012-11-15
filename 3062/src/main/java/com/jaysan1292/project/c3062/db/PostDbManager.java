@@ -6,6 +6,7 @@ import com.jaysan1292.project.common.data.User;
 import com.jaysan1292.project.common.data.beans.PostBean;
 import com.jaysan1292.project.common.util.SortedArrayList;
 import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -16,11 +17,12 @@ import java.util.Date;
 /** @author Jason Recillo */
 public class PostDbManager extends BaseDbManager<Post> {
     private static PostDbManager sharedInstance;
-    private static final String TABLE_NAME = "post_t";
-    private static final String ID_COLUMN = "post_id";
-    private static final String DATE_COLUMN = "post_date";
-    private static final String AUTHOR_ID_COLUMN = "post_author_id";
-    private static final String CONTENT_COLUMN = "post_content";
+    public static final String TABLE_NAME = "post_t";
+    public static final String ID_COLUMN = "post_id";
+    public static final String DATE_COLUMN = "post_date";
+    public static final String AUTHOR_ID_COLUMN = "post_author_id";
+    public static final String CONTENT_COLUMN = "post_content";
+    private static final Post[] EMPTY_POSTS = new Post[0];
 
     public static synchronized PostDbManager getSharedInstance() {
         if (sharedInstance == null) sharedInstance = new PostDbManager();
@@ -138,6 +140,55 @@ public class PostDbManager extends BaseDbManager<Post> {
         } catch (Exception e) {
             WebAppCommon.log.error(e.getMessage(), e);
             return new SortedArrayList<PostBean>();
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+    }
+
+    public synchronized Post[] getUserFeedPosts(User user) {
+        Connection conn = null;
+        try {
+            conn = openDatabaseConnection();
+            // Select all posts, where the post author's program
+            // is the same as the given user's program
+            String query = "SELECT * FROM " + PostDbManager.TABLE_NAME + ' ' +
+                           "WHERE " + PostDbManager.AUTHOR_ID_COLUMN + " IN " +
+                           "(SELECT " + UserDbManager.ID_COLUMN + ' ' +
+                           "FROM " + UserDbManager.TABLE_NAME + " WHERE " +
+                           UserDbManager.PROGRAM_ID_COLUMN + "=?) " +
+                           "ORDER BY " + PostDbManager.DATE_COLUMN + " DESC";
+            Post[] feedPosts = RUN.query(conn, query, getArrayResultSetHandler(), user.getProgram().getId());
+
+            if (feedPosts == null) return EMPTY_POSTS;
+
+            return feedPosts;
+        } catch (SQLException e) {
+            WebAppCommon.log.error(e.getMessage(), e);
+            return EMPTY_POSTS;
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+    }
+
+    public synchronized int getCommentCount(Post post) {
+        Connection conn = null;
+        try {
+            conn = openDatabaseConnection();
+            // Get the number of comments for the given post
+            String query = "SELECT COUNT(*) FROM " + CommentDbManager.TABLE_NAME + ' ' +
+                           "WHERE " + CommentDbManager.PARENT_POST_ID_COLUMN + " IN " +
+                           "(SELECT " + PostDbManager.ID_COLUMN + " FROM " + PostDbManager.TABLE_NAME + ' ' +
+                           "WHERE " + PostDbManager.ID_COLUMN + "=?)";
+            Integer count = RUN.query(conn, query, new ScalarHandler<Integer>(1), post.getId());
+
+            if (count == null) {
+                count = 0;
+            }
+
+            return count;
+        } catch (SQLException e) {
+            WebAppCommon.log.error(e.getMessage(), e);
+            return 0;
         } finally {
             DbUtils.closeQuietly(conn);
         }

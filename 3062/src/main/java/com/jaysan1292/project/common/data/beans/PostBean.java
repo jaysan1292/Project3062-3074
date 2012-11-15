@@ -1,5 +1,6 @@
 package com.jaysan1292.project.common.data.beans;
 
+import com.jaysan1292.project.c3062.db.PostDbManager;
 import com.jaysan1292.project.common.data.Comment;
 import com.jaysan1292.project.common.data.Post;
 import com.jaysan1292.project.common.util.SortedArrayList;
@@ -16,6 +17,11 @@ import java.util.List;
 public class PostBean implements Comparable<PostBean> {
     private Post post;
     private SortedArrayList<Comment> comments;
+
+    public PostBean() {
+        this.post = new Post();
+        this.comments = new SortedArrayList<Comment>();
+    }
 
     public Post getPost() {
         return post;
@@ -34,7 +40,8 @@ public class PostBean implements Comparable<PostBean> {
     }
 
     public int getPostCommentCount() {
-        return comments.size();
+//        return comments.size();
+        return PostDbManager.getSharedInstance().getCommentCount(post);
     }
 
     public int compareTo(PostBean o) {

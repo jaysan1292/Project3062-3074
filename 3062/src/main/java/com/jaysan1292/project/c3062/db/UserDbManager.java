@@ -20,14 +20,14 @@ import java.sql.SQLException;
  */
 public class UserDbManager extends BaseDbManager<User> {
     private static UserDbManager sharedInstance;
-    private static final String TABLE_NAME = "user_t";
-    private static final String ID_COLUMN = "user_id";
-    private static final String FIRST_NAME_COLUMN = "first_name";
-    private static final String LAST_NAME_COLUMN = "last_name";
-    private static final String EMAIL_COLUMN = "email";
-    private static final String STUDENT_NUMBER_COLUMN = "student_number";
-    private static final String PROGRAM_ID_COLUMN = "program_id";
-    private static final String PASSWORD_COLUMN = "password";
+    public static final String TABLE_NAME = "user_t";
+    public static final String ID_COLUMN = "user_id";
+    public static final String FIRST_NAME_COLUMN = "first_name";
+    public static final String LAST_NAME_COLUMN = "last_name";
+    public static final String EMAIL_COLUMN = "email";
+    public static final String STUDENT_NUMBER_COLUMN = "student_number";
+    public static final String PROGRAM_ID_COLUMN = "program_id";
+    public static final String PASSWORD_COLUMN = "password";
 
     public static UserDbManager getSharedInstance() {
         if (sharedInstance == null) sharedInstance = new UserDbManager();

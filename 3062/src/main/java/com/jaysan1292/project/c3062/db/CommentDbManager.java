@@ -18,13 +18,13 @@ import java.util.Date;
  */
 public class CommentDbManager extends BaseDbManager<Comment> {
     private static CommentDbManager sharedInstance;
-    private static final String TABLE_NAME = "comment_t";
-    private static final String ID_COLUMN = "comment_id";
-    private static final String AUTHOR_ID_COLUMN = "comment_author_id";
-    private static final String CONTENT_COLUMN = "comment_body";
-    private static final String DATE_COLUMN = "comment_date";
-    private static final String PARENT_POST_ID_COLUMN = "post_id";
-    private static final Comment[] EMPTY_COMMENTS = new Comment[0];
+    public static final String TABLE_NAME = "comment_t";
+    public static final String ID_COLUMN = "comment_id";
+    public static final String AUTHOR_ID_COLUMN = "comment_author_id";
+    public static final String CONTENT_COLUMN = "comment_body";
+    public static final String DATE_COLUMN = "comment_date";
+    public static final String PARENT_POST_ID_COLUMN = "post_id";
+    public static final Comment[] EMPTY_COMMENTS = new Comment[0];
 
     public static CommentDbManager getSharedInstance() {
         if (sharedInstance == null) sharedInstance = new CommentDbManager();
