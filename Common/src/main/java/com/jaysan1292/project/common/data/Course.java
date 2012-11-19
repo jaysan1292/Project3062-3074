@@ -1,6 +1,6 @@
 package com.jaysan1292.project.common.data;
 
-import com.jaysan1292.jdcommon.Range;
+import com.jaysan1292.jdcommon.range.IntegerRange;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -11,13 +11,13 @@ public class Course extends BaseEntity<Course> {
     private Weekday classDay;
     private String classRoom;
     private ClassType classType;
-    private Range<Integer> classTime;
+    private IntegerRange classTime;
 
     public Course() {
         this(-1, "(null)", "(null)", Weekday.MONDAY, "(null)", ClassType.LECTURE, null);
     }
 
-    public Course(long courseId, String courseCode, String courseName, Weekday classDay, String classRoom, ClassType classType, Range<Integer> classTime) {
+    public Course(long courseId, String courseCode, String courseName, Weekday classDay, String classRoom, ClassType classType, IntegerRange classTime) {
         this.courseId = courseId;
         this.courseCode = courseCode;
         this.courseName = courseName;
@@ -81,11 +81,11 @@ public class Course extends BaseEntity<Course> {
         this.classType = classType;
     }
 
-    public Range<Integer> getClassTime() {
+    public IntegerRange getClassTime() {
         return classTime;
     }
 
-    public void setClassTime(Range<Integer> classTime) {
+    public void setClassTime(IntegerRange classTime) {
         this.classTime = classTime;
     }
     //endregion
