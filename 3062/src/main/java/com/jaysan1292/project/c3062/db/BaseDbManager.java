@@ -1,5 +1,6 @@
 package com.jaysan1292.project.c3062.db;
 
+import com.google.common.base.Preconditions;
 import com.jaysan1292.project.c3062.WebAppCommon;
 import com.jaysan1292.project.common.data.BaseEntity;
 import org.apache.commons.dbutils.DbUtils;
@@ -63,6 +64,7 @@ public abstract class BaseDbManager<T extends BaseEntity> {
     protected abstract T buildObject(ResultSet rs) throws SQLException;
 
     public T get(long id) throws SQLException {
+        Preconditions.checkArgument(id >= 0, "Given ID was %s but it must be non-negative.", id);
         Connection conn = null;
         String query = "SELECT * FROM " + tableName() + " WHERE " + idColumnName() + "=?";
         try {
@@ -102,6 +104,7 @@ public abstract class BaseDbManager<T extends BaseEntity> {
     }
 
     public void update(T item) throws SQLException {
+        Preconditions.checkNotNull(item);
         Connection conn = null;
         try {
             conn = openDatabaseConnection();
@@ -112,6 +115,7 @@ public abstract class BaseDbManager<T extends BaseEntity> {
     }
 
     public void insert(T item) throws SQLException {
+        Preconditions.checkNotNull(item);
         Connection conn = null;
         try {
             conn = openDatabaseConnection();
