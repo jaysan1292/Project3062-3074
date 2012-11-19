@@ -53,13 +53,10 @@
                         <li class="divider-vertical"></li>
                         <c:if test="${show_login}">
                             <c:choose>
-                                <%--<c:when test="<%=loggedIn%>">--%>
                                 <c:when test="${loggedIn}">
-                                    <%--<c:if test="<%=user != null%>">--%>
                                     <c:if test="${user != null}">
                                         <li>
                                             <a href="javascript:void(0)" style="cursor: default;">
-                                                    <%--<c:out value="<%=user.getFullName()%>"/>--%>
                                                     ${user.fullName}
                                             </a>
                                         </li>

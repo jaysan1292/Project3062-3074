@@ -1,5 +1,5 @@
 <%@ page import="com.jaysan1292.project.c3062.WebAppCommon, com.jaysan1292.project.c3062.util.Tutorial" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
+<%@ page contentType="text/html" language="java" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 

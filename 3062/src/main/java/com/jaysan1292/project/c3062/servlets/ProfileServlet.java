@@ -24,6 +24,8 @@ public class ProfileServlet extends HttpServlet {
         WebAppCommon.log.debug("ProfileServlet GET");
 
         if (WebAppCommon.checkLoginAndAuthenticate(request, response)) {
+            response.setCharacterEncoding("UTF-8");
+
             Long requestedUserId;
             try {
                 requestedUserId = Long.parseLong(request.getParameter("id"));

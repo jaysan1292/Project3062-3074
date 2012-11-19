@@ -18,13 +18,15 @@ import java.util.Arrays;
 @WebServlet(WebAppCommon.SRV_POST)
 public class PostDetailServlet extends HttpServlet {
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        WebAppCommon.log.debug("PostDetailServlet POST");
-    }
+//    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        WebAppCommon.log.debug("PostDetailServlet POST");
+//    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         WebAppCommon.log.debug("PostDetailServlet GET");
         if (WebAppCommon.checkLoginAndAuthenticate(request, response)) {
+            response.setCharacterEncoding("UTF-8");
+
             if (request.getParameter("id") != null) {
                 try {
                     int postId = NumberUtils.toInt(request.getParameter("id"));

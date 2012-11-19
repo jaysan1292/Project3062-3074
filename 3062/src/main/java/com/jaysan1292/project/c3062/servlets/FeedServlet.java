@@ -22,13 +22,15 @@ import static com.jaysan1292.project.c3062.WebAppCommon.ATTR_USER_FEED;
 @WebServlet(WebAppCommon.SRV_FEED)
 public class FeedServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        WebAppCommon.log.debug("FeedServlet POST");
+        doGet(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         WebAppCommon.log.debug("FeedServlet GET");
 
         if (WebAppCommon.checkLoginAndAuthenticate(request, response)) {
+            response.setCharacterEncoding("UTF-8");
+
             HttpSession session = request.getSession();
             User user = WebAppCommon.getLoggedInUser(session);
 

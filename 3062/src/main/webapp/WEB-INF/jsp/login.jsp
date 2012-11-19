@@ -11,7 +11,7 @@
     <jsp:attribute name="show_navbar_login">false</jsp:attribute>
     <jsp:attribute name="optional_header">
         <script type="text/javascript"
-                src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.min.js"></script>
+                src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.js"></script>
     </jsp:attribute>
     <jsp:attribute name="optional_footer">
         <script type="text/javascript">
@@ -38,7 +38,7 @@
                 return '${pageContext.servletContext.contextPath}/register';
             }
         </script>
-        <script type="text/javascript" src="<c:url value="/js/register.js"/>"></script>
+        <script type="text/javascript" src="<c:url value="/js/register.jsp"/>"></script>
     </jsp:attribute>
     <jsp:body>
         <div class="container">
@@ -83,11 +83,22 @@
                             </div>
                         </div>
                         <div class="control-group">
+                            <label class="control-label" for="email">Email</label>
+
+                            <div class="controls">
+                                <input class="span12"
+                                       type="text"
+                                       id="email"
+                                       name="email"
+                                       placeholder="Email">
+                            </div>
+                        </div>
+                        <div class="control-group">
                             <label class="control-label" for="program">Program</label>
 
                             <div class="controls">
                                 <select class="span12" id="program" name="program">
-                                    <option value="invalid">---Select your Program---</option>
+                                    <option value="">---Select your Program---</option>
                                     <c:forEach items="${programs}" var="program">
                                         <option value="${program.programCode}">${program}</option>
                                     </c:forEach>
