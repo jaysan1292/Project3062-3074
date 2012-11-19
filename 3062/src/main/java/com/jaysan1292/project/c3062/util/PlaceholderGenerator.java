@@ -1,7 +1,7 @@
 package com.jaysan1292.project.c3062.util;
 
 import com.jaysan1292.jdcommon.Extensions;
-import com.jaysan1292.jdcommon.Range;
+import com.jaysan1292.jdcommon.range.IntegerRange;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,8 +22,8 @@ public class PlaceholderGenerator {
         put('.', 88.005); put('?', 7.547); put('!', 4.447);
     }};
     private static final Random random = new Random();
-    private static final Range<Integer> wordLength = new Range<Integer>(1, 12);
-    private static final Range<Integer> sentenceLength = new Range<Integer>(3, 11);
+    private static final IntegerRange wordLength = new IntegerRange(1, 12);
+    private static final IntegerRange sentenceLength = new IntegerRange(3, 11);
 
     private PlaceholderGenerator() {}
 
@@ -53,7 +53,7 @@ public class PlaceholderGenerator {
         try {
             newWordLen = (Integer) wordLength.getRandomValue();
         } catch (Exception e) {
-            newWordLen = (int) Math.floor((wordLength.Minimum + wordLength.Maximum) / 2);
+            newWordLen = (int) Math.floor((wordLength.getMinimum() + wordLength.getMaximum()) / 2);
         }
         StringBuilder newWord = new StringBuilder();
 
@@ -71,7 +71,7 @@ public class PlaceholderGenerator {
         try {
             sentenceLen = (Integer) sentenceLength.getRandomValue();
         } catch (Exception e) {
-            sentenceLen = (int) Math.floor((sentenceLength.Minimum + sentenceLength.Maximum) / 2);
+            sentenceLen = (int) Math.floor((sentenceLength.getMaximum() + sentenceLength.getMaximum()) / 2);
         }
         StringBuilder newSentence = new StringBuilder();
 

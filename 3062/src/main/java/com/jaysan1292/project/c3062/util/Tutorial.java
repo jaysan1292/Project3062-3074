@@ -1,6 +1,6 @@
 package com.jaysan1292.project.c3062.util;
 
-import com.jaysan1292.jdcommon.Range;
+import com.jaysan1292.jdcommon.range.IntegerRange;
 import com.jaysan1292.project.c3062.db.UserDbManager;
 import com.jaysan1292.project.common.data.User;
 
@@ -16,7 +16,7 @@ public class Tutorial {
         StringBuilder sb = new StringBuilder();
         ArrayList<User> users = new ArrayList<User>(count);
 
-        Range<Integer> range = new Range<Integer>(1, UserDbManager.getSharedInstance().getCount() - 1);
+        IntegerRange range = new IntegerRange(1, UserDbManager.getSharedInstance().getCount() - 1);
         for (int i = 0; i < count; i++) {
             try {
                 users.add(UserDbManager.getSharedInstance().get(Integer.parseInt(range.getRandomValue().toString())));

@@ -1,7 +1,8 @@
 package com.jaysan1292.project.c3062.util;
 
 import com.jaysan1292.jdcommon.Extensions;
-import com.jaysan1292.jdcommon.Range;
+import com.jaysan1292.jdcommon.range.IntegerRange;
+import com.jaysan1292.jdcommon.range.LongRange;
 import com.jaysan1292.project.c3062.WebAppCommon;
 import com.jaysan1292.project.c3062.db.CommentDbManager;
 import com.jaysan1292.project.c3062.db.PostDbManager;
@@ -29,9 +30,9 @@ import java.util.Date;
 @SuppressWarnings("ObjectAllocationInLoop")
 public class PlaceholderContent {
     private final static long maxTime = (long) (86400000 * 1.5);
-    private final static int numUsers = (Integer) new Range<Integer>(700, 1200).getRandomValue();
-    private final static int numPosts = (Integer) new Range<Integer>(7000, 9000).getRandomValue();
-    private final static int maxComments = 5;
+    private final static int numUsers = new IntegerRange(500, 1000).getRandomValue();
+    private final static int numPosts = new IntegerRange(5000, 7000).getRandomValue();
+    private final static int maxComments = 10;
 
     private PlaceholderContent() {}
 
@@ -67,40 +68,29 @@ public class PlaceholderContent {
             ///////////////////////////////////////////////////////////////////
 
             WebAppCommon.log.trace("Generating users.");
-            User me = new User("Jason",
-                               "Recillo",
-                               "jaysan1292@example.com",
-                               "100726948",
-                               p.getProgram("T127"),
-                               "");
+            User me = new User("Jason",                  // first name
+                               "Recillo",                // last name
+                               "jaysan1292@example.com", // email
+                               "100726948",              // student number
+                               p.getProgram("T127"),     // program
+                               "");                      // password
             me.setPassword(me.getStudentNumber());
             u.insert(me);
-//            UserBean ub = new UserBean(new User("Jason",
-//                                                "Recillo",
-//                                                "jaysan1292@example.com",
-//                                                "100726948",
-//                                                p.getProgram("T127"),
-//                                                ""));
-//            ub.setPassword(ub.getStudentNumber());
-//            u.insert(ub);
 
             for (int i = 1; i < numUsers; i++) {
+                // There is a small chance there could be a duplicate student number
+                // generated. So, continually generate student numbers until insert
+                // method executes without exception, i.e., the student number was
+                // unique.
                 while (true) {
                     try {
                         String studentId = RandomStringUtils.randomNumeric(9);
-//                        UserBean user = new UserBean(new User("User",
-//                                                              "Number " + i,
-//                                                              "n" + i + "@example.com",
-//                                                              studentId,
-//                                                              Extensions.getRandom(programs)));
-//                        user.setPassword(user.getStudentNumber());
-//                        u.insert(user);
-                        User user = new User("User",
-                                             "Number " + i,
-                                             "n" + i + "@example.com",
-                                             studentId,
-                                             Extensions.getRandom(programs),
-                                             studentId); // for now set password to be the same as student id
+                        User user = new User("User",                         // first name
+                                             "Number " + i,                  // last name
+                                             "n" + i + "@example.com",       // email
+                                             studentId,                      // student number
+                                             Extensions.getRandom(programs), // program
+                                             studentId);                     // password
                         u.insert(user);
                         break;
                     } catch (SQLException e) {
@@ -138,10 +128,12 @@ public class PlaceholderContent {
                 int iterations = Extensions.randomInt(0, maxComments);
                 for (int i = 0; i < iterations; i++) {
                     Comment comment = new Comment(Extensions.getRandom(users),
-                                                  PlaceholderGenerator.generateRandomContent(5, PlaceholderGenerator.ContentType.Sentence),
+                                                  PlaceholderGenerator.generateRandomContent(
+                                                          new IntegerRange(1, 4).getRandomValue(),
+                                                          PlaceholderGenerator.ContentType.Sentence),
                                                   new Date(NumberUtils.toLong(
-                                                          new Range<Long>(post.getPostDate().getTime(),
-                                                                          new Date().getTime()).getRandomValue().toString())),
+                                                          new LongRange(post.getPostDate().getTime(),
+                                                                        new Date().getTime()).getRandomValue().toString())),
                                                   post.getId());
                     c.insert(comment);
                 }
@@ -157,12 +149,13 @@ public class PlaceholderContent {
             } catch (IllegalStateException ignored) {}
             watchTotal.stop();
             WebAppCommon.log.info(String.format("Placeholder content generation (%d posts, %d users, %d comments) took %s.",
-                                                posts.length,
-                                                users.length,
-                                                comments.length,
+                                                p.getCount(),
+                                                u.getCount(),
+                                                c.getCount(),
                                                 watchTotal.toString()));
         } catch (Exception e) {
             WebAppCommon.log.error("There was an error generating placeholder content.. ABANDON SHIP", e);
+            WebAppCommon.shutdownApplication();
             System.exit(-1);
         }
     }
