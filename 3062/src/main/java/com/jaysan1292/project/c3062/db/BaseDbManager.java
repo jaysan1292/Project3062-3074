@@ -14,8 +14,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-//TODO: Remove sharedInstance from all subclasses, and just make each method synchronized
-
 /**
  * Created with IntelliJ IDEA.
  * Date: 31/10/12

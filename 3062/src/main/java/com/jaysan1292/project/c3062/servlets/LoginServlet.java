@@ -40,13 +40,9 @@ public class LoginServlet extends HttpServlet {
         User user = null;
         try {
             user = new User(UserDbManager.getSharedInstance().getUser(username));
-        } catch (SQLException e) {
-            throw new ServletException(e);
-        }
+        } catch (SQLException ignored) {}
 
-//        User user = UserDbManager.getSharedInstance().getUserByStudentId(username);
-
-        if (!user.comparePassword(password)) {
+        if ((user == null) || !user.comparePassword(password)) {
             // The given user was not found, or the password was
             // incorrect, so send the user back to the login page
             request.setAttribute("errorMessage", "Username or password was incorrect.");
@@ -68,12 +64,14 @@ public class LoginServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         WebAppCommon.log.debug("LoginServlet GET");
+        response.setCharacterEncoding("UTF-8");
+
         //return the login page
         boolean shouldLogout = BooleanUtils.toBoolean(NumberUtils.toInt(request.getParameter("logout")));
 
         HttpSession session = request.getSession();
         if (shouldLogout) {
-            setSessionUserLoggedOut(request, response);
+            setSessionUserLoggedOut(request);
             response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + '/'));
         } else {
             session.setAttribute("sendBackUrl", request.getParameter("sendBackUrl"));
@@ -91,14 +89,14 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
-    private static void setSessionUserLoggedIn(HttpSession session, User user) {
+    public static void setSessionUserLoggedIn(HttpSession session, User user) {
         session.setAttribute(WebAppCommon.ATTR_LOGGED_IN, true);
         session.setAttribute(WebAppCommon.ATTR_USER, user);
 
         WebAppCommon.log.info(user.getFullName() + " has logged in.");
     }
 
-    private static void setSessionUserLoggedOut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public static void setSessionUserLoggedOut(HttpServletRequest request) {
         HttpSession session = request.getSession();
         WebAppCommon.log.info(((User) session.getAttribute(WebAppCommon.ATTR_USER)).getFullName() + " has logged out.");
         session.setAttribute(WebAppCommon.ATTR_LOGGED_IN, false);

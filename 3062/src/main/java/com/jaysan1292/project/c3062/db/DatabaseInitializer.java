@@ -89,52 +89,16 @@ public class DatabaseInitializer {
 
             //region Create tables
             WebAppCommon.log.trace("Creating program table.");
-//            try {
             BaseDbManager.RUN.update(conn, program);
-//            } catch (SQLException e) {
-//                if (DerbyHelper.tableAlreadyExists(e)) {
-//                    WebAppCommon.log.trace("Program table already exists! Dropping all rows from table then.");
-//                    BaseDbManager.RUN.update(conn, "DELETE FROM program_t");
-//                } else {
-//                    throw e;
-//                }
-//            }
 
             WebAppCommon.log.trace("Creating user table.");
-//            try {
             BaseDbManager.RUN.update(conn, user);
-//            } catch (SQLException e) {
-//                if (DerbyHelper.tableAlreadyExists(e)) {
-//                    WebAppCommon.log.trace("User table already exists! Dropping all rows from table then.");
-//                    BaseDbManager.RUN.update(conn, "DELETE FROM user_t");
-//                } else {
-//                    throw e;
-//                }
-//            }
 
             WebAppCommon.log.trace("Creating post table.");
-//            try {
             BaseDbManager.RUN.update(conn, post);
-//            } catch (SQLException e) {
-//                if (DerbyHelper.tableAlreadyExists(e)) {
-//                    WebAppCommon.log.trace("Post table already exists! Dropping all rows from table then.");
-//                    BaseDbManager.RUN.update(conn, "DELETE FROM post_t");
-//                } else {
-//                    throw e;
-//                }
-//            }
 
             WebAppCommon.log.trace("Creating comment table.");
-//            try {
             BaseDbManager.RUN.update(conn, comment);
-//            } catch (SQLException e) {
-//                if (DerbyHelper.tableAlreadyExists(e)) {
-//                    WebAppCommon.log.trace("Comment table already exists! Dropping all rows from table then.");
-//                    BaseDbManager.RUN.update(conn, "DELETE FROM comment_t");
-//                } else {
-//                    throw e;
-//                }
-//            }
             //endregion
 
             watch.stop();

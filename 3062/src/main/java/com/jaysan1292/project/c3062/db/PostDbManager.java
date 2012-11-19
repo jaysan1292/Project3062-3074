@@ -105,6 +105,8 @@ public class PostDbManager extends BaseDbManager<Post> {
             String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + AUTHOR_ID_COLUMN + "=?";
             Post[] posts = RUN.query(conn, query, getArrayResultSetHandler(), user.getId());
 
+            if (posts == null) return EMPTY_POST_BEANS;
+
             SortedArrayList<PostBean> userPosts = new SortedArrayList<PostBean>();
             for (Post post : posts) {
                 PostBean bean = new PostBean();
