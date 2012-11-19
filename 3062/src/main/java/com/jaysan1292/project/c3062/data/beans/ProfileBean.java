@@ -9,6 +9,7 @@ import java.util.List;
 public class ProfileBean {
     private User user;
     private SortedArrayList<PostBean> userPosts;
+    private User[] classmates;
 
     public User getUser() {
         return user;
@@ -24,5 +25,13 @@ public class ProfileBean {
 
     public void setPosts(List<PostBean> userPosts) {
         this.userPosts = new SortedArrayList<PostBean>(userPosts);
+    }
+
+    public User[] getClassmates() {
+        return classmates;
+    }
+
+    public void setClassmates(User[] classmates) {
+        this.classmates = classmates;
     }
 }

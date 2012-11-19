@@ -34,8 +34,14 @@
                     <h3>classmates</h3>
 
                     <div class="row-fluid" id="classmate-images">
-                        <c:forEach begin="1" end="16">
-                            <img src="http://placehold.it/50x50" class="img-polaroid"/>
+                        <c:forEach items="${profile.classmates}" var="classmate">
+                            <a href="<c:url value="/profile?id=${classmate.id}"/>"
+                               title="${classmate.fullName}"
+                               style="text-decoration: none;
+                                      width: 50px;
+                                      height: 50px;">
+                                <img src="http://placehold.it/50x50" class="img-polaroid"/>
+                            </a>
                         </c:forEach>
                     </div>
                 </div>

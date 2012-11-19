@@ -45,6 +45,7 @@ public class ProfileServlet extends HttpServlet {
                     ProfileBean profile = new ProfileBean();
                     profile.setUser(user);
                     profile.setPosts(posts);
+                    profile.setClassmates(UserDbManager.getSharedInstance().getClassmates(user));
                     request.setAttribute("profile", profile);
                     request.getRequestDispatcher(WebAppCommon.JSP_PROFILE).include(request, response);
                 } else {

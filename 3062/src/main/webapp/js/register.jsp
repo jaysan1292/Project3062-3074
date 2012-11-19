@@ -26,7 +26,6 @@
 
         $(document).ready(function () {
             $('#register-form').validate({
-//        debug:          true,
                 onkeyup:  false,
                 rules:    {
                     firstName:          'required',
@@ -77,56 +76,6 @@
                     }
                 }
             });
-//    $('#register-form').submit(function (e) {
-//        e.preventDefault();
-//        console.log('Performing validation of register form.');
-//        const invalidPassword = '###INVALID###';
-//
-//        var password, password2;
-//
-//        password = $('#password').val();
-//        password2 = $('#password-confirm').val();
-//
-//        var user = {
-//            firstName: $('#firstName').val(),
-//            lastName:  $('#lastName').val(),
-//            studentId: $('#studentNumber').val(),
-//            program:   $('#program').val(),
-//            password:  ''
-//        };
-//
-//        var firstNameValid, lastNameValid,
-//            studentIdValid, programValid,
-//            passwordValid;
-//
-//        firstNameValid = validateName(user.firstName);
-//        lastNameValid = validateName(user.lastName);
-//        studentIdValid = validateStudentNumber(user.studentId);
-//        programValid = validateProgram(user.program);
-//        passwordValid = validatePassword($('#password').val(), $('#password-confirm').val());
-//
-//        var formIsValid =
-//            firstNameValid && lastNameValid &&
-//                studentIdValid && programValid &&
-//                passwordValid;
-//
-//        if (formIsValid) {
-//            user.password = $('#password').val();
-//            console.log('Form is valid! Submitting to server...');
-//
-////            $.post({
-////                url:     getRegisterUrl(),
-////                data:    $(user).toJSON(),
-////                success: function (data, textStatus, jqXHR) {
-////                    console.log(data);
-////                    console.log(textStatus);
-////                    console.log(jqXHR);
-////                }
-////            });
-//        } else {
-//            console.log('Form has problems D:');
-//        }
-//    });
         })
         ;
 
