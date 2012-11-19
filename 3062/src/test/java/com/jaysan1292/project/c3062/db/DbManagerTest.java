@@ -39,9 +39,7 @@ public class DbManagerTest {
 
     @BeforeClass
     public static void setUpOnce() throws Exception {
-        WebAppCommon.log.info("----------------------------------------");
-        WebAppCommon.log.info("Test setup");
-        WebAppCommon.log.info("----------------------------------------");
+        WebAppCommon.log.info("------------------------------------------------------------");
         try {
             WebAppCommon.initializeApplication();
 
@@ -49,6 +47,7 @@ public class DbManagerTest {
             postManager = PostDbManager.getSharedInstance();
             userManager = UserDbManager.getSharedInstance();
             commentManager = CommentDbManager.getSharedInstance();
+            WebAppCommon.log.info("------------------------------------------------------------");
         } catch (Exception e) {
             WebAppCommon.log.error("There was an error somewhere D:", e);
             tearDownOnce();
@@ -58,15 +57,13 @@ public class DbManagerTest {
 
     @AfterClass
     public static void tearDownOnce() throws Exception {
-        WebAppCommon.log.info("----------------------------------------");
-        WebAppCommon.log.info("Test teardown");
-        WebAppCommon.log.info("----------------------------------------");
+        WebAppCommon.log.info("------------------------------------------------------------");
 
         WebAppCommon.shutdownApplication();
 
-        WebAppCommon.log.info("----------------------------------------");
+        WebAppCommon.log.info("------------------------------------------------------------");
         WebAppCommon.log.info("Test complete!");
-        WebAppCommon.log.info("----------------------------------------");
+        WebAppCommon.log.info("------------------------------------------------------------");
     }
 
     //region ProgramDbManager
@@ -131,11 +128,18 @@ public class DbManagerTest {
     public void testGetUsersByProgram() throws Exception {
         WebAppCommon.log.info("Test: Get users by program");
 
-        Program program = programManager.getProgram("T127");
+        final Program program = programManager.getProgram("T127");
         ArrayList<User> users = new ArrayList<User>(Arrays.asList(userManager.getUsers(program)));
-        ArrayList<User> testUsers = new ArrayList<User>(Arrays.asList(userManager.getUsers(program)));
+        ArrayList<User> testUsers = new ArrayList<User>(Arrays.asList(userManager.getAll()));
 
-        assertEquals(users.hashCode(), testUsers.hashCode());
+        CollectionUtils.filter(testUsers, new Predicate() {
+            public boolean evaluate(Object object) {
+                User user = (User) object;
+                return user.getProgram().equals(program);
+            }
+        });
+
+        assertEquals(users, testUsers);
     }
 
     @Test
@@ -153,8 +157,8 @@ public class DbManagerTest {
         userManager.insert(user);
 
         User user2 = userManager.getUser("100777777");
-        assertEquals(user.getStudentNumber(), user2.getStudentNumber());
-        assertEquals(user.getPassword(), user2.getPassword());
+        user.setId(user2.getId());
+        assertEquals(user, user2);
     }
 
     @Test
@@ -170,6 +174,48 @@ public class DbManagerTest {
         User user2 = userManager.getUser("100726948");
         assertEquals("jaysan1292@gmail.com", user2.getEmail());
         assertEquals(user.getPassword(), user2.getPassword());
+    }
+
+    @Test
+    public void testGetClassmates() throws Exception {
+        WebAppCommon.log.info("Test: Get classmates");
+
+        final User user = userManager.getUser("100726948");
+
+        User[] classmates = userManager.getClassmates(user);
+
+        assertTrue(classmates.length <= 16);
+
+        final boolean[] valid = {true};
+        CollectionUtils.forAllDo(Arrays.asList(classmates), new Closure() {
+            public void execute(Object input) {
+                valid[0] &= ((User) input).getProgram().equals(user.getProgram());
+            }
+        });
+
+        assertTrue(valid[0]);
+    }
+
+    @Test
+    public void testCheckUniqueStudentNumber() throws Exception {
+        WebAppCommon.log.info("Test: Check unique student number");
+
+        boolean shouldBeFalse = userManager.isStudentNumberUnique("100726948");
+        assertFalse(shouldBeFalse);
+
+        boolean shouldBeTrue = userManager.isStudentNumberUnique("000000000");
+        assertTrue(shouldBeTrue);
+    }
+
+    @Test
+    public void testCheckUniqueEmail() throws Exception {
+        WebAppCommon.log.info("Test: Check unique email address");
+
+        boolean shouldBeFalse = userManager.isEmailUnique("n1@example.com");
+        assertFalse(shouldBeFalse);
+
+        boolean shouldBeTrue = userManager.isEmailUnique("asdfghjkl@example.com");
+        assertTrue(shouldBeTrue);
     }
 
     @Test(expected = SQLException.class)
