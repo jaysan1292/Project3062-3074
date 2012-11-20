@@ -1,13 +1,13 @@
 package com.jaysan1292.project.c3074.db;
 
 import android.content.res.Resources;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.jaysan1292.project.c3074.MobileAppCommon;
 import com.jaysan1292.project.c3074.R;
 import com.jaysan1292.project.common.data.Post;
 import com.jaysan1292.project.common.data.User;
 import com.jaysan1292.project.common.util.SortedArrayList;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang3.time.StopWatch;
 
 import java.io.IOException;
@@ -32,9 +32,9 @@ public class PostProvider {
     }
 
     public Post getPost(final long id) {
-        return (Post) CollectionUtils.find(posts, new Predicate() {
-            public boolean evaluate(Object object) {
-                return ((Post) object).getId() == id;
+        return Iterables.find(posts, new Predicate<Post>() {
+            public boolean apply(Post input) {
+                return input.getId() == id;
             }
         });
     }

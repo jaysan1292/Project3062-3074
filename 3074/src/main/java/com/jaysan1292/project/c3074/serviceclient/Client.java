@@ -1,5 +1,7 @@
 package com.jaysan1292.project.c3074.serviceclient;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.jaysan1292.project.c3074.MobileAppCommon;
 import com.jaysan1292.project.c3074.R;
 import com.jaysan1292.project.c3074.db.UserMetaManager;
@@ -7,8 +9,6 @@ import com.jaysan1292.project.common.data.Comment;
 import com.jaysan1292.project.common.data.Post;
 import com.jaysan1292.project.common.data.User;
 import com.jaysan1292.project.common.util.SortedArrayList;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
 import org.intellij.lang.annotations.Language;
 
 import java.io.IOException;
@@ -39,12 +39,11 @@ public class Client {
     public static User findUser(final long id) {
         // For now, just retrieve this from res/raw/users.json
         try {
-            InputStream input = MobileAppCommon.getContext().getResources().openRawResource(R.raw.users);
-            Set<User> users = User.readJSONSet(User.class, input);
-            return (User) CollectionUtils.find(users, new Predicate() {
-                public boolean evaluate(Object object) {
-                    User usr = (User) object;
-                    return usr.getId() == id;
+            InputStream in = MobileAppCommon.getContext().getResources().openRawResource(R.raw.users);
+            Set<User> users = User.readJSONSet(User.class, in);
+            return Iterables.find(users, new Predicate<User>() {
+                public boolean apply(User input) {
+                    return input.getId() == id;
                 }
             });
         } catch (IOException e) {

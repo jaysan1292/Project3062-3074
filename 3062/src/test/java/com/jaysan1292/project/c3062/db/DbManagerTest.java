@@ -1,5 +1,8 @@
 package com.jaysan1292.project.c3062.db;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.jaysan1292.jdcommon.Extensions;
 import com.jaysan1292.project.c3062.WebAppCommon;
 import com.jaysan1292.project.c3062.data.beans.PostBean;
@@ -9,9 +12,6 @@ import com.jaysan1292.project.common.data.Post;
 import com.jaysan1292.project.common.data.Program;
 import com.jaysan1292.project.common.data.User;
 import com.jaysan1292.project.common.util.SortedArrayList;
-import org.apache.commons.collections.Closure;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
 import org.apache.commons.dbutils.DbUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -132,10 +132,9 @@ public class DbManagerTest {
         ArrayList<User> users = new ArrayList<User>(Arrays.asList(userManager.getUsers(program)));
         ArrayList<User> testUsers = new ArrayList<User>(Arrays.asList(userManager.getAll()));
 
-        CollectionUtils.filter(testUsers, new Predicate() {
-            public boolean evaluate(Object object) {
-                User user = (User) object;
-                return user.getProgram().equals(program);
+        Iterables.removeIf(testUsers, new Predicate<User>() {
+            public boolean apply(User input) {
+                return !input.getProgram().equals(program);
             }
         });
 
@@ -180,20 +179,18 @@ public class DbManagerTest {
     public void testGetClassmates() throws Exception {
         WebAppCommon.log.info("Test: Get classmates");
 
-        final User user = userManager.getUser("100726948");
+        User user = userManager.getUser("100726948");
 
         User[] classmates = userManager.getClassmates(user);
 
         assertTrue(classmates.length <= 16);
 
-        final boolean[] valid = {true};
-        CollectionUtils.forAllDo(Arrays.asList(classmates), new Closure() {
-            public void execute(Object input) {
-                valid[0] &= ((User) input).getProgram().equals(user.getProgram());
-            }
-        });
+        boolean valid = true;
+        for (User classmate : classmates) {
+            valid &= classmate.getProgram().equals(user.getProgram());
+        }
 
-        assertTrue(valid[0]);
+        assertTrue(valid);
     }
 
     @Test
@@ -250,17 +247,15 @@ public class DbManagerTest {
 
     @Test
     public void testGetCommentsForPost() throws Exception {
-        final Post post = postManager.get(0);
+        Post post = postManager.get(0);
         Comment[] comments;
         comments = commentManager.getComments(post);
 
-        final boolean[] valid = new boolean[]{true};
-        CollectionUtils.forAllDo(Arrays.asList(comments), new Closure() {
-            public void execute(Object input) {
-                valid[0] &= post.getId() == ((Comment) input).getParentPostId();
-            }
-        });
-        assertTrue(valid[0]);
+        boolean valid = true;
+        for (Comment comment : comments) {
+            valid &= post.getId() == comment.getParentPostId();
+        }
+        assertTrue(valid);
     }
 
     @Test
@@ -434,12 +429,11 @@ public class DbManagerTest {
 
         final User user = userManager.get(0);
         Collection<Post> feedPosts = Arrays.asList(postManager.getUserFeedPosts(user));
-        assertTrue(CollectionUtils.select(feedPosts, new Predicate() {
-            public boolean evaluate(Object object) {
-                Post post = (Post) object;
-                return !user.getProgram().equals(post.getPostAuthor().getProgram());
+        assertTrue(Lists.newArrayList(Iterables.filter(feedPosts, new Predicate<Post>() {
+            public boolean apply(Post input) {
+                return !user.getProgram().equals(input.getPostAuthor().getProgram());
             }
-        }).isEmpty() && !feedPosts.isEmpty());
+        })).isEmpty() && !feedPosts.isEmpty());
     }
 
     @Test

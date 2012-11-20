@@ -1,5 +1,7 @@
 package com.jaysan1292.project.common.test;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.jaysan1292.project.c3062.WebAppCommon;
 import com.jaysan1292.project.c3062.db.CommentDbManager;
 import com.jaysan1292.project.c3062.db.PostDbManager;
@@ -7,9 +9,6 @@ import com.jaysan1292.project.c3062.db.UserDbManager;
 import com.jaysan1292.project.common.data.Comment;
 import com.jaysan1292.project.common.data.Post;
 import com.jaysan1292.project.common.data.User;
-import org.apache.commons.collections.Closure;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -38,18 +37,15 @@ public class Application {
         }
 
         final Set<Long> postIds = new HashSet<Long>();
-        CollectionUtils.forAllDo(posts, new Closure() {
-            public void execute(Object input) {
-                postIds.add(((Post) input).getId());
-            }
-        });
-        CollectionUtils.filter(comments, new Predicate() {
-            public boolean evaluate(Object object) {
-                final Comment comment = (Comment) object;
-                return CollectionUtils.exists(postIds, new Predicate() {
-                    public boolean evaluate(Object object) {
-                        long postId = (Long) object;
-                        return comment.getParentPostId() == postId;
+        for (Post post : posts) {
+            postIds.add(post.getId());
+        }
+
+        Iterables.removeIf(comments, new Predicate<Comment>() {
+            public boolean apply(final Comment comment) {
+                return Iterables.any(postIds, new Predicate<Long>() {
+                    public boolean apply(Long input) {
+                        return comment.getParentPostId() == input;
                     }
                 });
             }

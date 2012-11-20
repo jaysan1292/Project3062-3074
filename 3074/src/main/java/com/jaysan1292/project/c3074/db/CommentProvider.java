@@ -1,12 +1,12 @@
 package com.jaysan1292.project.c3074.db;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.jaysan1292.project.c3074.MobileAppCommon;
 import com.jaysan1292.project.c3074.R;
 import com.jaysan1292.project.common.data.Comment;
 import com.jaysan1292.project.common.data.Post;
-import org.apache.commons.collections.Closure;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang3.time.StopWatch;
 
 import java.io.IOException;
@@ -42,23 +42,20 @@ public class CommentProvider {
         }
 
         // Randomize comment dates;
-        CollectionUtils.forAllDo(comments, new Closure() {
-            public void execute(Object input) {
-                Comment comment = (Comment) input;
-                Post parent = PostProvider.getInstance().getPost(comment.getParentPostId());
-                comment.setCommentDate(new Date((long) (parent.getPostDate().getTime() - (Math.random() * (long) (86400000 * 1.5)))));
-            }
-        });
+        assert comments != null;
+        for (Comment comment : comments) {
+            Post parent = PostProvider.getInstance().getPost(comment.getParentPostId());
+            comment.setCommentDate(new Date((long) (parent.getPostDate().getTime() - (Math.random() * (long) (86400000 * 1.5)))));
+        }
 
         watch.stop();
         MobileAppCommon.log.info(String.format("Done getting comments! (%s)", watch.toString()));
     }
 
-    @SuppressWarnings("unchecked")
     public ArrayList<Comment> getComments(final long postId) {
-        return new ArrayList<Comment>(CollectionUtils.select(comments, new Predicate() {
-            public boolean evaluate(Object object) {
-                return ((Comment) object).getParentPostId() == postId;
+        return Lists.newArrayList(Iterables.filter(comments, new Predicate<Comment>() {
+            public boolean apply(Comment input) {
+                return input.getParentPostId() == postId;
             }
         }));
     }
