@@ -20,7 +20,7 @@ import com.jaysan1292.project.common.data.User;
 
 import java.util.ArrayList;
 
-//TODO: Implement navigation tabs switch between Feed view and Schedule view
+//TODO: Cache
 
 public class MainActivity extends ListActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
     private ProgressDialog _progressDialog;

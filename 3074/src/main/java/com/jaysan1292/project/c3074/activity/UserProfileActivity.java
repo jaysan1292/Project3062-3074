@@ -2,6 +2,7 @@ package com.jaysan1292.project.c3074.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -85,6 +86,14 @@ public class UserProfileActivity extends Activity implements AdapterView.OnItemC
                 finish();
                 overridePendingTransition(R.anim.slide_in_rev, R.anim.slide_out_rev);
                 return true;
+            case R.id.menu_up_email:
+                MobileAppCommon.log.info("Send email to " + user.getEmail());
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("plain/text");
+                intent.putExtra(Intent.EXTRA_EMAIL, user.getEmail());
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+                intent.putExtra(Intent.EXTRA_TEXT, "Type your email body.");
+                startActivity(Intent.createChooser(intent, "Send email"));
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -16,10 +16,6 @@ public class MobileAppCommon extends Application {
     private static AppSQLManager dataManager;
     private static User loggedInUser;
 
-    public static MobileAppCommon getInstance() {
-        return instance;
-    }
-
     public static Context getContext() {
         return instance.getApplicationContext();
     }
