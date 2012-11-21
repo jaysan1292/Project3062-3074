@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.jaysan1292.project.c3074.MobileAppCommon;
 import com.jaysan1292.project.c3074.R;
 import com.jaysan1292.project.c3074.activity.MainActivity;
 import com.jaysan1292.project.common.data.Post;
@@ -14,9 +15,9 @@ import com.jaysan1292.project.common.util.DateUtils;
 
 import java.util.ArrayList;
 
-public class PostListAdapter extends BaseAdapter {
+public class PostListAdapter extends BaseAdapter implements Disposable {
     private static LayoutInflater inflater;
-    private final ArrayList<Post> posts;
+    private ArrayList<Post> posts;
     private final MainActivity activity;
 
     public PostListAdapter(Context context, ArrayList<Post> posts) {
@@ -64,5 +65,10 @@ public class PostListAdapter extends BaseAdapter {
     @Override
     public long getItemId(int i) {
         return posts.get(i).getId();
+    }
+
+    public void dispose() {
+        MobileAppCommon.log.trace("PostListAdapter dispose");
+        posts = null;
     }
 }

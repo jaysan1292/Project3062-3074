@@ -3,6 +3,7 @@ package com.jaysan1292.project.c3074.db;
 import android.content.SharedPreferences;
 import com.jaysan1292.project.c3074.MobileAppCommon;
 import com.jaysan1292.project.common.data.User;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.Map;
@@ -94,10 +95,16 @@ public class UserMetaManager {
         }
     }
 
-    public static void setLoggedInUser(User user) {
-        MobileAppCommon.log.info("Saving '" + user.getFullName() + "' as the currently logged on user.");
-        setMetaValue(META_USER_ID, user.getId());
-        setMetaValue(META_USER_JSON, user.toString());
+    public static void setLoggedInUser(@Nullable User user) {
+        if (user != null) {
+            MobileAppCommon.log.info("Saving '" + user.getFullName() + "' as the currently logged on user.");
+            setMetaValue(META_USER_ID, user.getId());
+            setMetaValue(META_USER_JSON, user.toString());
+        } else {
+            MobileAppCommon.log.info("Logging out the currently logged in user.");
+            setMetaValue(META_USER_ID, (String) null);
+            setMetaValue(META_USER_JSON, (String) null);
+        }
     }
 
     private static SharedPreferences getSharedPreferences() {

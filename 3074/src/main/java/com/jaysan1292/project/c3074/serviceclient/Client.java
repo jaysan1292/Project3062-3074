@@ -1,14 +1,14 @@
 package com.jaysan1292.project.c3074.serviceclient;
 
+import android.content.Context;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.jaysan1292.project.c3074.MobileAppCommon;
 import com.jaysan1292.project.c3074.R;
+import com.jaysan1292.project.c3074.activity.MainActivity;
+import com.jaysan1292.project.c3074.db.PostProvider;
 import com.jaysan1292.project.c3074.db.UserMetaManager;
-import com.jaysan1292.project.common.data.Comment;
-import com.jaysan1292.project.common.data.Post;
 import com.jaysan1292.project.common.data.User;
-import com.jaysan1292.project.common.util.SortedArrayList;
 import org.intellij.lang.annotations.Language;
 
 import java.io.IOException;
@@ -21,7 +21,7 @@ public class Client {
 
     public static User authenticateUser(String username, String password) {
         //TODO: Actual authentication
-        MobileAppCommon.log.debug("Given username: " + username + ", Given password: " + password);
+        MobileAppCommon.log.debug("Given username: " + username + ", Given password: xxxxxxxx");
 
         // For now, just authenticate them
         @Language("JSON") String userJson = "{\"id\":0,\"firstName\":\"Jason\",\"lastName\":\"Recillo\",\"email\":\"jaysan1292@example.com\",\"studentNumber\":\"100726948\",\"program\":{\"programCode\":\"T127\",\"programName\":\"Computer Programmer Analyst\",\"id\":0}}";
@@ -52,7 +52,12 @@ public class Client {
         }
     }
 
-    public static SortedArrayList<Comment> getComments(Post post) {
-        return null; //TODO: Get comments
+    public static void logout(Context context) {
+        UserMetaManager.setLoggedInUser(null);
+        MobileAppCommon.startLoginActivity(context);
+        if (context instanceof MainActivity) {
+            ((MainActivity) context).dispose();
+        }
+        PostProvider.getInstance().dispose();
     }
 }

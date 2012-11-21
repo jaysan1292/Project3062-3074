@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.jaysan1292.project.c3074.MobileAppCommon;
 import com.jaysan1292.project.c3074.R;
 import com.jaysan1292.project.c3074.db.PostProvider;
+import com.jaysan1292.project.c3074.utils.Disposable;
 import com.jaysan1292.project.c3074.utils.UserPostListAdapter;
 import com.jaysan1292.project.common.data.Post;
 import com.jaysan1292.project.common.data.User;
@@ -24,7 +25,7 @@ import com.jaysan1292.project.common.data.User;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class UserProfileActivity extends Activity implements AdapterView.OnItemClickListener {
+public class UserProfileActivity extends Activity implements AdapterView.OnItemClickListener, Disposable {
     private ProgressDialog progressDialog;
     private ListView postListView;
     private User user;
@@ -100,6 +101,11 @@ public class UserProfileActivity extends Activity implements AdapterView.OnItemC
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void dispose() {
+        MobileAppCommon.log.trace("UserProfileActivity dispose");
+        ((UserPostListAdapter) postListView.getAdapter()).dispose();
     }
 
     private class LoadPostTask extends AsyncTask<Void, Void, ArrayList<Post>> {

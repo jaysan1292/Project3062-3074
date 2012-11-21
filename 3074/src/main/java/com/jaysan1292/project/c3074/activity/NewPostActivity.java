@@ -11,6 +11,7 @@ import android.view.*;
 import android.widget.*;
 import com.jaysan1292.project.c3074.MobileAppCommon;
 import com.jaysan1292.project.c3074.R;
+import com.jaysan1292.project.c3074.db.DraftManager;
 import com.jaysan1292.project.c3074.db.PostProvider;
 import com.jaysan1292.project.common.data.Post;
 import com.jaysan1292.project.common.data.User;
@@ -49,7 +50,7 @@ public class NewPostActivity extends Activity {
 
         MobileAppCommon.log.info(savedInstanceState);
 
-        drafts = MobileAppCommon.getDataManager().getDrafts();
+        drafts = DraftManager.getSharedInstance().getDrafts();
         MobileAppCommon.log.debug("NewPostActivity onStart");
         if (savedInstanceState == null) {
             if (!drafts.isEmpty()) {
@@ -144,7 +145,7 @@ public class NewPostActivity extends Activity {
     }
 
     private void showDraftsMenu() {
-        drafts = MobileAppCommon.getDataManager().getDrafts();
+        drafts = DraftManager.getSharedInstance().getDrafts();
 
         if (!drafts.isEmpty()) {
             MobileAppCommon.log.info("Showing drafts window.");
@@ -200,7 +201,7 @@ public class NewPostActivity extends Activity {
         MobileAppCommon.log.info("Submitting post");
         if (usingDraft) {
             // if we're submitting a draft that was previously saved, now remove it from the database.
-            MobileAppCommon.getDataManager().removeDraft(post);
+            DraftManager.getSharedInstance().removeDraft(post);
         }
         post.setPostContent(((TextView) findViewById(R.id.edit_text_new_post)).getText().toString());
         post.setPostDate(new Date());
@@ -221,7 +222,7 @@ public class NewPostActivity extends Activity {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             if (usingDraft) {
                                 MobileAppCommon.log.debug("This post is a draft; removing it from database");
-                                MobileAppCommon.getDataManager().removeDraft(post);
+                                DraftManager.getSharedInstance().removeDraft(post);
                             }
                             exitActivity();
                         }
@@ -230,10 +231,10 @@ public class NewPostActivity extends Activity {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             if (usingDraft) {
                                 MobileAppCommon.log.debug("This post is a draft; updating it in the database");
-                                MobileAppCommon.getDataManager().updateDraft(post);
+                                DraftManager.getSharedInstance().updateDraft(post);
                             } else {
                                 MobileAppCommon.log.debug("Saving draft to database.");
-                                MobileAppCommon.getDataManager().addDraft(post);
+                                DraftManager.getSharedInstance().addDraft(post);
                             }
                             exitActivity();
                         }

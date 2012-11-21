@@ -43,7 +43,7 @@
 
 <jsp:doBody/>
 <br/>
-<%--TODO: Fix the tablet-size mobile layout--%>
+
 <div class="navbar navbar-fixed-bottom" id="footer">
     <div class="navbar-inner">
         <div class="container">

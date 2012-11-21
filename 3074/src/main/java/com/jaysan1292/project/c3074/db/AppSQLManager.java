@@ -6,11 +6,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.jaysan1292.project.c3074.MobileAppCommon;
-import com.jaysan1292.project.common.data.Post;
 import org.apache.commons.lang3.time.DateUtils;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 
 import static com.jaysan1292.project.c3074.db.Schema.Drafts;
 
@@ -72,79 +70,4 @@ public class AppSQLManager extends SQLiteOpenHelper {
             db.insertOrThrow(table, null, value);
         }
     }
-
-    //region drafts
-
-    // TODO: These methods really ought to be refactored to DraftManager
-
-    public void addDraft(Post draft) {
-        SQLiteDatabase db = getWritableDatabase();
-        try {
-            db.beginTransaction();
-            {
-                ContentValues values = new ContentValues();
-                values.put(Drafts.POST_DATE, draft.getPostDate().getTime());
-                values.put(Drafts.POST_CONTENT, draft.getPostContent());
-                db.insert(Drafts.TABLE_NAME, null, values);
-            }
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-            db.close();
-        }
-    }
-
-    public ArrayList<Post> getDrafts() {
-        String sql = Drafts.DraftsCursor.QUERY;
-        SQLiteDatabase db = getReadableDatabase();
-        Drafts.DraftsCursor cursor = (Drafts.DraftsCursor) db.rawQueryWithFactory(new Drafts.DraftsCursor.Factory(), sql, null, null);
-
-        ArrayList<Post> drafts = new ArrayList<Post>();
-        while (cursor.moveToNext()) {
-            Post post = new Post();
-            post.setId(cursor.getId());
-            post.setPostAuthor(MobileAppCommon.getLoggedInUser());
-            post.setPostContent(cursor.getPostContent());
-            post.setPostDate(cursor.getPostDate());
-            drafts.add(post);
-        }
-        return drafts;
-    }
-
-    public void updateDraft(Post draft) {
-        SQLiteDatabase db = getWritableDatabase();
-        try {
-            db.beginTransaction();
-            {
-                ContentValues value = new ContentValues();
-                value.put(Drafts.POST_CONTENT, draft.getPostContent());
-                value.put(Drafts.POST_DATE, draft.getPostDate().getTime());
-
-                db.update(Drafts.TABLE_NAME, value, Drafts.ID + "=?", new String[]{String.valueOf(draft.getId())});
-            }
-            db.setTransactionSuccessful();
-        } catch (SQLException e) {
-            MobileAppCommon.log.error(e.getMessage(), e);
-            throw e;
-        } finally {
-            db.endTransaction();
-            db.close();
-        }
-    }
-
-    public void removeDraft(Post draft) {
-        SQLiteDatabase db = getWritableDatabase();
-        try {
-            db.beginTransaction();
-            {
-                db.delete(Drafts.TABLE_NAME, Drafts.ID + "=?", new String[]{String.valueOf(draft.getId())});
-            }
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-            db.close();
-        }
-    }
-
-    //endregion drafts
 }

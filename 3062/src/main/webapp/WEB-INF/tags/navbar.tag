@@ -98,10 +98,8 @@
                         </c:if>
                     </ul>
                     <ul class="nav pull-right hidden-desktop">
-                            <%--TODO: mobile login/logout menu--%>
                         <li>
                             <c:choose>
-                                <%--<c:when test="<%=loggedIn%>">--%>
                                 <c:when test="${loggedIn}">
                                     <a href="<c:url value="/login?logout=1"/>"><i class="icon-off"></i> logout</a>
                                 </c:when>

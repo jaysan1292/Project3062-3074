@@ -14,6 +14,8 @@ import com.jaysan1292.project.c3074.MobileAppCommon;
 import com.jaysan1292.project.c3074.R;
 import com.jaysan1292.project.c3074.db.CommentProvider;
 import com.jaysan1292.project.c3074.db.PostProvider;
+import com.jaysan1292.project.c3074.serviceclient.Client;
+import com.jaysan1292.project.c3074.utils.Disposable;
 import com.jaysan1292.project.c3074.utils.PostListAdapter;
 import com.jaysan1292.project.common.data.Post;
 import com.jaysan1292.project.common.data.User;
@@ -22,7 +24,7 @@ import java.util.ArrayList;
 
 //TODO: Cache
 
-public class MainActivity extends ListActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class MainActivity extends ListActivity implements View.OnClickListener, AdapterView.OnItemClickListener, Disposable {
     private ProgressDialog _progressDialog;
     private ListView _postListView;
     private boolean _shouldRestoreState;
@@ -109,6 +111,9 @@ public class MainActivity extends ListActivity implements View.OnClickListener, 
                 MobileAppCommon.log.debug("refresh button clicked");
                 refreshPosts();
                 return true;
+            case R.id.menu_main_logout:
+                MobileAppCommon.log.debug("logout button clicked");
+                Client.logout(this);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -175,5 +180,10 @@ public class MainActivity extends ListActivity implements View.OnClickListener, 
         MobileAppCommon.log.info("Refreshing posts.");
         _postListView.setAdapter(new PostListAdapter(MainActivity.this, PostProvider.getInstance().getPosts()));
         ((PostListAdapter) _postListView.getAdapter()).notifyDataSetChanged();
+    }
+
+    public void dispose() {
+        MobileAppCommon.log.trace("MainActivity dispose");
+        ((PostListAdapter) _postListView.getAdapter()).dispose();
     }
 }

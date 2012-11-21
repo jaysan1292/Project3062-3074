@@ -5,6 +5,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.jaysan1292.project.c3074.MobileAppCommon;
 import com.jaysan1292.project.c3074.R;
+import com.jaysan1292.project.c3074.utils.Disposable;
 import com.jaysan1292.project.common.data.Post;
 import com.jaysan1292.project.common.data.User;
 import com.jaysan1292.project.common.util.SortedArrayList;
@@ -14,12 +15,14 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Date;
 
-public class PostProvider {
+@SuppressWarnings("MethodMayBeStatic")
+public class PostProvider implements Disposable {
     private static PostProvider sharedInstance;
-    private SortedArrayList<Post> posts;
+    private static SortedArrayList<Post> posts;
 
     public static PostProvider getInstance() {
         if (sharedInstance == null) sharedInstance = new PostProvider();
+        if (posts == null) posts = sharedInstance.getPosts();
         return sharedInstance;
     }
 
@@ -27,9 +30,7 @@ public class PostProvider {
         posts = getPosts();
     }
 
-    private PostProvider() {
-        setArrays();
-    }
+    private PostProvider() {}
 
     public Post getPost(final long id) {
         return Iterables.find(posts, new Predicate<Post>() {
@@ -39,6 +40,7 @@ public class PostProvider {
         });
     }
 
+    @SuppressWarnings("ObjectAllocationInLoop")
     public synchronized SortedArrayList<Post> getPosts() {
         if (posts != null) {
             return posts;
@@ -50,8 +52,6 @@ public class PostProvider {
                 StopWatch watch = new StopWatch();
                 watch.start();
 
-//                BufferedReader reader = new BufferedReader(new InputStreamReader(context.getResources().openRawResource(R.raw.posts)));
-
                 try {
                     output = new SortedArrayList<Post>(Post.readJSONArray(Post.class, MobileAppCommon.getContext().getResources().openRawResource(R.raw.posts)));
                 } catch (IOException e) {
@@ -61,8 +61,6 @@ public class PostProvider {
                     MobileAppCommon.log.error(e.getMessage(), e);
                     output = null;
                 }
-
-//                reader.close();
 
                 MobileAppCommon.log.debug("Finished getting posts, now doing some post-processing (:");
 
@@ -101,5 +99,10 @@ public class PostProvider {
         // here, we're just going to save it to memory; these changes won't persist between
         // application restarts though.
         posts.insertSorted(post);
+    }
+
+    public void dispose() {
+        MobileAppCommon.log.trace("PostProvider dispose");
+        posts = null;
     }
 }

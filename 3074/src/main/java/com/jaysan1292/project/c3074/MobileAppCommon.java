@@ -70,6 +70,12 @@ public class MobileAppCommon extends Application {
         context.startActivity(intent);
     }
 
+    public static void startLoginActivity(Context context) {
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(intent);
+    }
+
     public static void startNewPostActivity(Context context) {
         Intent intent = new Intent(context, NewPostActivity.class);
         context.startActivity(intent);
