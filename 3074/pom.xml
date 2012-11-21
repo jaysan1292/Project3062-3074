@@ -13,12 +13,6 @@
     <properties>
         <platform.version>4.1.1.4</platform.version>
     </properties>
-    <repositories>
-        <repository>
-            <id>local-repo</id>
-            <url>file://${project.basedir}/libs</url>
-        </repository>
-    </repositories>
     <dependencies>
         <dependency>
             <groupId>com.jaysan1292.project</groupId>
@@ -52,8 +46,8 @@
                     <assetsDirectory>${project.basedir}/assets</assetsDirectory>
                     <resourceDirectory>${project.basedir}/res</resourceDirectory>
                     <nativeLibrariesDirectory>${project.basedir}/src/main/natives</nativeLibrariesDirectory>
-                    <genDirectory>${project.basedir}/gen</genDirectory>
-                    <genDirectoryAidl>${project.basedir}/gen</genDirectoryAidl>
+                    <!--<genDirectory>${project.basedir}/gen</genDirectory>-->
+                    <!--<genDirectoryAidl>${project.basedir}/gen</genDirectoryAidl>-->
                     <sdk>
                         <platform>16</platform>
                     </sdk>
