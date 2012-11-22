@@ -85,7 +85,9 @@ public class DatabaseInitializer {
                     "  post_id BIGINT NOT NULL,\n" + // Foreign key to post table
                     "  CONSTRAINT comment_pk PRIMARY KEY (comment_id),\n" +
                     "  CONSTRAINT comment_fk FOREIGN KEY (post_id)\n" +
-                    "  REFERENCES post_t (post_id)\n" +
+                    "  REFERENCES post_t (post_id),\n" +
+                    "  CONSTRAINT comment_author_fk FOREIGN KEY (comment_author_id)" +
+                    "  REFERENCES user_t (user_id)" +
                     ')';
             //endregion
 
