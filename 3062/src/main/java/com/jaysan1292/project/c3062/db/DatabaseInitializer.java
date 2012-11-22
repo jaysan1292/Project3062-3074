@@ -37,7 +37,9 @@ public class DatabaseInitializer {
             StopWatch watch = new StopWatch(); watch.start();
             WebAppCommon.log.info("Initializing database...");
             WebAppCommon.log.info("Creating tables");
-            conn = DriverManager.getConnection("jdbc:derby:" + BaseDbManager.DB_NAME + ";create=true");
+            String connectUrl = BaseDbManager.CONNECT_URL + ";create=true";
+            WebAppCommon.log.trace(connectUrl);
+            conn = DriverManager.getConnection(connectUrl);
 
             //region Table SQL
             @Language("Derby")
@@ -136,7 +138,7 @@ public class DatabaseInitializer {
             }
 
             WebAppCommon.log.info("Shutting down database.");
-            DriverManager.getConnection("jdbc:derby:" + BaseDbManager.DB_NAME + ";shutdown=true");
+            DriverManager.getConnection(BaseDbManager.CONNECT_URL + ";shutdown=true");
         } catch (SQLException e) {
             if ((e.getErrorCode() == 45000) && ("08006".equals(e.getSQLState()))) {
                 WebAppCommon.log.info("Database shut down successfully!");

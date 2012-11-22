@@ -24,6 +24,7 @@ import java.util.ArrayList;
  */
 public abstract class BaseDbManager<T extends BaseEntity> {
     public static final String DB_NAME = "gbc_community";
+    public static final String CONNECT_URL = "jdbc:derby:" + DB_NAME;
     static final QueryRunner RUN = new QueryRunner();
     private Class<T> cls;
 
@@ -142,6 +143,6 @@ public abstract class BaseDbManager<T extends BaseEntity> {
     protected abstract void doInsert(Connection conn, T item) throws SQLException;
 
     protected static Connection openDatabaseConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:derby:" + DB_NAME);
+        return DriverManager.getConnection(CONNECT_URL);
     }
 }
