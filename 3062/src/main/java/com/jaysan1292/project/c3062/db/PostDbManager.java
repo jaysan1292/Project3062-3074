@@ -2,6 +2,7 @@ package com.jaysan1292.project.c3062.db;
 
 import com.jaysan1292.project.c3062.WebAppCommon;
 import com.jaysan1292.project.c3062.data.beans.PostBean;
+import com.jaysan1292.project.common.data.Comment;
 import com.jaysan1292.project.common.data.Post;
 import com.jaysan1292.project.common.data.User;
 import com.jaysan1292.project.common.util.SortedArrayList;
@@ -74,6 +75,17 @@ public class PostDbManager extends BaseDbManager<Post> {
                    item.getPostDate().getTime(),
                    item.getPostAuthor().getId(),
                    item.getPostContent());
+    }
+
+    protected void doDelete(Connection conn, Post item) throws SQLException {
+        String query = "DELETE FROM " + TABLE_NAME + " WHERE " + ID_COLUMN + "=?";
+
+        // Delete all comments associated with this post
+        Comment[] comments = CommentDbManager.getSharedInstance().getComments(item);
+        for (Comment comment : comments) {
+            CommentDbManager.getSharedInstance().doDelete(conn, comment);
+        }
+        RUN.update(conn, query, item.getId());
     }
 
     ///////////////////////////////////////////////////////////////////////////

@@ -1,6 +1,8 @@
 package com.jaysan1292.project.c3062.db;
 
 import com.jaysan1292.project.c3062.WebAppCommon;
+import com.jaysan1292.project.common.data.Comment;
+import com.jaysan1292.project.common.data.Post;
 import com.jaysan1292.project.common.data.Program;
 import com.jaysan1292.project.common.data.User;
 import org.apache.commons.dbutils.DbUtils;
@@ -93,6 +95,23 @@ public class UserDbManager extends BaseDbManager<User> {
                    user.getStudentNumber(),
                    user.getProgram().getId(),
                    user.getPassword());
+    }
+
+    protected void doDelete(Connection conn, User item) throws SQLException {
+        String query = "DELETE FROM " + TABLE_NAME + " WHERE " + ID_COLUMN + "=?";
+
+        //Delete all posts and comments by this user
+        Post[] posts = PostDbManager.getSharedInstance().getPosts(item);
+        for (Post post : posts) {
+            PostDbManager.getSharedInstance().doDelete(conn, post);
+        }
+
+        Comment[] comments = CommentDbManager.getSharedInstance().getComments(item);
+        for (Comment comment : comments) {
+            CommentDbManager.getSharedInstance().doDelete(conn, comment);
+        }
+
+        RUN.update(conn, query, item.getId());
     }
 
     ///////////////////////////////////////////////////////////////////////////

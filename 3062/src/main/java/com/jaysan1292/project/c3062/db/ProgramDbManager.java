@@ -55,6 +55,10 @@ public class ProgramDbManager extends BaseDbManager<Program> {
         RUN.update(conn, query, item.getProgramCode(), item.getProgramName());
     }
 
+    protected void doDelete(Connection conn, Program item) throws SQLException {
+        throw new UnsupportedOperationException();
+    }
+
     ///////////////////////////////////////////////////////////////////////////
 
     public Program getProgram(String programCode) throws SQLException {

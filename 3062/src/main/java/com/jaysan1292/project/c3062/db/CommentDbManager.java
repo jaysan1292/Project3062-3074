@@ -2,6 +2,7 @@ package com.jaysan1292.project.c3062.db;
 
 import com.jaysan1292.project.common.data.Comment;
 import com.jaysan1292.project.common.data.Post;
+import com.jaysan1292.project.common.data.User;
 import org.apache.commons.dbutils.DbUtils;
 
 import java.sql.Connection;
@@ -82,6 +83,11 @@ public class CommentDbManager extends BaseDbManager<Comment> {
                    item.getParentPostId());
     }
 
+    protected void doDelete(Connection conn, Comment item) throws SQLException {
+        String query = "DELETE FROM " + TABLE_NAME + " WHERE " + ID_COLUMN + "=?";
+        RUN.update(conn, query, item.getId());
+    }
+
     ///////////////////////////////////////////////////////////////////////////
 
     public Comment[] getComments(Post post) {
@@ -90,6 +96,25 @@ public class CommentDbManager extends BaseDbManager<Comment> {
             conn = openDatabaseConnection();
             String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + PARENT_POST_ID_COLUMN + "=?";
             Comment[] comments = RUN.query(conn, query, getArrayResultSetHandler(), post.getId());
+
+            if (comments == null) {
+                return EMPTY_COMMENTS;
+            }
+
+            return comments;
+        } catch (SQLException e) {
+            return EMPTY_COMMENTS;
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+    }
+
+    public Comment[] getComments(User user) {
+        Connection conn = null;
+        try {
+            conn = openDatabaseConnection();
+            String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + AUTHOR_ID_COLUMN + "=?";
+            Comment[] comments = RUN.query(conn, query, getArrayResultSetHandler(), user.getId());
 
             if (comments == null) {
                 return EMPTY_COMMENTS;

@@ -22,7 +22,7 @@ import java.util.ArrayList;
  *
  * @author Jason Recillo
  */
-public abstract class BaseDbManager<T extends BaseEntity> {
+public abstract class BaseDbManager<T extends BaseEntity<T>> {
     public static final String DB_NAME = "gbc_community";
     public static final String CONNECT_URL = "jdbc:derby:" + DB_NAME;
     static final QueryRunner RUN = new QueryRunner();
@@ -126,6 +126,17 @@ public abstract class BaseDbManager<T extends BaseEntity> {
         }
     }
 
+    public void delete(T item) throws SQLException {
+        Preconditions.checkNotNull(item);
+        Connection conn = null;
+        try {
+            conn = openDatabaseConnection();
+            doDelete(conn, item);
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+    }
+
     public int getCount() {
         Connection conn = null;
         try {
@@ -141,6 +152,8 @@ public abstract class BaseDbManager<T extends BaseEntity> {
     protected abstract int doUpdate(Connection conn, T item) throws SQLException;
 
     protected abstract void doInsert(Connection conn, T item) throws SQLException;
+
+    protected abstract void doDelete(Connection conn, T item) throws SQLException;
 
     protected static Connection openDatabaseConnection() throws SQLException {
         return DriverManager.getConnection(CONNECT_URL);

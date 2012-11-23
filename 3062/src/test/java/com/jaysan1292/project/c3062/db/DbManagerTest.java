@@ -176,6 +176,25 @@ public class DbManagerTest {
     }
 
     @Test
+    public void testDeleteUser() throws Exception {
+        WebAppCommon.log.info("Test: Delete existing user");
+
+        User user = userManager.getUser("100726948");
+
+        userManager.delete(user);
+
+        // if this fails then the user was deleted successfully
+        try {
+            userManager.get(user.getId());
+        } catch (SQLException ignored) {
+            // Add the user back because other tests actually depend on this user existing :p
+            userManager.insert(user);
+            return;
+        }
+        throw new RuntimeException("Item was not deleted successfully.");
+    }
+
+    @Test
     public void testGetClassmates() throws Exception {
         WebAppCommon.log.info("Test: Get classmates");
 
@@ -262,7 +281,7 @@ public class DbManagerTest {
     public void testCreateComment() throws Exception {
         long pid = 0;
         Post post = postManager.get(pid);
-        User user = userManager.get(0);
+        User user = userManager.getUser("100726948");
 
         Comment comment = new Comment();
         comment.setCommentAuthor(user);
@@ -293,7 +312,7 @@ public class DbManagerTest {
     public void testEditComment() throws Exception {
         long pid = 0;
         Post post = postManager.get(pid);
-        User user = userManager.get(0);
+        User user = userManager.getUser("100726948");
 
         Comment comment = new Comment();
         comment.setCommentAuthor(user);
@@ -385,7 +404,7 @@ public class DbManagerTest {
         WebAppCommon.log.info("Test: Edit an existing post");
 
         Post post = new Post();
-        post.setPostAuthor(userManager.get(0));
+        post.setPostAuthor(userManager.getUser("100726948"));
         post.setPostDate(new Date());
         post.setPostContent("This is a test post.");
 
@@ -427,7 +446,7 @@ public class DbManagerTest {
     public void testGetUserFeedPosts() throws Exception {
         WebAppCommon.log.info("Test: Get user feed posts");
 
-        final User user = userManager.get(0);
+        final User user = userManager.getUser("100726948");
         Collection<Post> feedPosts = Arrays.asList(postManager.getUserFeedPosts(user));
         assertTrue(Lists.newArrayList(Iterables.filter(feedPosts, new Predicate<Post>() {
             public boolean apply(Post input) {

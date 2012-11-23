@@ -33,8 +33,13 @@ public class PlaceholderContent {
     private final static int numUsers = new IntegerRange(500, 1000).getRandomValue();
     private final static int numPosts = new IntegerRange(5000, 7000).getRandomValue();
     private final static int maxComments = 10;
+    private final static String progressIndicator = "%.2f%% complete.\r";
 
     private PlaceholderContent() {}
+
+    private static void reportProgress(int current, int max) {
+        System.out.printf(progressIndicator, (current * 100.0) / max);
+    }
 
     static {
         StopWatch watch = new StopWatch(); watch.start();
@@ -52,22 +57,29 @@ public class PlaceholderContent {
             Post[] posts;
             Comment[] comments;
 
+            int progress, max;
+
             ///////////////////////////////////////////////////////////////////
 
-            WebAppCommon.log.trace("Populating program table...");
+            WebAppCommon.log.debug("Populating program table...");
             ArrayList<Program> pro = Program.readJSONArray(Program.class, PlaceholderContent.class.getClassLoader().getResourceAsStream("programs.json"));
+            max = pro.size();
+            progress = 0;
             for (Program program : pro) {
                 p.insert(program);
+                reportProgress(progress, max);
+                progress++;
             }
+            System.out.print("\r");
             programs = p.getAll();
             watch.stop();
-            WebAppCommon.log.trace(String.format("Populating program table took %s.", watch.toString()));
+            WebAppCommon.log.debug(String.format("Populating program table took %s.", watch.toString()));
             watch.reset();
             watch.start();
 
             ///////////////////////////////////////////////////////////////////
 
-            WebAppCommon.log.trace("Generating users.");
+            WebAppCommon.log.debug("Generating users.");
             User me = new User("Jason",                  // first name
                                "Recillo",                // last name
                                "jaysan1292@example.com", // email
@@ -97,16 +109,18 @@ public class PlaceholderContent {
                         WebAppCommon.log.error(e.getMessage());
                     }
                 }
+                reportProgress(i, numUsers);
             }
+            System.out.print("\r");
             users = u.getAll();
             watch.stop();
-            WebAppCommon.log.trace(String.format("Generating %d users took %s.", u.getCount(), watch.toString()));
+            WebAppCommon.log.debug(String.format("Generating %d users took %s.", u.getCount(), watch.toString()));
             watch.reset();
             watch.start();
 
             ///////////////////////////////////////////////////////////////////
 
-            WebAppCommon.log.trace("Generating posts.");
+            WebAppCommon.log.debug("Generating posts.");
             for (int i = 0; i < numPosts; i++) {
                 Post post = new Post(new Date(((long) (System.currentTimeMillis() - (Math.random() * maxTime)))),
                                      Extensions.getRandom(users),
@@ -114,16 +128,20 @@ public class PlaceholderContent {
                                                                                    PlaceholderGenerator.ContentType.Sentence :
                                                                                    PlaceholderGenerator.ContentType.Paragraph));
                 po.insert(post);
+                reportProgress(i, numPosts);
             }
+            System.out.print("\r");
             posts = po.getAll();
             watch.suspend();
-            WebAppCommon.log.trace(String.format("Generating %d posts took %s.", po.getCount(), watch.toString()));
+            WebAppCommon.log.debug(String.format("Generating %d posts took %s.", po.getCount(), watch.toString()));
             watch.reset();
             watch.start();
 
             ///////////////////////////////////////////////////////////////////
 
-            WebAppCommon.log.trace("Generating post comments.");
+            WebAppCommon.log.debug("Generating post comments.");
+            max = posts.length;
+            progress = 0;
             for (Post post : posts) {
                 int iterations = Extensions.randomInt(0, maxComments);
                 for (int i = 0; i < iterations; i++) {
@@ -137,10 +155,13 @@ public class PlaceholderContent {
                                                   post.getId());
                     c.insert(comment);
                 }
+                reportProgress(progress, max);
+                progress++;
             }
+            System.out.print("\r");
             comments = c.getAll();
             watch.stop();
-            WebAppCommon.log.trace(String.format("Generating %d post comments took %s.", c.getCount(), watch.toString()));
+            WebAppCommon.log.debug(String.format("Generating %d post comments took %s.", c.getCount(), watch.toString()));
 
             ///////////////////////////////////////////////////////////////////
 
