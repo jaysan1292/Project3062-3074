@@ -26,8 +26,8 @@ public abstract class WebAppCommon {
     }};
 
     //session/cookie attributes
-    /** (Boolean) Whether or not the user is logged in. */
 
+    /** (Boolean) Whether or not the user is logged in. */
     public static final String ATTR_LOGGED_IN = "loggedIn";
 
     /** (User) The user object containing the information of the currently logged in user. */
