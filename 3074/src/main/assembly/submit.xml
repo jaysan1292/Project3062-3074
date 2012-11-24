@@ -12,23 +12,29 @@
             <includes>
                 <include>*</include>
             </includes>
+            <excludes>
+                <exclude>*.apk</exclude>
+            </excludes>
         </dependencySet>
     </dependencySets>
     <fileSets>
         <fileSet>
             <outputDirectory>/</outputDirectory>
             <includes>
-                <include>AndroidManifest.xml</include>
-                <include>src/**/*.java</include>
-                <include>gen/**/*.java</include>
                 <include>*.properties</include>
                 <include>.classpath</include>
+                <include>.project</include>
+                <include>AndroidManifest.xml</include>
                 <include>assets/**</include>
                 <include>build.xml</include>
-                <include>.project</include>
+                <include>gen/**</include>
                 <include>res/**</include>
+                <include>src/main/java/**</include>
+                <include>src/main/resources/**</include>
+                <include>src/test/**</include>
             </includes>
             <excludes>
+                <exclude>local.properties</exclude>
                 <exclude>target/**</exclude>
             </excludes>
         </fileSet>
